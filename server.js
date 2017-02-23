@@ -23,6 +23,10 @@ io.on('connection', (client) => {
 
   client.on('event', (data) => {});
 
+  client.on('youTube' , (data) =>{
+    console.log(data);
+  });
+
   client.on('disconnect', () => {
     console.log('Client disconnected');
     userCount --;

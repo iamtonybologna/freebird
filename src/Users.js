@@ -9,12 +9,9 @@ class App extends Component {
   componentDidMount() {
     console.log("componentDidMount <App />");
     this.ws = io.connect('ws://localhost:4000');
+
   }
 
-  componentWillUnmount() {
-    console.log('Closing socket connection');
-    this.ws.close();
-  }
 
   render() {
     return (
