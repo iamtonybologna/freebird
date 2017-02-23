@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import './App.css';
 import io from 'socket.io-client';
@@ -43,6 +44,6 @@ class App extends Component {
       </MuiThemeProvider>
     );
   }
-};
+}
 
 export default App;
