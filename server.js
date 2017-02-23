@@ -28,6 +28,7 @@ io.on('connection', (client) => {
   client.on('disconnect', () => {
     console.log('Client disconnected');
     userCount --;
+    console.log(userCount + ' clients connected!');
     io.sockets.emit('broadcast', { description: userCount + ' clients connected!' });
   });
 

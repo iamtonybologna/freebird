@@ -15,24 +15,22 @@ const muiTheme = getMuiTheme({
 
 class App extends Component {
 
-  constructor(props, context) {
-    super(props, context);
-    this.state = {
-      open: false,
-    };
-  }
-
   componentDidMount() {
-    console.log("componentDidMount <App />");
+    console.log('componentDidMount <App />');
+    console.log('Opening socket connection');
     this.ws = io.connect('ws://localhost:4000');
-    this.ws.emit('event', function(data) {
-      console.log("Hello");
-    });
   };
 
   componentWillUnmount() {
     console.log('Closing socket connection');
     this.ws.close();
+  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+
+    };
   };
 
   render() {
@@ -43,7 +41,7 @@ class App extends Component {
         </div>
       </MuiThemeProvider>
     );
-  }
+  };
 }
 
 export default App;

@@ -20,8 +20,8 @@ injectTapEventPlugin();
 ReactDOM.render((
   <Router>
     <div>
-      <Route path="/host" component={App} />
-      <Route path="/users" component={Users} />
+      <Route path='/host' component={App} />
+      <Route path='/users' component={Users} />
     </div>
   </Router>
 ), document.getElementById('root'));

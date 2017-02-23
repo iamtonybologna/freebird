@@ -54,7 +54,7 @@ class Host extends Component {
     return (
       <div>
         <Paper style={styles.paperVid} zDepth={5} rounded={false}>
-        <iframe style={styles.video} src="https://www.youtube.com/embed/6NXnxTNIWkc?ecver=1" frameBorder="0" allowFullScreen></iframe>
+        <iframe style={styles.video} src="https://www.youtube.com/embed/6NXnxTNIWkc?ecver=1" frameBorder='0' allowFullScreen></iframe>
       </Paper>
         <Paper style={styles.paper} zDepth={5} rounded={false}>
         <GridList style={styles.gridList} cols={2.2}>
@@ -73,12 +73,17 @@ class Host extends Component {
       </Paper>
       <div>
         <p>
-          <Link to="/host">Host Page</Link>
+          <Link to='/host'>Host Page</Link>
           <br/>
-          <Link to="/users">Users Page</Link>
+          <Link to='/users'>Users Page</Link>
         </p>
       </div>
+      {/* NavBar */}
+      {/* VideoEmbed */}
+      {/* HostVoteList */}
     </div>
-)}}
+    )
+  }
+}
 
 export default Host;

@@ -4,10 +4,11 @@ import './Users.css';
 import { Link } from 'react-router-dom';
 import io from 'socket.io-client';
 
-class App extends Component {
+class Users extends Component {
 
   componentDidMount() {
-    console.log("componentDidMount <App />");
+    console.log('componentDidMount <App />');
+    console.log('Opening socket connection');
     this.ws = io.connect('ws://localhost:4000');
   }
 
@@ -16,6 +17,13 @@ class App extends Component {
     this.ws.close();
   }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      userCount: 0
+    };
+  };
+
   render() {
     return (
       <div className="App">
@@ -23,17 +31,24 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React</h2>
         </div>
+        <div>
+          {this.state.userCount} user(s) in room
+        </div>
         <p className="App-intro">
           USERS PAGE
         </p>
         <p>
-          <Link to="/host">Host Page</Link>
+          <Link to='/host'>Host Page</Link>
           <br/>
-          <Link to="/users">Users Page</Link>
+          <Link to='/users'>Users Page</Link>
         </p>
+        {/* Welcome */}
+        {/* PartyButton */}
+        {/* UserVoteList */}
+        {/* Search */}
       </div>
     );
   }
 }
 
-export default App;
+export default Users;
