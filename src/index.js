@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+import Host from './Host';
+import Users from './Users';
 import './index.css';
 import {
   BrowserRouter as Router,
@@ -19,8 +21,14 @@ ReactDOM.render((
 ), document.getElementById('root'));
 
 
-// ReactDOM.render((
-//   <Router>
-//     <Route path="/users" component={Users} />
-//   </Router>
-// ), document.getElementById('users'));
+ReactDOM.render((
+  <Router>
+    <Route path="/users" component={Users} />
+  </Router>
+), document.getElementById('users'));
+
+ReactDOM.render((
+  <Router>
+    <Route path="/host" component={Host} />
+  </Router>
+), document.getElementById('host'));
