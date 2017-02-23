@@ -18,6 +18,7 @@
     "freebird"
   ],
   "dependencies": {
+<<<<<<< HEAD
     "cors": "^2.8.1",
     "express": "4.14.1",
     "node-uuid": "1.4.7",
@@ -27,6 +28,12 @@
     "react-router-dom": "^4.0.0-beta.6",
     "socket.io": "1.7.2",
     "ws": "2.0.2"
+=======
+    "material-ui": "^0.17.0",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "react-tap-event-plugin": "^2.0.1"
+>>>>>>> abe36ce5db7fb247284aed097988e9ca3e7a1791
   },
   "scripts": {
     "start": "react-scripts start",
