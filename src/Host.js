@@ -66,7 +66,7 @@ class Host extends Component {
 
               titleBackground="linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
             >
-              <img src={tile.img} />
+              <img role="presentation" src={tile.img} />
             </GridTile>
           ))}
         </GridList>
