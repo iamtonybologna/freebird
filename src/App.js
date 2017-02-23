@@ -38,6 +38,9 @@ class App extends Component {
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
           <Host/>
+          {/* NavBar */}
+          {/* VideoEmbed */}
+          {/* HostVoteList */}
         </div>
       </MuiThemeProvider>
     );

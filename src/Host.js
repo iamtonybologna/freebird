@@ -78,9 +78,6 @@ class Host extends Component {
           <Link to='/users'>Users Page</Link>
         </p>
       </div>
-      {/* NavBar */}
-      {/* VideoEmbed */}
-      {/* HostVoteList */}
     </div>
     )
   }
