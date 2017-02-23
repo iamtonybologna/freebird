@@ -9,12 +9,15 @@ class App extends Component {
   componentDidMount() {
     console.log("componentDidMount <App />");
     this.ws = io.connect('ws://localhost:4000');
-  }
+    this.ws.emit('event', function(data) {
+      console.log("Hello");
+    });
+  };
 
   componentWillUnmount() {
     console.log('Closing socket connection');
     this.ws.close();
-  }
+  };
 
   render() {
     return (
@@ -34,6 +37,6 @@ class App extends Component {
       </div>
     );
   }
-}
+};
 
 export default App;
