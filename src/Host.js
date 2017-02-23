@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { Link } from 'react-router-dom';
 import {GridList, GridTile} from 'material-ui/GridList';
 import IconButton from 'material-ui/IconButton';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
@@ -49,28 +50,35 @@ const tilesData = [
 ];
 
 class Host extends Component {
-    render() {
-        return (
-<div>
-  <Paper style={styles.paperVid} zDepth={5} rounded={false}>
-  <iframe style={styles.video} src="https://www.youtube.com/embed/6NXnxTNIWkc?ecver=1" frameBorder="0" allowFullScreen></iframe>
-</Paper>
-  <Paper style={styles.paper} zDepth={5} rounded={false}>
-  <GridList style={styles.gridList} cols={2.2}>
-    {tilesData.map((tile) => (
-      <GridTile
-        key={tile.img}
-        title={tile.title}
-        actionIcon={<IconButton><StarBorder color="rgb(0, 188, 212)" /></IconButton>}
+  render() {
+    return (
+      <div>
+        <Paper style={styles.paperVid} zDepth={5} rounded={false}>
+        <iframe style={styles.video} src="https://www.youtube.com/embed/6NXnxTNIWkc?ecver=1" frameBorder="0" allowFullScreen></iframe>
+      </Paper>
+        <Paper style={styles.paper} zDepth={5} rounded={false}>
+        <GridList style={styles.gridList} cols={2.2}>
+          {tilesData.map((tile) => (
+            <GridTile
+              key={tile.img}
+              title={tile.title}
+              actionIcon={<IconButton><StarBorder color="rgb(0, 188, 212)" /></IconButton>}
 
-        titleBackground="linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
-      >
-        <img src={tile.img} />
-      </GridTile>
-    ))}
-  </GridList>
-</Paper>
-</div>
+              titleBackground="linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
+            >
+              <img src={tile.img} />
+            </GridTile>
+          ))}
+        </GridList>
+      </Paper>
+      <div>
+        <p>
+          <Link to="/host">Host Page</Link>
+          <br/>
+          <Link to="/users">Users Page</Link>
+        </p>
+      </div>
+    </div>
 )}}
 
 export default Host;

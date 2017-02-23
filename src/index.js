@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import Users from './Users';
 import './index.css';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 import {
   BrowserRouter as Router,
   // eslint-disable-next-line
