@@ -34,7 +34,7 @@ if (!YT.loading) {
     var a = document.createElement('script');
     a.type = 'text/javascript';
     a.id = 'www-widgetapi-script';
-    a.src = 'https://s.ytimg.com/yts/jsbin/www-widgetapi-vflY8jZzt/www-widgetapi.js';
+    a.src = '../public/widget_api.js';
     a.async = false;
     var b = document.getElementsByTagName('script')[0];
     b.parentNode.insertBefore(a, b);

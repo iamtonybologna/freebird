@@ -18,7 +18,8 @@ io.on('connection', (client) => {
   console.log('New Client Connected');
   userCount ++;
   console.log(userCount + ' clients connected!');
-  io.sockets.emit('broadcast', { description: userCount + ' clients connected!' });
+
+  io.sockets.emit('update', { description: userCount + 'clients connected!' });
 
 
   client.on('event', (data) => {});

@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <script src="../public/iframe_api.js"></script>
 
     <!--
       Notice the use of %PUBLIC_URL% in the tag above.
@@ -25,8 +26,7 @@
 
       // 3. This function creates an <iframe> (and YouTube player)
       //    after the API code downloads.
-       player1;
-       player2;
+
       function onYouTubeIframeAPIReady() {
         console.log("called");
         player1 = new YT.Player('player1', {
@@ -34,8 +34,7 @@
           width: '640',
           videoId: 'M7lc1UVf-VE',
           events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
+            'onReady': onPlayerReady
           }
         });
         player2 = new YT.Player('player2', {
@@ -43,40 +42,18 @@
           width: '640',
           videoId: 'bHQqvYy5KYo',
           events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
+            'onReady': onPlayerReady
           }
         });
       }
 
-      // 4. The API will call this function when the video player is ready.
       function onPlayerReady(event) {
-        event.target.playVideo();
-      }
-
-      // 5. The API calls this function when the player's state changes.
-      //    The function indicates that when playing a video (state=1),
-      //    the player should play for six seconds and then stop.
-      var done = false;
-      function onPlayerStateChange(event) {
-
-
-        if (event.data == YT.PlayerState.PLAYING && !done) {
-          setTimeout(stopVideo, 20000);
-          done = true;
-        }
+      //  event.target.playVideo();
+      //  setInterval(function(){ console.log(player1.getCurrentTime());}, 1000);
       }
 
 
-      function stopVideo() {
-        player.stopVideo();
-      }
 
-
-      function swapVideo(){
-        var play1 = document.getElementById('player1').style.display = "none";
-        var play2 = document.getElementById('player2').style.display = "block";
-      }
 
 
     </script>
