@@ -19,9 +19,7 @@ class Users extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      userCount: 0
-    };
+    this.state = {};
   };
 
   render() {
@@ -30,9 +28,6 @@ class Users extends Component {
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React</h2>
-        </div>
-        <div>
-          {this.state.userCount} user(s) in room
         </div>
         <p className="App-intro">
           USERS PAGE

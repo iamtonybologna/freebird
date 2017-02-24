@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 import './App.css';
+import { Link } from 'react-router-dom';
 import io from 'socket.io-client';
 import {deepOrange500} from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -19,6 +20,12 @@ class App extends Component {
     console.log('componentDidMount <App />');
     console.log('Opening socket connection');
     this.ws = io.connect('ws://localhost:4000');
+
+    this.ws.on('updateUserCount', (data) => {
+      console.log('Received a message from the server!', data);
+      this.setState({ userCount: data.userCount });
+   });
+
   };
 
   componentWillUnmount() {
@@ -29,7 +36,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      userCount: 0
     };
   };
 
@@ -37,6 +44,14 @@ class App extends Component {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
+          <div>
+            {this.state.userCount} user(s) in room
+          </div>
+          <p>
+            <Link to='/host'>Host Page</Link>
+            <br/>
+            <Link to='/users'>Users Page</Link>
+          </p>
           <Host/>
           {/* NavBar */}
           {/* VideoEmbed */}

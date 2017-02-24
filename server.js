@@ -18,7 +18,7 @@ io.on('connection', (client) => {
   console.log('New Client Connected');
   userCount ++;
   console.log(userCount + ' clients connected!');
-  io.sockets.emit('broadcast', { description: userCount + ' clients connected!' });
+  io.sockets.emit('updateUserCount', { userCount: userCount });
 
 
   client.on('event', (data) => {
@@ -29,7 +29,7 @@ io.on('connection', (client) => {
     console.log('Client disconnected');
     userCount --;
     console.log(userCount + ' clients connected!');
-    io.sockets.emit('broadcast', { description: userCount + ' clients connected!' });
+    io.sockets.emit('broadcast', { userCount: userCount });
   });
 
 });
