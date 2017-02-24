@@ -28,7 +28,7 @@ class Users extends Component {
     });
 
     ws.addEventListener('error', (error) => {
-      console.log(`Error: ${error}`)
+      console.log(`Error: ${error}`);
     });
   }
 

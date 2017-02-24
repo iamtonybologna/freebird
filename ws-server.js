@@ -1,16 +1,14 @@
 const express   = require('express');
-const app       = express();
 const WebSocket = require('ws');
-const cors      = require('cors');
-const http      = require('http');
-app.use(cors());
-const server    = require('http').createServer(app);
 
 const PORT = 4000;
-server.listen(
-  PORT,
-  () => console.log(`Listening on ${PORT}`)
-);
+const app = express()
+  .use(express.static('public'))
+  .listen(
+    PORT,
+    '0.0.0.0',
+    () => console.log(`Listening on ${PORT}`)
+  );
 
 const wss = new WebSocket.Server({server: app});
 
