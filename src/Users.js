@@ -2,20 +2,40 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './Users.css';
 import { Link } from 'react-router-dom';
-import io from 'socket.io-client';
+
+const ws = new WebSocket('ws://localhost:4000');
 
 class Users extends Component {
 
   componentDidMount() {
-    console.log('componentDidMount <App />');
-    console.log('Opening socket connection');
-    this.ws = io.connect('ws://localhost:4000');
+    console.log('componentDidMount <Users />');
+    ws.addEventListener('open', (event) => {
+      console.log("Connected to WS Server.");
+    });
+
+    // New message
+    ws.addEventListener('message', (event) => {
+      let data = JSON.parse(event.data);
+      let type = data.type;
+      switch(type) {
+        case "updateUserCount":
+          console.log(`Received from server: ${event.data}`);
+          this.setState({ userCount: data.userCount });
+          break;
+        default:
+          throw new Error("Unknown event type " + data.type);
+      }
+    });
+
+    ws.addEventListener('error', (error) => {
+      console.log(`Error: ${error}`)
+    });
   }
 
   componentWillUnmount() {
     console.log('Closing socket connection');
-    this.ws.close();
-  }
+    ws.close();
+  };
 
   constructor(props) {
     super(props);
