@@ -1,9 +1,18 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {Link} from 'react-router-dom';
 import io from 'socket.io-client';
 import Player from './Player.js';
+import {deepOrange500} from 'material-ui/styles/colors';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Host from './Host.js';
+
+const muiTheme = getMuiTheme({
+  palette: {
+    accent1Color: deepOrange500,
+  }
+});
 
 class App extends Component {
 
@@ -13,20 +22,28 @@ class App extends Component {
       player1Hidden: "block",
       player2Hidden: "none",
       playing: null,
-      notPlaying: null
+      notPlaying: null,
+      userCount: 0
     };
   }
 
-    componentDidMount() {
-    console.log("componentDidMount <App />");
+
+  componentDidMount() {
+    console.log('componentDidMount <App />');
+    console.log('Opening socket connection');
     this.ws = io.connect('ws://localhost:4000');
+
+    this.ws.on('updateUserCount', (data) => {
+      console.log('Received a message from the server!', data);
+      this.setState({ userCount: data.userCount });
+   });
     this.ws.emit('youTube', 'ok');
     this.ws.on('update', function (data) {
       console.log('Received a message from the server!', data);
     });
     this.startUp();
+  };
 
-  }
 
   startUp() {
     let err = false;
@@ -75,33 +92,29 @@ class App extends Component {
   componentWillUnmount() {
     console.log('Closing socket connection');
     this.ws.close();
-  }
+  };
 
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo"/>
-          <h2>Welcome to React</h2>
+      <MuiThemeProvider muiTheme={muiTheme}>
+        <div>
+          <Host/>
+          <div>
+            {this.state.userCount} user(s) in room
+          </div>
+          {/* NavBar */}
+          {/* VideoEmbed */}
+          {/* HostVoteList */}
         </div>
-        <p className="App-intro">
-          HOSTS PAGE
-        </p>
-        <p>
-          <Link to="/host">Host Page</Link>
-          <br/>
-          <Link to="/users">Users Page</Link>
-          <button onClick={this.loadPlayer}></button>
-        </p>
         <div style={{display: this.state.player1Hidden}}>
-        <Player id={"player1"} ></Player>
+          <Player id={"player1"} ></Player>
         </div>
         <div style={{display: this.state.player2Hidden}}>
           <Player id={"player2"} ></Player>
         </div>
-      </div>
+      </MuiThemeProvider>
     );
-  }
-}
+  };
+};
 
 export default App;
