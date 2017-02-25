@@ -29,8 +29,13 @@ class Users extends Component {
     this.handleUserFieldKeyUp = (e) => {
       if (e.key === 'Enter') {
         this.ws.emit('setUsername', { 'name': e.target.value });
-        console.log("Username sent to server ", e.target.value);
+        console.log('Username sent to server', e.target.value);
       };
+    };
+
+    this.handleSongClick = (e) => {
+      this.ws.emit('setUserVote', { id: this.state.user.id, 'song': e.target.value });
+      console.log('Vote sent to server', { id: this.state.user.id, 'song': e.target.value });
     };
 
     this.state = {
@@ -54,7 +59,8 @@ class Users extends Component {
           <Link to='/users'>Users Page</Link>
         </p>
           <input type='text' name='name' onKeyUp={this.handleUserFieldKeyUp} />
-          <button>Song 1</button>
+          <br/><br/>
+          <button value='songOne' onClick={this.handleSongClick} >Song 1</button>
         {/* Welcome */}
         {/* PartyButton */}
         {/* UserVoteList */}
