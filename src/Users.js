@@ -1,8 +1,19 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './Users.css';
 import { Link } from 'react-router-dom';
 import io from 'socket.io-client';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import {deepOrange500} from 'material-ui/styles/colors';
+import Welcome from './Welcome.js';
+import UserVoteList from './UserVoteList.js';
+import Search from './Search.js';
+
+const muiTheme = getMuiTheme({
+  palette: {
+    accent1Color: deepOrange500,
+  }
+});
 
 class Users extends Component {
 
@@ -39,9 +50,18 @@ class Users extends Component {
     };
 
     this.state = {
+      userCount: 0,
+      searchResults: [],
       user: { id: 0, name: '' }
     };
   };
+
+
+  updateSearchResultsList = (results) => {
+    this.setState({searchResults: results})
+  }
+
+
 
   render() {
     return (
@@ -67,7 +87,15 @@ class Users extends Component {
         {/* PartyButton */}
         {/* UserVoteList */}
         {/* Search */}
+
+      <MuiThemeProvider muiTheme={muiTheme}>
+        <div>
+        <Welcome/>
+        <Search updateSearchResultsList={this.updateSearchResultsList}/>
+        <UserVoteList/>
+
       </div>
+      </MuiThemeProvider>
     );
   };
 };
