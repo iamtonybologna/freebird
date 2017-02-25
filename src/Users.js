@@ -1,8 +1,19 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './Users.css';
 import { Link } from 'react-router-dom';
 import io from 'socket.io-client';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import {deepOrange500} from 'material-ui/styles/colors';
+import Welcome from './Welcome.js';
+import UserVoteList from './UserVoteList.js';
+import Search from './Search.js';
+
+const muiTheme = getMuiTheme({
+  palette: {
+    accent1Color: deepOrange500,
+  }
+});
 
 class Users extends Component {
 
@@ -20,33 +31,30 @@ class Users extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userCount: 0
+      userCount: 0,
+      searchResults: [],
     };
+
   };
+
+
+  updateSearchResultsList = (results) => {
+    this.setState({searchResults: results})
+  }
+
+
 
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
+
+      <MuiThemeProvider muiTheme={muiTheme}>
         <div>
-          {this.state.userCount} user(s) in room
-        </div>
-        <p className="App-intro">
-          USERS PAGE
-        </p>
-        <p>
-          <Link to='/host'>Host Page</Link>
-          <br/>
-          <Link to='/users'>Users Page</Link>
-        </p>
-        {/* Welcome */}
-        {/* PartyButton */}
-        {/* UserVoteList */}
-        {/* Search */}
+        <Welcome/>
+        <Search updateSearchResultsList={this.updateSearchResultsList}/>
+        <UserVoteList/>
+
       </div>
+      </MuiThemeProvider>
     );
   }
 }
