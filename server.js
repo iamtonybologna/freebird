@@ -18,7 +18,7 @@ let votes = {
   songOne: [],
   songTwo: [],
   songThree: []
-}
+};
 
 io.on('connection', (client) => {
 
@@ -26,7 +26,6 @@ io.on('connection', (client) => {
   userCount ++;
   console.log(userCount + ' clients connected!');
   io.emit('updateUserCount', { userCount: userCount });
-
 
   client.on('event', (data) => {
     console.log(data);

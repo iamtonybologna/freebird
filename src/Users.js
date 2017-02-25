@@ -61,6 +61,8 @@ class Users extends Component {
           <input type='text' name='name' onKeyUp={this.handleUserFieldKeyUp} />
           <br/><br/>
           <button value='songOne' onClick={this.handleSongClick} >Song 1</button>
+          <button value='songTwo' onClick={this.handleSongClick} >Song 2</button>
+          <button value='songThree' onClick={this.handleSongClick} >Song 3</button>
         {/* Welcome */}
         {/* PartyButton */}
         {/* UserVoteList */}
