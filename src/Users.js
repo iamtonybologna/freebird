@@ -59,30 +59,18 @@ class Users extends Component {
 
   updateSearchResultsList = (results) => {
     this.setState({searchResults: results})
-  }
+  };
 
 
 
   render() {
     return (
       <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          USERS PAGE
-        </p>
-        <p>
-          <Link to='/host'>Host Page</Link>
-          <br/>
-          <Link to='/users'>Users Page</Link>
-        </p>
-          <input type='text' name='name' onKeyUp={this.handleUserFieldKeyUp} />
-          <br/><br/>
-          <button value='songOne' onClick={this.handleSongClick} >Song 1</button>
-          <button value='songTwo' onClick={this.handleSongClick} >Song 2</button>
-          <button value='songThree' onClick={this.handleSongClick} >Song 3</button>
+        <input type='text' name='name' onKeyUp={this.handleUserFieldKeyUp} />
+        <br/><br/>
+        <button value='songOne' onClick={this.handleSongClick} >Song 1</button>
+        <button value='songTwo' onClick={this.handleSongClick} >Song 2</button>
+        <button value='songThree' onClick={this.handleSongClick} >Song 3</button>
         {/* Welcome */}
         {/* PartyButton */}
         {/* UserVoteList */}
@@ -96,6 +84,8 @@ class Users extends Component {
 
       </div>
       </MuiThemeProvider>
+      </div>
+
     );
   };
 };
