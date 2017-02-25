@@ -1,7 +1,6 @@
 
 import React, { Component } from 'react';
 import './App.css';
-import { Link } from 'react-router-dom';
 import io from 'socket.io-client';
 import {deepOrange500} from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -44,15 +43,10 @@ class App extends Component {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
+          <Host/>
           <div>
             {this.state.userCount} user(s) in room
           </div>
-          <p>
-            <Link to='/host'>Host Page</Link>
-            <br/>
-            <Link to='/users'>Users Page</Link>
-          </p>
-          <Host/>
           {/* NavBar */}
           {/* VideoEmbed */}
           {/* HostVoteList */}
@@ -60,6 +54,6 @@ class App extends Component {
       </MuiThemeProvider>
     );
   };
-}
+};
 
 export default App;

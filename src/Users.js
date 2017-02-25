@@ -10,16 +10,32 @@ class Users extends Component {
     console.log('componentDidMount <App />');
     console.log('Opening socket connection');
     this.ws = io.connect('ws://localhost:4000');
-  }
+
+    this.ws.on('setUsername', (user) => {
+      console.log(user);
+      this.setState({ user: { id: user.id , name: user.name } });
+      console.log('Current state: ', this.state);
+    });
+  };
 
   componentWillUnmount() {
     console.log('Closing socket connection');
     this.ws.close();
-  }
+  };
 
   constructor(props) {
     super(props);
-    this.state = {};
+
+    this.handleUserFieldKeyUp = (e) => {
+      if (e.key === 'Enter') {
+        this.ws.emit('setUsername', { 'name': e.target.value });
+        console.log("Username sent to server ", e.target.value);
+      };
+    };
+
+    this.state = {
+      user: { id: 0, name: '' }
+    };
   };
 
   render() {
@@ -37,13 +53,15 @@ class Users extends Component {
           <br/>
           <Link to='/users'>Users Page</Link>
         </p>
+          <input type='text' name='name' onKeyUp={this.handleUserFieldKeyUp} />
+          <button>Song 1</button>
         {/* Welcome */}
         {/* PartyButton */}
         {/* UserVoteList */}
         {/* Search */}
       </div>
     );
-  }
-}
+  };
+};
 
 export default Users;
