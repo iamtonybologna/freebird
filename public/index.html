@@ -6,33 +6,22 @@
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
     <script src="../public/iframe_api.js"></script>
 
-    <!--
-      Notice the use of %PUBLIC_URL% in the tag above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
     <title>Freebird</title>
     <script>
-      // 2. This code loads the IFrame Player API code asynchronously.
+
       var tag = document.createElement('script');
 
       tag.src = "https://www.youtube.com/iframe_api";
       var firstScriptTag = document.getElementsByTagName('script')[0];
       firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-      // 3. This function creates an <iframe> (and YouTube player)
-      //    after the API code downloads.
 
       function onYouTubeIframeAPIReady() {
         console.log("called");
         player1 = new YT.Player('player1', {
           height: '390',
           width: '640',
-          videoId: 'M7lc1UVf-VE',
+          videoId: 'hqJKZVnNLT0',
           events: {
             'onReady': onPlayerReady
           }
@@ -40,7 +29,7 @@
         player2 = new YT.Player('player2', {
           height: '390',
           width: '640',
-          videoId: 'bnKFaAS30X8',
+          videoId: '0CgopgfcG00',
           events: {
             'onReady': onPlayerReady
           }
@@ -55,16 +44,7 @@
   </head>
   <body>
       <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start`.
-      To create a production bundle, use `npm run build`.
-    -->
   </body>
 
 </html>

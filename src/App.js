@@ -11,10 +11,11 @@ class App extends Component {
     super(props);
     this.state = {
       player1Hidden: "block",
-      player2Hidden: "none"
+      player2Hidden: "none",
+      playing: null,
+      notPlaying: null
     };
   }
-
 
     componentDidMount() {
     console.log("componentDidMount <App />");
@@ -49,24 +50,27 @@ class App extends Component {
   playerTime() {
     let videoDuration = window.player1.getDuration();
     let timePlayed = window.player1.getCurrentTime();
-    if (videoDuration - timePlayed <= 1000)
+    if (videoDuration - timePlayed <= 180)
     {
       this.loadPlayer();
     } else {
       setTimeout(() => {
         this.playerTime();
-        console.log('nope');
       }, 1000);
     }
   }
 
   loadPlayer() {
-    console.log('clicked');
-    window.player2.setVolume(100);
     window.player2.playVideo();
-    this.setState({player1Hidden: "none"});
-    this.setState({player2Hidden: "block"});
+    window.player2.setVolume(100);
+    setTimeout(() => {
+      this.setState({player1Hidden: "none"});
+      this.setState({player2Hidden: "block"});
+      this.setState({playing: 2});
+      window.player1.stopVideo();
+    }, 5000);
   }
+
 
   componentWillUnmount() {
     console.log('Closing socket connection');
@@ -89,10 +93,10 @@ class App extends Component {
           <Link to="/users">Users Page</Link>
           <button onClick={this.loadPlayer}></button>
         </p>
-        <div class="wrapper" style={{display: this.state.player1Hidden}}>
+        <div style={{display: this.state.player1Hidden}}>
         <Player id={"player1"} ></Player>
         </div>
-        <div class="wrapper" style={{display: this.state.player2Hidden}}>
+        <div style={{display: this.state.player2Hidden}}>
           <Player id={"player2"} ></Player>
         </div>
       </div>
