@@ -49,6 +49,7 @@ io.on('connection', (client) => {
       };
     };
     votes[vote.song].push(vote.id);
+    io.emit('votes', { votes: votes });
     console.log(votes);
   });
 
