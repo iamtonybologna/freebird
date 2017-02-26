@@ -4,15 +4,7 @@ import App from './App';
 import Users from './Users';
 import './index.css';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import {
-  BrowserRouter as Router,
-  // eslint-disable-next-line
-  StaticRouter, // for server rendering
-  Route,
-  // eslint-disable-next-line
-  Link
-  // etc.
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 
 injectTapEventPlugin();

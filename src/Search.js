@@ -9,14 +9,14 @@ const styles = {
   root: {
     display: 'flex',
     flexWrap: 'wrap',
-    justifyContent: 'space-around',
-  },
+    justifyContent: 'space-around'
+  }
 }
 
 class Search extends Component {
   state = {
     open: false,
-    openResults: false,
+    openResults: false
   };
 
   handleOpen = () => {
@@ -51,38 +51,34 @@ class Search extends Component {
         primary={true}
         keyboardFocused={true}
         onTouchTap={this.handleClose}
-      />,
+      />
     ];
 
     return (
       <div>
-      <FloatingActionButton
-        onTouchTap={this.handleOpen}
-        style={styles.root}
-        >
-        <ContentAdd />
-      </FloatingActionButton>
-      <Dialog
+        <FloatingActionButton
+          onTouchTap={this.handleOpen}
+          style={styles.root}
+          >
+          <ContentAdd />
+        </FloatingActionButton>
+        <Dialog
           title="hit them with a banger"
           actions={actions}
           modal={false}
           open={this.state.open}
           onRequestClose={this.handleClose}
         >
-        <YouTubeAutocomplete
-           apiKey="AIzaSyCxZrHtU_wXNdakFMEiceOirp-xpxOIMLo"
-           placeHolder="insert heater here..."
-           maxResults="10"
-           callback={this._onSearchResultsFound, this.handleClose, this.handleOpenResults}
-         />
-      </Dialog>
-
+          <YouTubeAutocomplete
+             apiKey="AIzaSyCxZrHtU_wXNdakFMEiceOirp-xpxOIMLo"
+             placeHolder="insert heater here..."
+             maxResults="10"
+             callback={this._onSearchResultsFound, this.handleClose, this.handleOpenResults}
+          />
+        </Dialog>
       </div>
     )
-
-
   }
-
 }
 
 export default Search;
