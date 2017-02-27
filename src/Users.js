@@ -55,19 +55,21 @@ class Users extends Component {
     this.renderView = () => {
       switch(this.state.view) {
 
-        case 'Search':
-        return <Search updateSearchResultsList={this.updateSearchResultsList}/>
-        case 'UserVoteList':
-        return <UserVoteList />
-        case 'Welcome':
+        case 0:
         return <Welcome />
+        case 1:
+        return <UserVoteList />
+        case 2:
+        return <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher}/>
+        case 3:
+        return <SearchResults results={this.state.searchResults} />
 
       }
     }
 
 
     this.state = {
-      view: 'UserVoteList',
+      view: 1,
       userCount: 0,
       searchResults: [],
       user: { id: 0, name: '' },

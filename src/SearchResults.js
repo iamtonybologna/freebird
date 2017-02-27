@@ -29,13 +29,13 @@ class SearchResults extends Component {
           style={styles.gridList}
           cols={0.1}
         >
-          {this.props.searchResults.map((tile) => (
+          {this.props.results.map((tile) => (
             <GridTile
               key={tile.id.videoId}
               title={tile.snippet.title}
               actionIcon={<IconButton><StarBorder color="white" /></IconButton>}
             >
-              <img src={tile.snippet.thumbnails.default.url} />
+              <img src={tile.snippet.thumbnails.medium.url} />
             </GridTile>
           ))}
         </GridList>

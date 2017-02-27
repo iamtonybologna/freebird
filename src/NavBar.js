@@ -21,6 +21,7 @@ class NavBar extends Component {
 
 select = (newView) => this.props.switcher(newView);
 
+
 render() {
   return (
     <Paper zDepth={1}>
@@ -28,17 +29,17 @@ render() {
         <BottomNavigationItem
           label="Profile"
           icon={profileIcon}
-          onTouchTap={() => this.select('Welcome')}
+          onTouchTap={() => this.select(0)}
         />
         <BottomNavigationItem
           label="Home"
           icon={homeIcon}
-          onTouchTap={() => this.select('UserVoteList')}
+          onTouchTap={() => this.select(1)}
         />
         <BottomNavigationItem
           label="Search"
           icon={searchIcon}
-          onTouchTap={() => this.select('Search')}
+          onTouchTap={() => this.select(2)}
         />
       </BottomNavigation>
     </Paper>
