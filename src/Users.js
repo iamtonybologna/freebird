@@ -9,6 +9,8 @@ import UserVoteList from './UserVoteList.js';
 import Search from './Search.js';
 import SearchResults from './SearchResults.js';
 import NavBar from './NavBar.js';
+import loadingUser from './loadingUser.js';
+import CircularProgress from 'material-ui/CircularProgress';
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -28,6 +30,12 @@ class Users extends Component {
       this.setState({ user: { id: user.id , name: user.name } });
       console.log('Current state: ', this.state);
     });
+
+    this.ws.on('setNextUp', (nextUp) => {
+      console.log(nextUp);
+      this.setState({voteListLoaded: true, 'nextUp': nextUp });
+      console.log('Current state: ', this.state);
+    });
   };
 
   componentWillUnmount() {
@@ -43,7 +51,11 @@ class Users extends Component {
         case 0:
           return <Welcome handleNewName={this.handleNewName}/>
         case 1:
-          return <UserVoteList voteFor={this.handleSongClick}/>
+          if (this.state.voteListLoaded === false) {
+            return <div>  <CircularProgress size={80} thickness={5} /> <br/> Waiting on first vote...</div>
+            } else {
+              return <UserVoteList voteFor={this.handleSongClick}/>
+            }
         case 2:
           return <Search updateSearchResultsList={this.updateSearchResultsList} />
         case 3:
@@ -52,16 +64,18 @@ class Users extends Component {
           <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher}/>
           <SearchResults results={this.state.searchResults} submitNewSong={this.handleSongAddition}/>
         </div>
-      )
+        )
       }
     }
 
 
     this.state = {
-      view: 1,
+      view: 2,
       userCount: 0,
       searchResults: [],
-      user: { id: 0, name: '' }
+      user: { id: 0, name: '' },
+      voteListLoaded: false,
+      nextUp: [],
     };
   };
 

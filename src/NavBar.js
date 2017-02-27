@@ -37,7 +37,7 @@ class NavBar extends Component {
           <BottomNavigationItem
             label="Search"
             icon={searchIcon}
-            onTouchTap={() => this.select(2)}
+            onTouchTap={() => this.select(3)}
           />
         </BottomNavigation>
       </Paper>
