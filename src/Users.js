@@ -12,7 +12,7 @@ import NavBar from './NavBar.js';
 
 const muiTheme = getMuiTheme({
   palette: {
-    accent1Color: deepOrange500
+    accent1Color: deepOrange500,
   }
 });
 
@@ -38,37 +38,23 @@ class Users extends Component {
   constructor(props) {
     super(props);
 
-    this.handleUserFieldKeyUp = (e) => {
-      if (e.key === 'Enter') {
-        this.ws.emit('setUsername', { 'name': e.target.value });
-        console.log('Username sent to server', e.target.value);
-      };
-    };
-
-    this.handleSongClick = (e) => {
-      this.ws.emit('setUserVote', { id: this.state.user.id, 'song': e.target.value });
-      console.log('Vote sent to server', { id: this.state.user.id, 'song': e.target.value });
-    };
-
     this.renderView = () => {
-      switch (this.state.view) {
+      switch(this.state.view) {
         case 0:
-          return <Welcome />
+          return <Welcome handleNewName={this.handleNewName}/>
         case 1:
-          return <UserVoteList />
+          return <UserVoteList voteFor={this.handleSongClick}/>
         case 2:
-          return <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher} />
+          return <Search updateSearchResultsList={this.updateSearchResultsList} />
         case 3:
-          return (
-            <div>
-              <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher} />
-              <SearchResults results={this.state.searchResults} />
-            </div>
-          )
-        default:
-          break;
-      };
-    };
+        return (
+        <div>
+          <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher}/>
+          <SearchResults results={this.state.searchResults} submitNewSong={this.handleSongAddition}/>
+        </div>
+      )
+      }
+    }
 
 
     this.state = {
@@ -80,24 +66,36 @@ class Users extends Component {
   };
 
   switcher = (newView) => {
-    this.setState({view: newView});
-    console.log(this.state.searchResults);
-  };
+    this.setState({view: newView})
+    console.log(this.state.searchResults)
+  }
 
   updateSearchResultsList = (results) => {
-      this.setState({ searchResults: results,
-                      view: 3
-                    });
+      this.setState({searchResults: results,
+                    view: 3
+                    })
+  };
+
+  handleNewName = (e) => {
+    if (e.key === 'Enter') {
+      this.ws.emit('setUsername', { 'name': e.target.value });
+      console.log('Username sent to server', e.target.value);
+    };
+  };
+
+  handleSongClick = (e) => {
+    this.ws.emit('setUserVote', { id: this.state.user.id, 'song': e });
+    console.log('Vote sent to server', { id: this.state.user.id, 'song': e });
+  };
+
+  handleSongAddition = (e) => {
+    this.ws.emit('addNewSong', { id: this.state.user.id, 'song': e });
+    console.log('New song sent to server', {id: this.state.user.id, 'song': e });
   };
 
   render() {
     return (
       <div className="App">
-        <input type='text' name='name' onKeyUp={this.handleUserFieldKeyUp} />
-        <br/><br/>
-        <button value='songOne' onClick={this.handleSongClick} >Song 1</button>
-        <button value='songTwo' onClick={this.handleSongClick} >Song 2</button>
-        <button value='songThree' onClick={this.handleSongClick} >Song 3</button>
         <MuiThemeProvider muiTheme={muiTheme}>
           <div>
             { this.renderView() }

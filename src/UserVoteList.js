@@ -17,7 +17,7 @@ const styles = {
   },
   paper: {
     margin: 'auto'
-  }
+  },
 };
 
 const tilesData = [
@@ -49,7 +49,9 @@ class UserVoteList extends Component {
         >
           {tilesData.map((tile) => (
             <GridTile
-              key={tile.img}
+              key={tile.title}
+              onTouchTap={this.props.voteFor.bind(this, tile.title)}
+              value={tile.title}
               title={tile.title}
               subtitle={<span>by <b>{tile.author}</b></span>}
               actionIcon={<IconButton><StarBorder color="white" /></IconButton>}

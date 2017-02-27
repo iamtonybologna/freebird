@@ -10,11 +10,7 @@ export default class Welcome extends Component {
         <TextField
           hintText="Clarice is that you?"
           floatingLabelText="They call me..."
-        /><br/>
-        <FlatButton
-          label="Let's Party"
-          primary={true}
-          onTouchTap={this.loadUserVoteList}
+          onKeyUp={this.props.handleNewName.bind()}
         />
       </div>
     )
