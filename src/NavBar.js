@@ -13,38 +13,37 @@ const searchIcon = <YoutubeSearchedFor />;
 const styles = {
     navBar: {
       position: 'fixed',
-      bottom: 0,
+      bottom: 0
     },
   };
 
 class NavBar extends Component {
 
-select = (newView) => this.props.switcher(newView);
+  select = (newView) => this.props.switcher(newView);
 
-
-render() {
-  return (
-    <Paper zDepth={1}>
-      <BottomNavigation selectedIndex={this.props.view} style={styles.navBar}>
-        <BottomNavigationItem
-          label="Profile"
-          icon={profileIcon}
-          onTouchTap={() => this.select(0)}
-        />
-        <BottomNavigationItem
-          label="Home"
-          icon={homeIcon}
-          onTouchTap={() => this.select(1)}
-        />
-        <BottomNavigationItem
-          label="Search"
-          icon={searchIcon}
-          onTouchTap={() => this.select(2)}
-        />
-      </BottomNavigation>
-    </Paper>
-  );
-}
-}
+  render() {
+    return (
+      <Paper zDepth={1}>
+        <BottomNavigation selectedIndex={this.props.view} style={styles.navBar}>
+          <BottomNavigationItem
+            label="Profile"
+            icon={profileIcon}
+            onTouchTap={() => this.select(0)}
+          />
+          <BottomNavigationItem
+            label="Home"
+            icon={homeIcon}
+            onTouchTap={() => this.select(1)}
+          />
+          <BottomNavigationItem
+            label="Search"
+            icon={searchIcon}
+            onTouchTap={() => this.select(2)}
+          />
+        </BottomNavigation>
+      </Paper>
+    );
+  };
+};
 
 export default NavBar;

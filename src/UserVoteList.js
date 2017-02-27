@@ -7,16 +7,16 @@ const styles = {
   root: {
     display: 'flex',
     flexWrap: 'wrap',
-    justifyContent: 'space-around',
+    justifyContent: 'space-around'
   },
   gridList: {
     width: '90%',
     height: 'auto',
     overflowY: 'auto',
-    margin: 'auto',
+    margin: 'auto'
   },
   paper: {
-    margin: 'auto',
+    margin: 'auto'
   }
 };
 
@@ -24,21 +24,22 @@ const tilesData = [
   {
     img: './1.jpg',
     title: 'Breakfast',
-    author: 'jill111',
+    author: 'jill111'
   },
   {
     img: './2.jpg',
     title: 'Tasty burger',
-    author: 'pashminu',
+    author: 'pashminu'
   },
   {
     img: './3.jpg',
     title: 'Camera',
-    author: 'Danson67',
+    author: 'Danson67'
   },
 ];
 
 class UserVoteList extends Component {
+
   render() {
     return (
       <div style={styles.root}>
@@ -59,7 +60,7 @@ class UserVoteList extends Component {
         </GridList>
       </div>
     )
-  }
-}
+  };
+};
 
 export default UserVoteList;

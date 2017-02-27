@@ -163,7 +163,7 @@ class VideoEmbed extends Component {
       </div>
       </Paper>
     )
-  }
-}
+  };
+};
 
 export default VideoEmbed;

@@ -1,17 +1,11 @@
 import React, {Component} from 'react';
 import YouTubeAutocomplete from 'material-ui-youtube-autocomplete';
 
-
-
 class Search extends Component {
-
 
   selectSearch = (results) => this.props.updateSearchResultsList(results);
 
-
-
   render() {
-
     return (
       <div>
         <YouTubeAutocomplete
@@ -22,7 +16,7 @@ class Search extends Component {
          />
       </div>
     )
-  }
-}
+  };
+};
 
 export default Search;

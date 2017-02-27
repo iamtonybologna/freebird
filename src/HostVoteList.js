@@ -45,7 +45,7 @@ const tilesData = [
     img: './3.jpg',
     title: 'Camera',
     author: 'Danson67'
-  },
+  }
 ];
 
 class HostVoteList extends Component {
@@ -66,7 +66,7 @@ class HostVoteList extends Component {
         </GridList>
       </Paper>
     )
-  }
-}
+  };
+};
 
 export default HostVoteList;

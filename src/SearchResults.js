@@ -7,21 +7,22 @@ const styles = {
   root: {
     display: 'flex',
     flexWrap: 'wrap',
-    justifyContent: 'space-around',
+    justifyContent: 'space-around'
   },
   gridList: {
     width: '90%',
     height: 'auto',
     overflowY: 'auto',
-    margin: 'auto',
+    margin: 'auto'
   },
   paper: {
-    margin: 'auto',
+    margin: 'auto'
   }
 };
 
 
 class SearchResults extends Component {
+
   render() {
     return (
       <div style={styles.root}>
@@ -40,7 +41,7 @@ class SearchResults extends Component {
           ))}
         </GridList>
       </div>
-      )
+    )
   }
 }
 
