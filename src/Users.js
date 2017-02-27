@@ -45,24 +45,21 @@ class Users extends Component {
       };
     };
 
-    this.handleSongClick = (e) => {
-      this.ws.emit('setUserVote', { id: this.state.user.id, 'song': e.target.value });
-      console.log('Vote sent to server', { id: this.state.user.id, 'song': e.target.value });
-    };
+
 
     this.renderView = () => {
       switch(this.state.view) {
         case 0:
           return <Welcome />
         case 1:
-          return <UserVoteList />
+          return <UserVoteList voteFor={this.handleSongClick.bind(this)}/>
         case 2:
-          return <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher}/>
+          return <Search updateSearchResultsList={this.updateSearchResultsList} />
         case 3:
         return (
         <div>
           <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher}/>
-          <SearchResults results={this.state.searchResults} />
+          <SearchResults results={this.state.searchResults} submitNewSong={this.handleSongAddition}/>
         </div>
       )
       }
@@ -88,14 +85,20 @@ class Users extends Component {
                     })
   };
 
+  handleSongClick = (e, songId) => {
+    this.ws.emit('setUserVote', { id: this.state.user.id, 'song': e });
+    console.log('Vote sent to server', { id: this.state.user.id, 'song': e });
+  };
+
+  handleSongAddition = (e, songId) => {
+    this.ws.emit('addNewSong', { id: this.state.user.id, 'song': e });
+    console.log('New song sent to server', { id: this.state.user.id, 'song': e });
+  };
+
   render() {
     return (
       <div className="App">
         <input type='text' name='name' onKeyUp={this.handleUserFieldKeyUp} />
-        <br/><br/>
-        <button value='songOne' onClick={this.handleSongClick} >Song 1</button>
-        <button value='songTwo' onClick={this.handleSongClick} >Song 2</button>
-        <button value='songThree' onClick={this.handleSongClick} >Song 3</button>
         <MuiThemeProvider muiTheme={muiTheme}>
           <div>
             { this.renderView() }
