@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './Users.css';
-import { Link } from 'react-router-dom';
 import io from 'socket.io-client';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -98,8 +97,7 @@ class Users extends Component {
           </div>
         </MuiThemeProvider>
       </div>
-
-    );
+    )
   };
 };
 
