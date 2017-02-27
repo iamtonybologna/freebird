@@ -31,9 +31,9 @@ class Users extends Component {
       console.log('Current state: ', this.state);
     });
 
-    this.ws.on('setNextUp', (nextUp) => {
-      console.log(nextUp);
-      this.setState({voteListLoaded: true, 'nextUp': nextUp });
+    this.ws.on('updateUpNext', (upNext) => {
+      console.log(upNext);
+      this.setState({voteListLoaded: true, 'upNext': upNext.data });
       console.log('Current state: ', this.state);
     });
   };
@@ -75,7 +75,7 @@ class Users extends Component {
       searchResults: [],
       user: { id: 0, name: '' },
       voteListLoaded: false,
-      nextUp: [],
+      upNext: [],
     };
   };
 
