@@ -42,21 +42,21 @@ class UserVoteList extends Component {
   render() {
     return (
       <div style={styles.root}>
-          <GridList
-            style={styles.gridList}
-            cols={0.1}
-          >
-            {tilesData.map((tile) => (
-              <GridTile
-                key={tile.img}
-                title={tile.title}
-                subtitle={<span>by <b>{tile.author}</b></span>}
-                actionIcon={<IconButton><StarBorder color="white" /></IconButton>}
-              >
-                <img src={tile.img} />
-              </GridTile>
-            ))}
-          </GridList>
+        <GridList
+          style={styles.gridList}
+          cols={0.1}
+        >
+          {tilesData.map((tile) => (
+            <GridTile
+              key={tile.img}
+              title={tile.title}
+              subtitle={<span>by <b>{tile.author}</b></span>}
+              actionIcon={<IconButton><StarBorder color="white" /></IconButton>}
+            >
+              <img src={tile.img} />
+            </GridTile>
+          ))}
+        </GridList>
       </div>
     )
   }

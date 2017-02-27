@@ -8,12 +8,15 @@ import {deepOrange500} from 'material-ui/styles/colors';
 import Welcome from './Welcome.js';
 import UserVoteList from './UserVoteList.js';
 import Search from './Search.js';
+import SearchResults from './SearchResults.js';
+import NavBar from './NavBar.js';
 
 const muiTheme = getMuiTheme({
   palette: {
     accent1Color: deepOrange500,
   }
 });
+
 
 class Users extends Component {
 
@@ -49,17 +52,39 @@ class Users extends Component {
       console.log('Vote sent to server', { id: this.state.user.id, 'song': e.target.value });
     };
 
+    this.renderView = () => {
+      switch(this.state.view) {
+
+        case 'Search':
+        return <Search updateSearchResultsList={this.updateSearchResultsList}/>
+        case 'UserVoteList':
+        return <UserVoteList />
+        case 'Welcome':
+        return <Welcome />
+
+      }
+    }
+
+
     this.state = {
+      view: 'UserVoteList',
       userCount: 0,
       searchResults: [],
-      user: { id: 0, name: '' }
+      user: { id: 0, name: '' },
     };
   };
 
 
+  switcher = (newView) => {
+    this.setState({view: newView})
+    console.log(this.state.searchResults)
+  }
+
   updateSearchResultsList = (results) => {
-    this.setState({searchResults: results})
+      this.setState({searchResults: results})
+
   };
+
 
 
 
@@ -71,18 +96,12 @@ class Users extends Component {
         <button value='songOne' onClick={this.handleSongClick} >Song 1</button>
         <button value='songTwo' onClick={this.handleSongClick} >Song 2</button>
         <button value='songThree' onClick={this.handleSongClick} >Song 3</button>
-        {/* Welcome */}
-        {/* PartyButton */}
-        {/* UserVoteList */}
-        {/* Search */}
 
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
-        <Welcome/>
-        <Search updateSearchResultsList={this.updateSearchResultsList}/>
-        <UserVoteList/>
-
-      </div>
+          { this.renderView() }
+          <NavBar switcher={this.switcher}/>
+        </div>
       </MuiThemeProvider>
       </div>
 
