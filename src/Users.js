@@ -38,21 +38,12 @@ class Users extends Component {
   constructor(props) {
     super(props);
 
-    this.handleUserFieldKeyUp = (e) => {
-      if (e.key === 'Enter') {
-        this.ws.emit('setUsername', { 'name': e.target.value });
-        console.log('Username sent to server', e.target.value);
-      };
-    };
-
-
-
     this.renderView = () => {
       switch(this.state.view) {
         case 0:
-          return <Welcome />
+          return <Welcome handleNewName={this.handleNewName}/>
         case 1:
-          return <UserVoteList voteFor={this.handleSongClick.bind(this)}/>
+          return <UserVoteList voteFor={this.handleSongClick}/>
         case 2:
           return <Search updateSearchResultsList={this.updateSearchResultsList} />
         case 3:
@@ -85,20 +76,26 @@ class Users extends Component {
                     })
   };
 
-  handleSongClick = (e, songId) => {
+  handleNewName = (e) => {
+    if (e.key === 'Enter') {
+      this.ws.emit('setUsername', { 'name': e.target.value });
+      console.log('Username sent to server', e.target.value);
+    };
+  };
+
+  handleSongClick = (e) => {
     this.ws.emit('setUserVote', { id: this.state.user.id, 'song': e });
     console.log('Vote sent to server', { id: this.state.user.id, 'song': e });
   };
 
-  handleSongAddition = (e, songId) => {
+  handleSongAddition = (e) => {
     this.ws.emit('addNewSong', { id: this.state.user.id, 'song': e });
-    console.log('New song sent to server', { id: this.state.user.id, 'song': e });
+    console.log('New song sent to server', {id: this.state.user.id, 'song': e });
   };
 
   render() {
     return (
       <div className="App">
-        <input type='text' name='name' onKeyUp={this.handleUserFieldKeyUp} />
         <MuiThemeProvider muiTheme={muiTheme}>
           <div>
             { this.renderView() }

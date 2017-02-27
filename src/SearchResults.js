@@ -34,7 +34,7 @@ class SearchResults extends Component {
             <GridTile
               key={tile.id.videoId}
               title={tile.snippet.title}
-              onTouchTap={this.props.submitNewSong.bind(this, tile.id.videoId)}
+              onTouchTap={this.props.submitNewSong.bind(this, tile)}
               actionIcon={<IconButton><StarBorder color="white" /></IconButton>}
             >
               <img src={tile.snippet.thumbnails.medium.url} />
