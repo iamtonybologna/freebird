@@ -86,9 +86,10 @@ class Users extends Component {
   };
 
   updateSearchResultsList = (results) => {
-      this.setState({ searchResults: results,
-                      view: 3
-                    }
+      this.setState({
+        searchResults: results,
+        view: 3
+        }
       );
   };
 
@@ -98,19 +99,21 @@ class Users extends Component {
   };
 
   handleSongAddition = (e) => {
-    this.ws.emit('addNewSong', { 'userId': this.state.user.id,
-                                 'songId': e.id.videoId,
-                                 'songTitle': e.snippet.title,
-                                 'songImageMedium': e.snippet.thumbnails.medium.url,
-                                 'songImageHigh': e.snippet.thumbnails.high.url
-                               }
+    this.ws.emit('addNewSong', {
+        'userId': this.state.user.id,
+        'songId': e.id.videoId,
+        'songTitle': e.snippet.title,
+        'songImageMedium': e.snippet.thumbnails.medium.url,
+        'songImageHigh': e.snippet.thumbnails.high.url
+      }
     );
-    console.log('New song sent to server', { 'userId': this.state.user.id,
-                                             'songId': e.id.videoId,
-                                             'songTitle': e.snippet.title,
-                                             'songImageMedium': e.snippet.thumbnails.medium.url,
-                                             'songImageHigh': e.snippet.thumbnails.high.url
-                                           }
+    console.log('New song sent to server', {
+        'userId': this.state.user.id,
+        'songId': e.id.videoId,
+        'songTitle': e.snippet.title,
+        'songImageMedium': e.snippet.thumbnails.medium.url,
+        'songImageHigh': e.snippet.thumbnails.high.url
+      }
     );
   };
 

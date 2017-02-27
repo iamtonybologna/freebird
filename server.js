@@ -53,14 +53,16 @@ io.on('connection', (client) => {
 
   client.on('addNewSong', (songData) => {
     console.log('Received new song from client', songData);
-    let newSong = { uploader: songData.userId,
-                    songId: songData.songId,
-                    songTitle: songData.songTitle,
-                    songImageMedium: songData.songImageMedium,
-                    songImageHigh: songData.songImageHigh
+    let newSong = {
+      uploader: songData.userId,
+      songId: songData.songId,
+      songTitle: songData.songTitle,
+      songImageMedium: songData.songImageMedium,
+      songImageHigh: songData.songImageHigh
     };
     playlist.push(newSong);
     if (initializing) {
+      console.log('Broadcasting playlist data');
       io.emit('updatePlaylist', { data: playlist });
     };
   });
