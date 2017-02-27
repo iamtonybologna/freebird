@@ -12,7 +12,7 @@ import NavBar from './NavBar.js';
 
 const muiTheme = getMuiTheme({
   palette: {
-    accent1Color: deepOrange500,
+    accent1Color: deepOrange500
   }
 });
 
@@ -28,6 +28,12 @@ class Users extends Component {
       this.setState({ user: { id: user.id , name: user.name } });
       console.log('Current state: ', this.state);
     });
+
+    this.ws.on('updatePlaylist', (playlist) => {
+      console.log(playlist);
+      this.setState({ playlist: playlist.data });
+      console.log('Current state: ', this.state);
+    });
   };
 
   componentWillUnmount() {
@@ -38,8 +44,15 @@ class Users extends Component {
   constructor(props) {
     super(props);
 
+    this.handleUserFieldKeyUp = (e) => {
+      if (e.key === 'Enter') {
+        this.ws.emit('setUsername', { 'name': e.target.value });
+        console.log('Username sent to server', e.target.value);
+      };
+    };
+
     this.renderView = () => {
-      switch(this.state.view) {
+      switch (this.state.view) {
         case 0:
           return <Welcome handleNewName={this.handleNewName}/>
         case 1:
@@ -47,40 +60,36 @@ class Users extends Component {
         case 2:
           return <Search updateSearchResultsList={this.updateSearchResultsList} />
         case 3:
-        return (
-        <div>
-          <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher}/>
-          <SearchResults results={this.state.searchResults} submitNewSong={this.handleSongAddition}/>
-        </div>
-      )
-      }
-    }
-
+          return (
+            <div>
+              <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher}/>
+              <SearchResults results={this.state.searchResults} submitNewSong={this.handleSongAddition}/>
+            </div>
+          )
+        default:
+          break;
+      };
+    };
 
     this.state = {
       view: 1,
       userCount: 0,
       searchResults: [],
-      user: { id: 0, name: '' }
+      user: { id: 0, name: '' },
+      playlist: []
     };
   };
 
   switcher = (newView) => {
-    this.setState({view: newView})
-    console.log(this.state.searchResults)
-  }
-
-  updateSearchResultsList = (results) => {
-      this.setState({searchResults: results,
-                    view: 3
-                    })
+    this.setState({ view: newView });
+    console.log(this.state.searchResults);
   };
 
-  handleNewName = (e) => {
-    if (e.key === 'Enter') {
-      this.ws.emit('setUsername', { 'name': e.target.value });
-      console.log('Username sent to server', e.target.value);
-    };
+  updateSearchResultsList = (results) => {
+      this.setState({ searchResults: results,
+                      view: 3
+                    }
+      );
   };
 
   handleSongClick = (e) => {
@@ -89,8 +98,20 @@ class Users extends Component {
   };
 
   handleSongAddition = (e) => {
-    this.ws.emit('addNewSong', { id: this.state.user.id, 'song': e });
-    console.log('New song sent to server', {id: this.state.user.id, 'song': e });
+    this.ws.emit('addNewSong', { 'userId': this.state.user.id,
+                                 'songId': e.id.videoId,
+                                 'songTitle': e.snippet.title,
+                                 'songImageMedium': e.snippet.thumbnails.medium.url,
+                                 'songImageHigh': e.snippet.thumbnails.high.url
+                               }
+    );
+    console.log('New song sent to server', { 'userId': this.state.user.id,
+                                             'songId': e.id.videoId,
+                                             'songTitle': e.snippet.title,
+                                             'songImageMedium': e.snippet.thumbnails.medium.url,
+                                             'songImageHigh': e.snippet.thumbnails.high.url
+                                           }
+    );
   };
 
   render() {

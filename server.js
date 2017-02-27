@@ -12,6 +12,7 @@ io.origins('*:*');
 server.listen(4000);
 console.log('Server listening on port 4000');
 
+let initializing = true;
 let userCount = 0;
 let usernames = {};
 let votes = {
@@ -19,6 +20,7 @@ let votes = {
   songTwo: [],
   songThree: []
 };
+let playlist = [];
 
 io.on('connection', (client) => {
 
@@ -26,10 +28,6 @@ io.on('connection', (client) => {
   userCount ++;
   console.log(userCount + ' clients connected!');
   io.emit('updateUserCount', { userCount: userCount });
-
-  client.on('event', (data) => {
-    console.log(data);
-  });
 
   client.on('setUsername', (user) => {
     console.log('Received username from client', user);
@@ -51,6 +49,30 @@ io.on('connection', (client) => {
     votes[vote.song].push(vote.id);
     io.emit('votes', { votes: votes });
     console.log(votes);
+  });
+
+  client.on('addNewSong', (songData) => {
+    console.log('Received new song from client', songData);
+    let newSong = { uploader: songData.userId,
+                    songId: songData.songId,
+                    songTitle: songData.songTitle,
+                    songImageMedium: songData.songImageMedium,
+                    songImageHigh: songData.songImageHigh
+    };
+    playlist.push(newSong);
+    if (initializing) {
+      io.emit('updatePlaylist', { data: playlist });
+    };
+  });
+
+  client.on('getUpNext', () => {
+    console.log('Sending 3 songs to host');
+    let upNext = [
+      playlist[Math.floor(Math.random() * playlist.length)],
+      playlist[Math.floor(Math.random() * playlist.length)],
+      playlist[Math.floor(Math.random() * playlist.length)]
+    ];
+    io.emit('updateUpNext', { data: upNext });
   });
 
   client.on('disconnect', () => {
