@@ -59,11 +59,15 @@ class Users extends Component {
         case 2:
           return <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher}/>
         case 3:
-          return <SearchResults results={this.state.searchResults} />
-        default:
-          break;
-      };
-    };
+        return (
+        <div>
+          <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher}/>
+          <SearchResults results={this.state.searchResults} />
+        </div>
+      )
+      }
+    }
+
 
     this.state = {
       view: 1,
@@ -79,7 +83,9 @@ class Users extends Component {
   }
 
   updateSearchResultsList = (results) => {
-      this.setState({searchResults: results})
+      this.setState({searchResults: results,
+                    view: 3
+                    })
   };
 
   render() {
