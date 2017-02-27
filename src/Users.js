@@ -57,16 +57,18 @@ class Users extends Component {
         case 1:
           return <UserVoteList />
         case 2:
-          return <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher}/>
+          return <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher} />
         case 3:
-        return (
-        <div>
-          <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher}/>
-          <SearchResults results={this.state.searchResults} />
-        </div>
-      )
-      }
-    }
+          return (
+            <div>
+              <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher} />
+              <SearchResults results={this.state.searchResults} />
+            </div>
+          )
+        default:
+          break;
+      };
+    };
 
 
     this.state = {
@@ -78,14 +80,14 @@ class Users extends Component {
   };
 
   switcher = (newView) => {
-    this.setState({view: newView})
-    console.log(this.state.searchResults)
+    this.setState({view: newView});
+    console.log(this.state.searchResults);
   };
 
   updateSearchResultsList = (results) => {
-      this.setState({searchResults: results,
-                    view: 3
-                    })
+      this.setState({ searchResults: results,
+                      view: 3
+                    });
   };
 
   render() {
