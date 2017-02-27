@@ -1,14 +1,12 @@
 import React, {Component} from 'react';
 import YouTubeAutocomplete from 'material-ui-youtube-autocomplete';
+import SearchResults from './SearchResults.js';
 
 
 
 class Search extends Component {
 
-
   selectSearch = (results) => this.props.updateSearchResultsList(results);
-
-
 
   render() {
 
