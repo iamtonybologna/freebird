@@ -28,6 +28,12 @@ class Users extends Component {
       this.setState({ user: { id: user.id , name: user.name } });
       console.log('Current state: ', this.state);
     });
+
+    this.ws.on('updatePlaylist', (playlist) => {
+      console.log(playlist);
+      this.setState({ playlist: playlist.data });
+      console.log('Current state: ', this.state);
+    });
   };
 
   componentWillUnmount() {
@@ -45,24 +51,19 @@ class Users extends Component {
       };
     };
 
-    this.handleSongClick = (e) => {
-      this.ws.emit('setUserVote', { id: this.state.user.id, 'song': e.target.value });
-      console.log('Vote sent to server', { id: this.state.user.id, 'song': e.target.value });
-    };
-
     this.renderView = () => {
       switch (this.state.view) {
         case 0:
           return <Welcome />
         case 1:
-          return <UserVoteList />
+          return <UserVoteList voteFor={this.handleSongClick.bind(this)}/>
         case 2:
-          return <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher} />
+          return <Search updateSearchResultsList={this.updateSearchResultsList} />
         case 3:
           return (
             <div>
-              <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher} />
-              <SearchResults results={this.state.searchResults} />
+              <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher}/>
+              <SearchResults results={this.state.searchResults} submitNewSong={this.handleSongAddition}/>
             </div>
           )
         default:
@@ -70,34 +71,53 @@ class Users extends Component {
       };
     };
 
-
     this.state = {
       view: 1,
       userCount: 0,
       searchResults: [],
-      user: { id: 0, name: '' }
+      user: { id: 0, name: '' },
+      playlist: []
     };
   };
 
   switcher = (newView) => {
-    this.setState({view: newView});
+    this.setState({ view: newView });
     console.log(this.state.searchResults);
   };
 
   updateSearchResultsList = (results) => {
       this.setState({ searchResults: results,
                       view: 3
-                    });
+                    }
+      );
+  };
+
+  handleSongClick = (e) => {
+    this.ws.emit('setUserVote', { id: this.state.user.id, 'song': e });
+    console.log('Vote sent to server', { id: this.state.user.id, 'song': e });
+  };
+
+  handleSongAddition = (e) => {
+    this.ws.emit('addNewSong', { 'userId': this.state.user.id,
+                                 'songId': e.id.videoId,
+                                 'songTitle': e.snippet.title,
+                                 'songImageMedium': e.snippet.thumbnails.medium.url,
+                                 'songImageHigh': e.snippet.thumbnails.high.url
+                               }
+    );
+    console.log('New song sent to server', { 'userId': this.state.user.id,
+                                             'songId': e.id.videoId,
+                                             'songTitle': e.snippet.title,
+                                             'songImageMedium': e.snippet.thumbnails.medium.url,
+                                             'songImageHigh': e.snippet.thumbnails.high.url
+                                           }
+    );
   };
 
   render() {
     return (
       <div className="App">
         <input type='text' name='name' onKeyUp={this.handleUserFieldKeyUp} />
-        <br/><br/>
-        <button value='songOne' onClick={this.handleSongClick} >Song 1</button>
-        <button value='songTwo' onClick={this.handleSongClick} >Song 2</button>
-        <button value='songThree' onClick={this.handleSongClick} >Song 3</button>
         <MuiThemeProvider muiTheme={muiTheme}>
           <div>
             { this.renderView() }
