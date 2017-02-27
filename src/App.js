@@ -20,7 +20,9 @@ class App extends Component {
     super(props);
     this.state = {
       playList: { songOne : 'Pib8eYDSFEI', songTwo: 'lgSLz5FeXUg', songThree: 'sOOebk_dKFo' },
-      votes: { songOne : [], songTwo: [], songThree: [] }
+      votes: { songOne : [], songTwo: [], songThree: [] },
+      upNext: [],
+      view: 1
     };
   };
 
@@ -34,10 +36,16 @@ class App extends Component {
       console.log('Received a message from the server!', data);
       this.setState({ userCount: data.userCount });
     });
-
     this.ws.on('votes', (data) => {
       console.log('votes', data);
       this.setState({ votes: data.votes});
+    });
+    this.ws.on('updateUpNext', (upNext) => {
+      console.log('updateUpNext', upNext);
+      this.setState({ upNext: upNext.data});
+    });
+    this.ws.on('updatePlaylist', (playlist) => {
+      console.log('updateplaylist', playlist.data);
     });
   };
 
@@ -46,12 +54,16 @@ class App extends Component {
     this.ws.close();
   };
 
+  getUpNext = () => {
+    this.ws.emit('getUpNext');
+  };
+
   render() {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
           <div>
-            <VideoEmbed playList={this.state.playList} votes={this.state.votes} />
+            <VideoEmbed playList={this.state.playList} votes={this.state.votes} getUpNext={this.getUpNext}/>
             <HostVoteList votes={this.state.votes} />
             <div>
               {this.state.userCount} user(s) in room

@@ -128,6 +128,7 @@ class VideoEmbed extends Component {
     let tempPlayer = this.state.playing;
     this.setState({playing : this.state.notPlaying});
     this.setState({notPlaying : tempPlayer});
+    this.props.getUpNext();
     this.playerTimer();
   };
 
