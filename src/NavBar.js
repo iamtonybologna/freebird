@@ -13,7 +13,7 @@ const styles = {
     navBar: {
       position: 'fixed',
       bottom: 0
-    },
+    }
   };
 
 class NavBar extends Component {
@@ -41,7 +41,7 @@ class NavBar extends Component {
           />
         </BottomNavigation>
       </Paper>
-    );
+    )
   };
 };
 

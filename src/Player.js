@@ -6,7 +6,7 @@ class Player extends Component {
     return (
       <div id={this.props.id}>
       </div>
-    );
-  }
-}
+    )
+  };
+};
 export default Player;

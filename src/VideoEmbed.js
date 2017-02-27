@@ -82,7 +82,7 @@ class VideoEmbed extends Component {
         this.startUp();
        }, 1000);
       }
-    }
+    };
   };
 
   // get everything going after player1 onReady is fired
@@ -138,8 +138,8 @@ class VideoEmbed extends Component {
     for (let item in playList) {
       if (playList.hasOwnProperty(item)) {
         sortArray.push([item, playList[item], this.props.votes[item].length]);
-      }
-    }
+      };
+    };
     sortArray.sort((a,b) => {
       return a[2] < b[2];
     });

@@ -5,7 +5,7 @@ class PartyButton extends Component {
     return (
 
     )
-  }
-}
+  };
+};
 
 export default PartyButton;

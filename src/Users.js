@@ -12,7 +12,7 @@ import NavBar from './NavBar.js';
 
 const muiTheme = getMuiTheme({
   palette: {
-    accent1Color: deepOrange500,
+    accent1Color: deepOrange500
   }
 });
 
@@ -51,7 +51,7 @@ class Users extends Component {
     };
 
     this.renderView = () => {
-      switch(this.state.view) {
+      switch (this.state.view) {
         case 0:
           return <Welcome />
         case 1:
@@ -76,7 +76,7 @@ class Users extends Component {
   switcher = (newView) => {
     this.setState({view: newView})
     console.log(this.state.searchResults)
-  }
+  };
 
   updateSearchResultsList = (results) => {
       this.setState({searchResults: results})

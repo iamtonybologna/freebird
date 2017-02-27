@@ -9,11 +9,11 @@ class Search extends Component {
     return (
       <div>
         <YouTubeAutocomplete
-           apiKey="AIzaSyCxZrHtU_wXNdakFMEiceOirp-xpxOIMLo"
-           placeHolder="insert heater here..."
-           maxResults="10"
-           callback={this.selectSearch}
-         />
+          apiKey="AIzaSyCxZrHtU_wXNdakFMEiceOirp-xpxOIMLo"
+          placeHolder="insert heater here..."
+          maxResults="10"
+          callback={this.selectSearch}
+        />
       </div>
     )
   };
