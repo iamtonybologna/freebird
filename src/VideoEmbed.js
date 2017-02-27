@@ -37,9 +37,7 @@ class VideoEmbed extends Component {
       player2Hidden: "none",
       playing: null,
       notPlaying: null,
-      timer: 0,
-      playList: { songOne : 'Pib8eYDSFEI', songTwo: 'lgSLz5FeXUg', songThree: 'sOOebk_dKFo' },
-      votes: { songOne : [], songTwo: [], songThree: [] }
+      timer: 0
     };
   };
 
@@ -60,10 +58,10 @@ class VideoEmbed extends Component {
         // create player one
         this.setState({
           playing: new window.YT.Player('player1', {
-            height: '390',
-            width: '640',
+            height: '432',
+            width: '970',
             videoId: 'hqJKZVnNLT0',
-            //this start the first player
+            // this starts the first player
             events: {
               'onReady': this.onPlayerReady
             }
@@ -72,8 +70,8 @@ class VideoEmbed extends Component {
         // create player two
         this.setState({
           notPlaying: new window.YT.Player('player2', {
-            height: '390',
-            width: '640',
+            height: '420',
+            width: '900',
             videoId: 'mSLqhZk-hA4'
           })
         });
@@ -135,11 +133,11 @@ class VideoEmbed extends Component {
 
   voteCalculate = () =>{
     let sortArray = [];
-    let playList = this.state.playList;
+    let playList = this.props.playList;
 
     for (let item in playList) {
       if (playList.hasOwnProperty(item)) {
-        sortArray.push([item, playList[item], this.state.votes[item].length]);
+        sortArray.push([item, playList[item], this.props.votes[item].length]);
       }
     }
     sortArray.sort((a,b) => {
@@ -152,9 +150,9 @@ class VideoEmbed extends Component {
     return (
       <Paper style={styles.paperVid} zDepth={5} rounded={false}>
       <div>
-        Song one {this.state.votes.songOne.length} -
-        Song two {this.state.votes.songTwo.length} -
-        Song three {this.state.votes.songThree.length} -
+        Song one {this.props.votes.songOne.length} -
+        Song two {this.props.votes.songTwo.length} -
+        Song three {this.props.votes.songThree.length} -
         Time Left {this.state.timer}
         <div style={{display: this.state.player1Hidden}}>
           <Player id={"player1"}></Player>

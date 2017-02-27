@@ -58,7 +58,6 @@ class HostVoteList extends Component {
               key={tile.img}
               title={tile.title}
               actionIcon={<IconButton><StarBorder color="rgb(0, 188, 212)" /></IconButton>}
-
               titleBackground="linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
             >
               <img role="presentation" src={tile.img} />

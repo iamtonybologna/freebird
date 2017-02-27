@@ -55,12 +55,9 @@ class Users extends Component {
     };
   };
 
-
   updateSearchResultsList = (results) => {
     this.setState({searchResults: results})
   };
-
-
 
   render() {
     return (
@@ -74,7 +71,6 @@ class Users extends Component {
         {/* PartyButton */}
         {/* UserVoteList */}
         {/* Search */}
-
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
         <Welcome/>
