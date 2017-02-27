@@ -54,13 +54,15 @@ class Users extends Component {
     this.renderView = () => {
       switch(this.state.view) {
         case 0:
-        return <Welcome />
+          return <Welcome />
         case 1:
-        return <UserVoteList />
+          return <UserVoteList />
         case 2:
-        return <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher}/>
+          return <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher}/>
         case 3:
-        return <SearchResults results={this.state.searchResults} />
+          return <SearchResults results={this.state.searchResults} />
+        default:
+          break;
       };
     };
 
