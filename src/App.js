@@ -7,6 +7,9 @@ import { Link } from 'react-router-dom';
 import io from 'socket.io-client';
 import VideoEmbed from './VideoEmbed.js';
 import HostVoteList from './HostVoteList.js';
+import Splash from './splash.js';
+import Loading from './loading.js';
+
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -20,9 +23,32 @@ class App extends Component {
     super(props);
     this.state = {
       playList: { songOne : 'Pib8eYDSFEI', songTwo: 'lgSLz5FeXUg', songThree: 'sOOebk_dKFo' },
-      votes: { songOne : [], songTwo: [], songThree: [] }
+      votes: { songOne : [], songTwo: [], songThree: [] },
+      view: 'splash',
     };
+
+    this.renderView = () => {
+      switch(this.state.view) {
+        case 'splash':
+          return <Splash switcher={this.switcher}/>
+        case 'loading':
+          return <Loading switcher={this.switcher}/>
+        case 'main':
+        return (
+        <div>
+          <VideoEmbed playList={this.state.playList} votes={this.state.votes} />
+          <HostVoteList votes={this.state.votes} />
+        </div>
+      )
+      }
+    }
   };
+
+  switcher = (newView) => {
+    this.setState({view: newView})
+    console.log(this.state.searchResults)
+  }
+
 
   componentDidMount() {
     console.log('componentDidMount <App />');
@@ -50,20 +76,8 @@ class App extends Component {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
-          <div>
-            <VideoEmbed playList={this.state.playList} votes={this.state.votes} />
-            <HostVoteList votes={this.state.votes} />
-            <div>
-              {this.state.userCount} user(s) in room
-            </div>
-            <div>
-              <p>
-                <Link to='/host'>Host Page</Link>
-                <br/>
-                <Link to='/users'>Users Page</Link>
-              </p>
-            </div>
-          </div>
+          { this.renderView() }
+          {this.state.userCount} user(s) in room
         </div>
       </MuiThemeProvider>
     )
