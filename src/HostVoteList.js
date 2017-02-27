@@ -53,14 +53,14 @@ class HostVoteList extends Component {
     return (
       <Paper style={styles.paper} zDepth={5} rounded={false}>
         <GridList style={styles.gridList} cols={2.2}>
-          {tilesData.map((tile) => (
+          {this.props.upNext.map((tile) => (
             <GridTile
-              key={tile.img}
-              title={tile.title}
+              key={tile.songId}
+              title={tile.songTitle}
               actionIcon={<IconButton><StarBorder color="rgb(0, 188, 212)" /></IconButton>}
               titleBackground="linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
             >
-              <img role="presentation" src={tile.img} />
+              <img role="presentation" src={tile.songImageHigh} />
             </GridTile>
           ))}
         </GridList>

@@ -25,6 +25,7 @@ class App extends Component {
       playList: { songOne : 'Pib8eYDSFEI', songTwo: 'lgSLz5FeXUg', songThree: 'sOOebk_dKFo' },
       votes: { songOne : [], songTwo: [], songThree: [] },
       view: 'splash',
+      upNext: [],
     };
 
     this.renderView = () => {
@@ -37,7 +38,7 @@ class App extends Component {
         return (
         <div>
           <VideoEmbed playList={this.state.playList} votes={this.state.votes} />
-          <HostVoteList votes={this.state.votes} />
+          <HostVoteList votes={this.state.votes} upNext={this.state.upNext}/>
         </div>
       )
       }
@@ -64,6 +65,12 @@ class App extends Component {
     this.ws.on('votes', (data) => {
       console.log('votes', data);
       this.setState({ votes: data.votes});
+    });
+
+    this.ws.on('updateUpNext', (upNext) => {
+      console.log(upNext);
+      this.setState({'upNext': upNext.data });
+      console.log('Current state: ', this.state);
     });
   };
 

@@ -9,7 +9,6 @@ import UserVoteList from './UserVoteList.js';
 import Search from './Search.js';
 import SearchResults from './SearchResults.js';
 import NavBar from './NavBar.js';
-import loadingUser from './loadingUser.js';
 import CircularProgress from 'material-ui/CircularProgress';
 
 const muiTheme = getMuiTheme({
@@ -54,7 +53,7 @@ class Users extends Component {
           if (this.state.voteListLoaded === false) {
             return <div>  <CircularProgress size={80} thickness={5} /> <br/> Waiting on first vote...</div>
             } else {
-              return <UserVoteList voteFor={this.handleSongClick}/>
+              return <UserVoteList voteFor={this.handleSongClick} upNext={this.state.upNext}/>
             }
         case 2:
           return <Search updateSearchResultsList={this.updateSearchResultsList} />

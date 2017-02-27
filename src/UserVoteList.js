@@ -47,16 +47,14 @@ class UserVoteList extends Component {
           style={styles.gridList}
           cols={0.1}
         >
-          {tilesData.map((tile) => (
+          {this.props.upNext.map((tile) => (
             <GridTile
-              key={tile.title}
+              key={tile.songId}
               onTouchTap={this.props.voteFor.bind(this, tile.title)}
-              value={tile.title}
-              title={tile.title}
-              subtitle={<span>by <b>{tile.author}</b></span>}
+              title={tile.songTitle}
               actionIcon={<IconButton><StarBorder color="white" /></IconButton>}
             >
-              <img src={tile.img} />
+              <img src={tile.songImageMedium} />
             </GridTile>
           ))}
         </GridList>
