@@ -90,18 +90,19 @@ class Users extends Component {
               )
             }
         case 2:
-          return
-          <div>
-            <Search updateSearchResultsList={this.updateSearchResultsList} />
-            <NavBar switcher={this.switcher}/>
-          </div>
+          return (
+            <div>
+              <Search updateSearchResultsList={this.updateSearchResultsList} />
+              <NavBar switcher={this.switcher}/>
+            </div>
+          )
         case 3:
           return (
-          <div>
-            <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher}/>
-            <SearchResults results={this.state.searchResults} submitNewSong={this.handleSongAddition}/>
-            <NavBar switcher={this.switcher}/>
-          </div>
+            <div>
+              <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher}/>
+              <SearchResults results={this.state.searchResults} submitNewSong={this.handleSongAddition}/>
+              <NavBar switcher={this.switcher}/>
+            </div>
           )
         default:
           break;

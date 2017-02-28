@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 import Paper from 'material-ui/Paper';
 import YoutubeSearchedFor from 'material-ui/svg-icons/action/youtube-searched-for';
-import Searched from 'material-ui/svg-icons/action/search';
 import Input from 'material-ui/svg-icons/action/input';
 
 const homeIcon = <Input />;
