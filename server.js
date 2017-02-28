@@ -67,7 +67,7 @@ io.on('connection', (client) => {
 
     // check if song is in playlist
     let songInPlaylist = false;
-    for (let i = 0; i < playlist.length, i++) {
+    for (let i = 0; i < playlist.length; i++) {
       if (playlist[i][songId] == newSong.id) {
         songInPlaylist = true;
       };
