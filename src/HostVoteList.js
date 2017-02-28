@@ -5,36 +5,23 @@ import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import Paper from 'material-ui/Paper';
 
 const styles = {
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around'
-  },
   gridList: {
     display: 'flex',
     flexWrap: 'nowrap',
-    overflowX: 'auto'
+    overflowX: 'auto',
+    width: '100%',
   },
   paper: {
     margin: '20px',
     display: 'flex'
   },
-  paperVid: {
-    margin: '20px',
-    height: '450px'
-  },
-  video: {
-    width: '100%',
-    height: '450px',
-    overflow: 'auto'
-  }
 };
 
 class HostVoteList extends Component {
   render() {
     return (
       <Paper style={styles.paper} zDepth={5} rounded={false}>
-        <GridList style={styles.gridList} cols={2.2}>
+        <GridList style={styles.gridList} cols={1.2}>
           {this.props.upNext.map((tile) => (
             <GridTile
               key={tile.data.songId}

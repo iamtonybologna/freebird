@@ -36,6 +36,7 @@ io.on('connection', (client) => {
     usernames[id] = user.name;
     console.log('New user added to usernames', usernames);
     io.emit('setUsername', { id: id, name: user.name });
+    io.emit('checkForUpNext', { upNext: upNext });
   });
 
   client.on('setUserVote', (vote) => {

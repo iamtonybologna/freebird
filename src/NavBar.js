@@ -2,11 +2,10 @@ import React, {Component} from 'react';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 import Paper from 'material-ui/Paper';
 import YoutubeSearchedFor from 'material-ui/svg-icons/action/youtube-searched-for';
-import Home from 'material-ui/svg-icons/action/home';
-import Profile from 'material-ui/svg-icons/action/perm-identity';
+import Searched from 'material-ui/svg-icons/action/search';
+import Input from 'material-ui/svg-icons/action/input';
 
-const profileIcon = <Profile />;
-const homeIcon = <Home />;
+const homeIcon = <Input />;
 const searchIcon = <YoutubeSearchedFor />;
 
 const styles = {
@@ -25,12 +24,7 @@ class NavBar extends Component {
       <Paper zDepth={1}>
         <BottomNavigation selectedIndex={this.props.view} style={styles.navBar}>
           <BottomNavigationItem
-            label="Profile"
-            icon={profileIcon}
-            onTouchTap={() => this.select(0)}
-          />
-          <BottomNavigationItem
-            label="Home"
+            label="Vote"
             icon={homeIcon}
             onTouchTap={() => this.select(1)}
           />

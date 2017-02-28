@@ -41,6 +41,13 @@ class Users extends Component {
       this.setState({ playlist: playlist.data });
       console.log('Current state: ', this.state);
     });
+
+    this.ws.on('checkForUpNext', (data) => {
+      console.log('Received a message from the server!', data);
+      if (data.upNext.length > 0) {
+        this.setState({ upNext: data.upNext, voteListLoaded: true });
+      };
+    });
   };
 
   componentWillUnmount() {
@@ -52,7 +59,7 @@ class Users extends Component {
     super(props);
 
     this.state = {
-      view: 2,
+      view: 0,
       userCount: 0,
       searchResults: [],
       user: { id: 0, name: '' },
@@ -67,17 +74,33 @@ class Users extends Component {
           return <Welcome handleNewName={this.handleNewName}/>
         case 1:
           if (this.state.voteListLoaded === false) {
-            return <div> <br/> <CircularProgress size={80} thickness={5} /> <br/><br/> Waiting on first vote...</div>
+            return (
+            <div>
+              <CircularProgress size={80} thickness={5} />
+              Waiting on first vote...
+              <NavBar switcher={this.switcher}/>
+            </div>
+          )
             } else {
-              return <UserVoteList voteFor={this.handleSongClick} upNext={this.state.upNext}/>
+              return (
+                <div>
+                  <UserVoteList voteFor={this.handleSongClick} upNext={this.state.upNext}/>
+                  <NavBar switcher={this.switcher}/>
+                </div>
+              )
             }
         case 2:
-          return <Search updateSearchResultsList={this.updateSearchResultsList} />
+          return
+          <div>
+            <Search updateSearchResultsList={this.updateSearchResultsList} />
+            <NavBar switcher={this.switcher}/>
+          </div>
         case 3:
           return (
           <div>
             <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher}/>
             <SearchResults results={this.state.searchResults} submitNewSong={this.handleSongAddition}/>
+            <NavBar switcher={this.switcher}/>
           </div>
           )
         default:
@@ -103,12 +126,13 @@ class Users extends Component {
     if (e.key === 'Enter') {
       this.ws.emit('setUsername', { 'name': e.target.value });
       console.log('Username sent to server', e.target.value);
+      this.setState({ view: 1 });
     };
   };
 
   handleSongClick = (e) => {
-    this.ws.emit('setUserVote', { id: this.state.user.id, 'song': e });
-    console.log('Vote sent to server', { id: this.state.user.id, 'song': e });
+    this.ws.emit('setUserVote', { userId: this.state.user.id, 'songId': e });
+    console.log('Vote sent to server', { userId: this.state.user.id, 'songId': e });
   };
 
   handleSongAddition = (e) => {
@@ -136,7 +160,6 @@ class Users extends Component {
         <MuiThemeProvider muiTheme={muiTheme}>
           <div>
             { this.renderView() }
-            <NavBar switcher={this.switcher}/>
           </div>
         </MuiThemeProvider>
       </div>

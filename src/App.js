@@ -32,12 +32,13 @@ class App extends Component {
         case 'splash':
           return <Splash switcher={this.switcher}/>
         case 'loading':
-          return <Loading switcher={this.switcher}/>
+          return <Loading switcher={this.switcher} upNext={this.state.upNext}/>
         case 'main':
           return (
             <div>
               <VideoEmbed playList={this.state.playList} upNext={this.state.upNext} getUpNext={this.getUpNext} votes={this.state.votes} />
               <HostVoteList votes={this.state.votes} upNext={this.state.upNext}/>
+              {this.state.userCount} user(s) in room
             </div>
           )
         default:
@@ -89,7 +90,6 @@ class App extends Component {
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
           { this.renderView() }
-          {this.state.userCount} user(s) in room
         </div>
       </MuiThemeProvider>
     )
