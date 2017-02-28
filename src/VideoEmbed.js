@@ -149,9 +149,7 @@ class VideoEmbed extends Component {
       return a[1] < b[1];
     });
 
-    console.log(sortArray[0][0]);
-
-    console.log(this.props.upNext, "props next");
+    console.log("props next", this.props.upNext);
     return sortArray[0][0];
   };
 
