@@ -20,7 +20,7 @@ class App extends Component {
     super(props);
     this.state = {
       playList: { songOne : 'Pib8eYDSFEI', songTwo: 'lgSLz5FeXUg', songThree: 'sOOebk_dKFo' },
-      votes: { songOne : [], songTwo: [], songThree: [] },
+      votes: { songOne : [], songTwo: [1,1,1], songThree: [] },
       upNext: [],
       view: 1
     };
@@ -43,6 +43,7 @@ class App extends Component {
     this.ws.on('updateUpNext', (upNext) => {
       console.log('updateUpNext', upNext);
       this.setState({ upNext: upNext.data});
+      console.log(this.state.upNext);
     });
     this.ws.on('updatePlaylist', (playlist) => {
       console.log('updateplaylist', playlist.data);
@@ -63,7 +64,7 @@ class App extends Component {
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
           <div>
-            <VideoEmbed playList={this.state.playList} votes={this.state.votes} getUpNext={this.getUpNext}/>
+            <VideoEmbed playList={this.state.playList} votes={this.state.votes} upNext={this.state.upNext} getUpNext={this.getUpNext}/>
             <HostVoteList votes={this.state.votes} />
             <div>
               {this.state.userCount} user(s) in room

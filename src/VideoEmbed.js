@@ -43,7 +43,9 @@ class VideoEmbed extends Component {
 
   componentDidMount() {
     // player startup
+    console.log(this.props.getUpNext);
     this.startUp();
+
   };
 
   // check if YT object exists, if it does you are safe to create players
@@ -87,6 +89,7 @@ class VideoEmbed extends Component {
 
   // get everything going after player1 onReady is fired
   onPlayerReady = (event) => {
+    this.props.getUpNext();
     event.target.playVideo();
     event.target.setVolume(100);
     this.playerTimer();
@@ -134,17 +137,32 @@ class VideoEmbed extends Component {
 
   voteCalculate = () =>{
     let sortArray = [];
-    let playList = this.props.playList;
+    let votes = this.props.votes;
 
-    for (let item in playList) {
-      if (playList.hasOwnProperty(item)) {
-        sortArray.push([item, playList[item], this.props.votes[item].length]);
+    for (let item in votes) {
+      if (votes.hasOwnProperty(item)) {
+        sortArray.push([item, this.props.votes[item].length]);
       };
     };
+
     sortArray.sort((a,b) => {
-      return a[2] < b[2];
+      return a[1] < b[1];
     });
-    return sortArray[0][1];
+
+    console.log(sortArray[0][0]);
+
+    let videoKey = null;
+    switch (sortArray[0][0]){
+      case 'songOne':
+        videoKey = 0;
+      case 'songTwo':
+        videoKey = 1;
+      case 'songThree':
+        videoKey = 2;
+    }
+
+    console.log(this.props.upNext, "props next");
+    return this.props.upNext[videoKey].songId;
   };
 
   render() {
