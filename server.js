@@ -15,43 +15,45 @@ console.log('Server listening on port 4000');
 let initializing = true;
 let userCount = 0;
 let usernames = {};
-let votes = {
-  songOne: [],
-  songTwo: [],
-  songThree: []
-};
+let votes = {};
 let upNext = [];
 let playlist = [];
 
 io.on('connection', (client) => {
 
   console.log('New Client Connected');
-  userCount ++;
+  userCount++;
   console.log(userCount + ' clients connected!');
   io.emit('updateUserCount', { userCount: userCount });
 
+  // set username
   client.on('setUsername', (user) => {
     console.log('Received username from client', user);
     let id = uuid.v1();
     usernames[id] = user.name;
     console.log('New user added to usernames', usernames);
     io.emit('setUsername', { id: id, name: user.name });
+    io.emit('checkForUpNext', { upNext: upNext });
   });
 
+  // voting
+  // votes = { songId: [userId, userId, userId] }
+  // vote = { userId: , songId: }
   client.on('setUserVote', (vote) => {
     console.log('Received vote from client', vote);
+    // remove vote if user has already voted on a song
     for (let song in votes) {
-      if (votes[song].indexOf(vote.id) > -1) {
-        console.log('Found id');
-        let index = song.indexOf(vote.id);
-        votes[song].splice(index, 1);
+      if (votes[song].indexOf(vote.userId) > -1) {
+        let index = song.indexOf(vote.userId);
+        votes[vote.songId].splice(index, 1);
       };
     };
-    votes[vote.song].push(vote.id);
+    votes[vote.songId].push(vote.userId);
     io.emit('votes', { votes: votes });
-    console.log(votes);
+    console.log('Updated votes', votes);
   });
 
+  // add new song
   client.on('addNewSong', (songData) => {
     console.log('Received new song from client', songData);
     let newSong = {
@@ -62,41 +64,38 @@ io.on('connection', (client) => {
       songImageHigh: songData.songImageHigh,
       upNext: false
     };
-    playlist.push(newSong);
-    if (initializing) {
-      console.log('Broadcasting playlist data');
-      io.emit('updatePlaylist', { data: playlist });
+
+    // check if song is in playlist
+    let songInPlaylist = false;
+    for (let i = 0; i < playlist.length, i++) {
+      if (playlist[i][songId] == newSong.id) {
+        songInPlaylist = true;
+      };
+    };
+    // if song is not in playlist, add to playlist
+    if (!songInPlaylist) {
+      playlist.push(newSong);
+      if (initializing) {
+        console.log('Broadcasting playlist data');
+        io.emit('updatePlaylist', { data: playlist });
+      };
     };
   });
 
+  // grab 3 random songs from playlist, add to voting list, send to host and users
   client.on('getUpNext', () => {
     upNext = [];
     let i = 0;
     if (playlist.length > 2) {
       while (i < 3) {
         let randomSong = playlist[Math.floor(Math.random() * playlist.length)];
-        if (randomSong.upNext === true) {
-          randomSong = playlist[Math.floor(Math.random() * playlist.length)];
-        } else {
+        if (!randomSong.upNext) {
           randomSong.upNext = true;
-          switch (i) {
-            case 0:
-              upNext.push({ voteId: 'songOne', data: randomSong });
-              i ++;
-              break;
-            case 1:
-              upNext.push({ voteId: 'songTwo', data: randomSong });
-              i ++;
-              break;
-            case 2:
-              upNext.push({ voteId: 'songThree', data: randomSong });
-              i ++;
-              break;
-            default:
-              break;
-          };
+          upNext.push({ data: randomSong });
+          votes[randomSong.songId] = [];
+          i++;
         };
-        console.log('Sending 3 songs to host', upNext);
+        console.log('Broadcasting new upNext list', upNext);
         io.emit('updateUpNext', { data: upNext });
       };
     };
@@ -104,7 +103,7 @@ io.on('connection', (client) => {
 
   client.on('disconnect', () => {
     console.log('Client disconnected');
-    userCount --;
+    userCount--;
     console.log(userCount + ' clients connected!');
     io.emit('updateUserCount', { userCount: userCount });
   });
