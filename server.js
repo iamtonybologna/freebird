@@ -67,8 +67,8 @@ io.on('connection', (client) => {
 
     // check if song is in playlist
     let songInPlaylist = false;
-    for (let i = 0; i < playlist.length, i++) {
-      if (playlist[i][songId] == newSong.id) {
+    for (let i = 0; i < playlist.length; i++) {
+      if (playlist[i].songId === newSong.songId) {
         songInPlaylist = true;
       };
     };
@@ -90,14 +90,14 @@ io.on('connection', (client) => {
       while (i < 3) {
         let randomSong = playlist[Math.floor(Math.random() * playlist.length)];
         if (!randomSong.upNext) {
-          randomSong.upNext = true;
+          // randomSong.upNext = true;
           upNext.push({ data: randomSong });
           votes[randomSong.songId] = [];
           i++;
         };
-        console.log('Broadcasting new upNext list', upNext);
-        io.emit('updateUpNext', { data: upNext });
       };
+      console.log('Broadcasting new upNext list', upNext);
+      io.emit('updateUpNext', { data: upNext });
     };
   });
 
