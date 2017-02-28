@@ -44,8 +44,8 @@ io.on('connection', (client) => {
     // remove vote if user has already voted on a song
     for (let song in votes) {
       if (votes[song].indexOf(vote.userId) > -1) {
-        let index = song.indexOf(vote.userId);
-        votes[vote.songId].splice(index, 1);
+        let index = votes[song].indexOf(vote.userId);
+        votes[song].splice(index, 1);
       };
     };
     votes[vote.songId].push(vote.userId);
@@ -84,20 +84,20 @@ io.on('connection', (client) => {
 
   // grab 3 random songs from playlist, add to voting list, send to host and users
   client.on('getUpNext', () => {
-    upNext.map((song) => {
-      song.upNext = false;
-    });
     upNext = [];
+    let newSongs = {};
     let i = 0;
     if (playlist.length > 2) {
       while (i < 3) {
         let randomSong = playlist[Math.floor(Math.random() * playlist.length)];
-        if (!randomSong.upNext) {
-          randomSong.upNext = true;
-          upNext.push({ data: randomSong });
-          votes[randomSong.songId] = [];
+        if (newSongs.hasOwnProperty(randomSong.songId) === false) {
+          newSongs[randomSong.songId] = randomSong;
           i++;
         };
+      };
+      for (let song in newSongs) {
+        upNext.push(newSongs[song]);
+        votes[song] = [];
       };
       console.log('Broadcasting new upNext list', upNext);
       io.emit('updateUpNext', { data: upNext });

@@ -151,23 +151,8 @@ class VideoEmbed extends Component {
 
     console.log(sortArray[0][0]);
 
-    let videoKey = null;
-    switch (sortArray[0][0]){
-      case 'songOne':
-        videoKey = 0;
-        break;
-      case 'songTwo':
-        videoKey = 1;
-        break;
-      case 'songThree':
-        videoKey = 2;
-        break;
-      default:
-        break;
-    }
-
     console.log(this.props.upNext, "props next");
-    return this.props.upNext[videoKey].data.songId;
+    return sortArray[0][0];
   };
 
   render() {
