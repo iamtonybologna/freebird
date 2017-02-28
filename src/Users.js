@@ -51,7 +51,7 @@ class Users extends Component {
           return <Welcome handleNewName={this.handleNewName}/>
         case 1:
           if (this.state.voteListLoaded === false) {
-            return <div>  <CircularProgress size={80} thickness={5} /> <br/> Waiting on first vote...</div>
+            return <div> <br/> <CircularProgress size={80} thickness={5} /> <br/><br/> Waiting on first vote...</div>
             } else {
               return <UserVoteList voteFor={this.handleSongClick} upNext={this.state.upNext}/>
             }
