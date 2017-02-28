@@ -89,9 +89,7 @@ io.on('connection', (client) => {
     if (playlist.length > 2) {
       while (i < 3) {
         let randomSong = playlist[Math.floor(Math.random() * playlist.length)];
-        if (randomSong.upNext === true) {
-          randomSong = playlist[Math.floor(Math.random() * playlist.length)];
-        } else {
+        if (!randomSong.upNext) {
           randomSong.upNext = true;
           upNext.push({ data: randomSong });
           votes[randomSong.songId] = [];
