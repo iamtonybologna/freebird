@@ -167,7 +167,7 @@ class VideoEmbed extends Component {
     }
 
     console.log(this.props.upNext, "props next");
-    return this.props.upNext[videoKey].songId;
+    return this.props.upNext[videoKey].data.songId;
   };
 
   render() {
