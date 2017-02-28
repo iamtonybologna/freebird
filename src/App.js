@@ -68,7 +68,7 @@ class App extends Component {
     this.ws.on('updateUpNext', (upNext) => {
       console.log('updateUpNext', upNext);
       this.setState({ upNext: upNext.data});
-      console.log(this.state.upNext);
+      console.log('upNext', this.state.upNext);
     });
     this.ws.on('updatePlaylist', (playlist) => {
       console.log('updateplaylist', playlist.data);
