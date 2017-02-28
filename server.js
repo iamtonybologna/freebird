@@ -68,7 +68,7 @@ io.on('connection', (client) => {
     // check if song is in playlist
     let songInPlaylist = false;
     for (let i = 0; i < playlist.length; i++) {
-      if (playlist[i][songId] == newSong.id) {
+      if (playlist[i].songId === newSong.songId) {
         songInPlaylist = true;
       };
     };
@@ -84,6 +84,9 @@ io.on('connection', (client) => {
 
   // grab 3 random songs from playlist, add to voting list, send to host and users
   client.on('getUpNext', () => {
+    upNext.map((song) => {
+      song.upNext = false;
+    });
     upNext = [];
     let i = 0;
     if (playlist.length > 2) {
@@ -95,9 +98,9 @@ io.on('connection', (client) => {
           votes[randomSong.songId] = [];
           i++;
         };
-        console.log('Broadcasting new upNext list', upNext);
-        io.emit('updateUpNext', { data: upNext });
       };
+      console.log('Broadcasting new upNext list', upNext);
+      io.emit('updateUpNext', { data: upNext });
     };
   });
 
