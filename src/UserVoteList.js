@@ -31,12 +31,12 @@ class UserVoteList extends Component {
         >
           {this.props.upNext.map((tile) => (
             <GridTile
-              key={tile.songId}
-              onTouchTap={this.props.voteFor.bind(this, tile.songId)}
-              title={tile.songTitle}
+              key={tile.data.songId}
+              onTouchTap={this.props.voteFor.bind(this, tile.data.songId)}
+              title={tile.data.songTitle}
               actionIcon={<IconButton><StarBorder color='white' /></IconButton>}
             >
-              <img src={tile.songImageMedium} role='presentation'/>
+              <img src={tile.data.songImageMedium} role='presentation'/>
             </GridTile>
           ))}
         </GridList>
