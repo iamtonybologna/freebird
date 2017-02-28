@@ -31,13 +31,13 @@ class Users extends Component {
     });
 
     this.ws.on('updateUpNext', (upNext) => {
-      console.log(upNext);
+      console.log('upNext', upNext);
       this.setState({voteListLoaded: true, 'upNext': upNext.data });
       console.log('Current state: ', this.state);
     });
 
     this.ws.on('updatePlaylist', (playlist) => {
-      console.log(playlist);
+      console.log('playlist', playlist);
       this.setState({ playlist: playlist.data });
       console.log('Current state: ', this.state);
     });

@@ -20,6 +20,7 @@ let votes = {
   songTwo: [],
   songThree: []
 };
+let upNext = [];
 let playlist = [];
 
 io.on('connection', (client) => {
@@ -58,7 +59,8 @@ io.on('connection', (client) => {
       songId: songData.songId,
       songTitle: songData.songTitle,
       songImageMedium: songData.songImageMedium,
-      songImageHigh: songData.songImageHigh
+      songImageHigh: songData.songImageHigh,
+      upNext: false
     };
     playlist.push(newSong);
     if (initializing) {
@@ -68,13 +70,36 @@ io.on('connection', (client) => {
   });
 
   client.on('getUpNext', () => {
-    console.log('Sending 3 songs to host');
-    let upNext = [
-      playlist[Math.floor(Math.random() * playlist.length)],
-      playlist[Math.floor(Math.random() * playlist.length)],
-      playlist[Math.floor(Math.random() * playlist.length)]
-    ];
-    io.emit('updateUpNext', { data: upNext });
+    upNext = [];
+    let i = 0;
+    if (playlist.length > 2) {
+      while (i < 3) {
+        let randomSong = playlist[Math.floor(Math.random() * playlist.length)];
+        if (randomSong.upNext === true) {
+          randomSong = playlist[Math.floor(Math.random() * playlist.length)];
+        } else {
+          randomSong.upNext = true;
+          switch (i) {
+            case 0:
+              upNext.push({ voteId: 'songOne', data: randomSong });
+              i ++;
+              break;
+            case 1:
+              upNext.push({ voteId: 'songTwo', data: randomSong });
+              i ++;
+              break;
+            case 2:
+              upNext.push({ voteId: 'songThree', data: randomSong });
+              i ++;
+              break;
+            default:
+              break;
+          };
+        };
+        console.log('Sending 3 songs to host', upNext);
+        io.emit('updateUpNext', { data: upNext });
+      };
+    };
   });
 
   client.on('disconnect', () => {

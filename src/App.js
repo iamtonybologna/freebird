@@ -7,7 +7,7 @@ import io from 'socket.io-client';
 import VideoEmbed from './VideoEmbed.js';
 import HostVoteList from './HostVoteList.js';
 import Splash from './splash.js';
-import Loading from './loading.js';
+import Loading from './Loading.js';
 
 
 const muiTheme = getMuiTheme({
@@ -47,8 +47,7 @@ class App extends Component {
   };
 
   switcher = (newView) => {
-    this.setState({view: newView})
-    console.log(this.state.searchResults)
+    this.setState({view: newView});
   }
 
 
