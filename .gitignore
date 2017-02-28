@@ -3,6 +3,9 @@
 # dependencies
 /node_modules
 
+#youtube library edits
+!node_modules/youtube-finder
+
 # testing
 /coverage
 
