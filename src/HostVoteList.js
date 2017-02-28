@@ -37,12 +37,12 @@ class HostVoteList extends Component {
         <GridList style={styles.gridList} cols={2.2}>
           {this.props.upNext.map((tile) => (
             <GridTile
-              key={tile.songId}
-              title={tile.songTitle}
+              key={tile.data.songId}
+              title={tile.data.songTitle}
               actionIcon={<IconButton><StarBorder color="rgb(0, 188, 212)" /></IconButton>}
               titleBackground="linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)"
             >
-              <img role="presentation" src={tile.songImageHigh} />
+              <img role="presentation" src={tile.data.songImageHigh} />
             </GridTile>
           ))}
         </GridList>
