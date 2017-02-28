@@ -16,7 +16,7 @@ const styles = {
     margin: 'auto'
   },
   paper: {
-    margin: 'auto'
+    margin: 'auto',
   }
 };
 
