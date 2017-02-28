@@ -9,7 +9,8 @@ import UserVoteList from './UserVoteList.js';
 import Search from './Search.js';
 import SearchResults from './SearchResults.js';
 import NavBar from './NavBar.js';
-import CircularProgress from 'material-ui/CircularProgress';
+import LoadingUser from './LoadingUser.js';
+
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -71,13 +72,14 @@ class Users extends Component {
     this.renderView = () => {
       switch (this.state.view) {
         case 0:
-          return <Welcome handleNewName={this.handleNewName}/>
+          return (
+            <Welcome handleNewName={this.handleNewName}/>
+        )
         case 1:
           if (this.state.voteListLoaded === false) {
             return (
             <div>
-              <CircularProgress size={80} thickness={5} />
-              Waiting on first vote...
+              <LoadingUser />
               <NavBar switcher={this.switcher}/>
             </div>
           )
