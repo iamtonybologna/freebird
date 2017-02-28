@@ -84,13 +84,16 @@ io.on('connection', (client) => {
 
   // grab 3 random songs from playlist, add to voting list, send to host and users
   client.on('getUpNext', () => {
+    upNext.map((song) => {
+      song.upNext = false;
+    });
     upNext = [];
     let i = 0;
     if (playlist.length > 2) {
       while (i < 3) {
         let randomSong = playlist[Math.floor(Math.random() * playlist.length)];
         if (!randomSong.upNext) {
-          // randomSong.upNext = true;
+          randomSong.upNext = true;
           upNext.push({ data: randomSong });
           votes[randomSong.songId] = [];
           i++;
