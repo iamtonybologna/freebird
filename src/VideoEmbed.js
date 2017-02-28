@@ -174,9 +174,6 @@ class VideoEmbed extends Component {
     return (
       <Paper style={styles.paperVid} zDepth={5} rounded={false}>
         <div>
-          Song one {this.props.votes.songOne.length} -
-          Song two {this.props.votes.songTwo.length} -
-          Song three {this.props.votes.songThree.length} -
           Time Left {this.state.timer}
           <div style={{display: this.state.player1Hidden}}>
             <Player id={"player1"}></Player>
