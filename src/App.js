@@ -3,7 +3,6 @@ import './App.css';
 import {deepOrange500} from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { Link } from 'react-router-dom';
 import io from 'socket.io-client';
 import VideoEmbed from './VideoEmbed.js';
 import HostVoteList from './HostVoteList.js';
@@ -25,7 +24,7 @@ class App extends Component {
       playList: { songOne : 'Pib8eYDSFEI', songTwo: 'lgSLz5FeXUg', songThree: 'sOOebk_dKFo' },
       votes: { songOne : [], songTwo: [], songThree: [] },
       view: 'splash',
-      upNext: [],
+      upNext: []
     };
 
     this.renderView = () => {
@@ -35,14 +34,16 @@ class App extends Component {
         case 'loading':
           return <Loading switcher={this.switcher}/>
         case 'main':
-        return (
-        <div>
-          <VideoEmbed playList={this.state.playList} upNext={this.state.upNext} getUpNext={this.getUpNext} votes={this.state.votes} />
-          <HostVoteList votes={this.state.votes} upNext={this.state.upNext}/>
-        </div>
-      )
+          return (
+            <div>
+              <VideoEmbed playList={this.state.playList} upNext={this.state.upNext} getUpNext={this.getUpNext} votes={this.state.votes} />
+              <HostVoteList votes={this.state.votes} upNext={this.state.upNext}/>
+            </div>
+          )
+        default:
+          break;
       }
-    }
+    };
   };
 
   switcher = (newView) => {

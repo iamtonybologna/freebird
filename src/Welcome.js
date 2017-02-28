@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 
 export default class Welcome extends Component {

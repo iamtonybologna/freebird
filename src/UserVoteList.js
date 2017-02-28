@@ -20,24 +20,6 @@ const styles = {
   },
 };
 
-const tilesData = [
-  {
-    img: './1.jpg',
-    title: 'Breakfast',
-    author: 'jill111'
-  },
-  {
-    img: './2.jpg',
-    title: 'Tasty burger',
-    author: 'pashminu'
-  },
-  {
-    img: './3.jpg',
-    title: 'Camera',
-    author: 'Danson67'
-  },
-];
-
 class UserVoteList extends Component {
 
   render() {
@@ -52,9 +34,9 @@ class UserVoteList extends Component {
               key={tile.songId}
               onTouchTap={this.props.voteFor.bind(this, tile.title)}
               title={tile.songTitle}
-              actionIcon={<IconButton><StarBorder color="white" /></IconButton>}
+              actionIcon={<IconButton><StarBorder color='white' /></IconButton>}
             >
-              <img src={tile.songImageMedium} />
+              <img src={tile.songImageMedium} role='presentation'/>
             </GridTile>
           ))}
         </GridList>

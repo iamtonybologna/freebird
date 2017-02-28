@@ -30,24 +30,6 @@ const styles = {
   }
 };
 
-const tilesData = [
-  {
-    img: './1.jpg',
-    title: 'Breakfast',
-    author: 'jill111'
-  },
-  {
-    img: './2.jpg',
-    title: 'Tasty burger',
-    author: 'pashminu'
-  },
-  {
-    img: './3.jpg',
-    title: 'Camera',
-    author: 'Danson67'
-  }
-];
-
 class HostVoteList extends Component {
   render() {
     return (
@@ -58,7 +40,7 @@ class HostVoteList extends Component {
               key={tile.songId}
               title={tile.songTitle}
               actionIcon={<IconButton><StarBorder color="rgb(0, 188, 212)" /></IconButton>}
-              titleBackground="linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
+              titleBackground="linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)"
             >
               <img role="presentation" src={tile.songImageHigh} />
             </GridTile>

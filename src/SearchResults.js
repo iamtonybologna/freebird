@@ -16,7 +16,7 @@ const styles = {
     margin: 'auto'
   },
   paper: {
-    margin: 'auto',
+    margin: 'auto'
   }
 };
 
@@ -35,9 +35,9 @@ class SearchResults extends Component {
               key={tile.id.videoId}
               title={tile.snippet.title}
               onTouchTap={this.props.submitNewSong.bind(this, tile)}
-              actionIcon={<IconButton><StarBorder color="white" /></IconButton>}
+              actionIcon={<IconButton><StarBorder color='white' /></IconButton>}
             >
-              <img src={tile.snippet.thumbnails.medium.url} />
+              <img src={tile.snippet.thumbnails.medium.url} role='presentation'/>
             </GridTile>
           ))}
         </GridList>

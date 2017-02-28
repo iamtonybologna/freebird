@@ -17,7 +17,7 @@ export default class Loading extends Component {
       <div style={styles.button}>
         <CircularProgress size={80} thickness={5} />
           <RaisedButton
-          label="Actuallt Start the Party"
+          label="Actually Start the Party"
           primary={true}
           onTouchTap={() => this.select('main')} />
       </div>

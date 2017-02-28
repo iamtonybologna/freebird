@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import YouTubeAutocomplete from 'material-ui-youtube-autocomplete';
-import SearchResults from './SearchResults.js';
 import Paper from 'material-ui/Paper';
 
 const styles = {

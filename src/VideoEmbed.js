@@ -125,12 +125,12 @@ class VideoEmbed extends Component {
     let p2Hidden = "none";
     if (this.state.player1Hidden === "none") p1Hidden = "block";
     if (this.state.player2Hidden === "none") p2Hidden = "block";
-    this.setState({player1Hidden: p1Hidden});
-    this.setState({player2Hidden: p2Hidden});
+    this.setState({ player1Hidden: p1Hidden });
+    this.setState({ player2Hidden: p2Hidden });
     this.state.playing.stopVideo();
     let tempPlayer = this.state.playing;
-    this.setState({playing : this.state.notPlaying});
-    this.setState({notPlaying : tempPlayer});
+    this.setState({ playing : this.state.notPlaying });
+    this.setState({ notPlaying : tempPlayer });
     this.props.getUpNext();
     this.playerTimer();
   };
@@ -155,10 +155,15 @@ class VideoEmbed extends Component {
     switch (sortArray[0][0]){
       case 'songOne':
         videoKey = 0;
+        break;
       case 'songTwo':
         videoKey = 1;
+        break;
       case 'songThree':
         videoKey = 2;
+        break;
+      default:
+        break;
     }
 
     console.log(this.props.upNext, "props next");
@@ -168,18 +173,18 @@ class VideoEmbed extends Component {
   render() {
     return (
       <Paper style={styles.paperVid} zDepth={5} rounded={false}>
-      <div>
-        Song one {this.props.votes.songOne.length} -
-        Song two {this.props.votes.songTwo.length} -
-        Song three {this.props.votes.songThree.length} -
-        Time Left {this.state.timer}
-        <div style={{display: this.state.player1Hidden}}>
-          <Player id={"player1"}></Player>
+        <div>
+          Song one {this.props.votes.songOne.length} -
+          Song two {this.props.votes.songTwo.length} -
+          Song three {this.props.votes.songThree.length} -
+          Time Left {this.state.timer}
+          <div style={{display: this.state.player1Hidden}}>
+            <Player id={"player1"}></Player>
+          </div>
+          <div style={{display: this.state.player2Hidden}}>
+            <Player id={"player2"}></Player>
+          </div>
         </div>
-        <div style={{display: this.state.player2Hidden}}>
-          <Player id={"player2"}></Player>
-        </div>
-      </div>
       </Paper>
     )
   };

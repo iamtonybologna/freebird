@@ -51,6 +51,16 @@ class Users extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      view: 2,
+      userCount: 0,
+      searchResults: [],
+      user: { id: 0, name: '' },
+      voteListLoaded: false,
+      upNext: [],
+      playlist: []
+    };
+
     this.renderView = () => {
       switch (this.state.view) {
         case 0:
@@ -64,26 +74,15 @@ class Users extends Component {
         case 2:
           return <Search updateSearchResultsList={this.updateSearchResultsList} />
         case 3:
-        return (
-        <div>
-          <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher}/>
-          <SearchResults results={this.state.searchResults} submitNewSong={this.handleSongAddition}/>
-        </div>
-        )
-      }
-    }
-
-
-
-    this.state = {
-      view: 2,
-      userCount: 0,
-      searchResults: [],
-      user: { id: 0, name: '' },
-      voteListLoaded: false,
-      upNext: [],
-      user: { id: 0, name: '' },
-      playlist: []
+          return (
+          <div>
+            <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher}/>
+            <SearchResults results={this.state.searchResults} submitNewSong={this.handleSongAddition}/>
+          </div>
+          )
+        default:
+          break;
+      };
     };
   };
 
