@@ -44,6 +44,7 @@ class VideoEmbed extends Component {
   componentDidMount() {
     // player startup
     console.log(this.props.getUpNext);
+    this.props.getUpNext();
     this.startUp();
 
   };
@@ -89,7 +90,6 @@ class VideoEmbed extends Component {
 
   // get everything going after player1 onReady is fired
   onPlayerReady = (event) => {
-    this.props.getUpNext();
     event.target.playVideo();
     event.target.setVolume(100);
     this.playerTimer();

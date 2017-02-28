@@ -37,7 +37,7 @@ class App extends Component {
         case 'main':
         return (
         <div>
-          <VideoEmbed playList={this.state.playList} votes={this.state.votes} />
+          <VideoEmbed playList={this.state.playList} upNext={this.state.upNext} getUpNext={this.getUpNext} votes={this.state.votes} />
           <HostVoteList votes={this.state.votes} upNext={this.state.upNext}/>
         </div>
       )

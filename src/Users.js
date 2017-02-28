@@ -74,6 +74,7 @@ class Users extends Component {
     }
 
 
+
     this.state = {
       view: 2,
       userCount: 0,
@@ -97,6 +98,7 @@ class Users extends Component {
         view: 3
       }
     );
+  };
 
   handleNewName = (e) => {
     if (e.key === 'Enter') {
@@ -140,7 +142,7 @@ class Users extends Component {
         </MuiThemeProvider>
       </div>
     )
-  };
+  }
 };
 
 export default Users;
