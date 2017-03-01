@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import YouTubeAutocomplete from 'material-ui-youtube-autocomplete';
 import Paper from 'material-ui/Paper';
-import Searching from 'material-ui/svg-icons/action/search';
 
 const styles = {
   paper: {
