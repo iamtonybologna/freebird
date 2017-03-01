@@ -63,7 +63,7 @@ class VideoEmbed extends Component {
           playing: new window.YT.Player('player1', {
             height: '432',
             width: '970',
-            videoId: 'hqJKZVnNLT0',
+            videoId: 'X_DVS_303kQ',
             // this starts the first player
             events: {
               'onReady': this.onPlayerReady
@@ -147,18 +147,18 @@ class VideoEmbed extends Component {
 
     //if no votes return the first video from up next
     //if nothing in upnext play current video
+
     if (sortArray.length === 0) {
-      if (!Object.keys(this.props.upNext)[0]){
-        return this.state.playing.videoId;
+      if (this.props.upNext.length === 0){
+        return this.state.playing.getVideoData().video_id;
       }
-      return this.props.upNext(Object.keys(this.props.upNext)[0]);
+      return this.props.upNext[0].songId;
     }
 
     sortArray.sort((a,b) => {
       return a[1] < b[1];
     });
 
-    console.log("props next", this.props.upNext);
     return sortArray[0][0];
   };
 
