@@ -15,7 +15,7 @@ io.origins('*:*');
 app.use(express.static(`${__dirname}/build/static`));
 
 app.use((req, res) => {
-  res.sendFile(`${__dirname}/build/index.html`);
+  res.sendFile(`${__dirname}/public/index.html`);
 });
 
 let PORT = process.env.PORT || config.PORT

@@ -51,11 +51,9 @@ class App extends Component {
     this.setState({ view: newView });
   }
 
-
   componentDidMount() {
     console.log('componentDidMount <App />');
     console.log('Opening socket connection');
-    // connect to websocket server and listen for messages
 
     this.ws = io.connect(`${config.HOST}:${config.PORT}`);
 
