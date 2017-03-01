@@ -18,8 +18,9 @@ app.use((req, res) => {
   res.sendFile(`${__dirname}/build/index.html`);
 });
 
-server.listen(process.env.PORT || config.PORT);
-console.log(`Server listening on port ${config.PORT}`);
+let PORT = process.env.PORT || config.PORT
+server.listen(PORT);
+console.log(`Server listening on port: ${PORT}`);
 
 let initializing = true;
 let userCount = 0;
