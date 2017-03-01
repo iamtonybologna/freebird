@@ -35,12 +35,13 @@ io.on('connection', (client) => {
   io.emit('updateUserCount', { userCount: userCount });
 
   // set username
-  client.on('setUsername', (user) => {
+  client.on('setUsername', (user, fn) => {
     console.log('Received username from client', user);
     let id = uuid.v1();
     usernames[id] = user.name;
     console.log('New user added to usernames', usernames);
-    io.emit('setUsername', { id: id, name: user.name });
+    fn(id);
+    // io.emit('setUsername', { id: id, name: user.name });
     io.emit('checkForUpNext', { upNext: upNext });
   });
 

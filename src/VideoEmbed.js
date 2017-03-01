@@ -73,8 +73,8 @@ class VideoEmbed extends Component {
         // create player two
         this.setState({
           notPlaying: new window.YT.Player('player2', {
-            height: '420',
-            width: '900',
+            height: '432',
+            width: '970',
             videoId: 'mSLqhZk-hA4'
           })
         });
