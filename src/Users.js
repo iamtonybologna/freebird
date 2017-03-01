@@ -10,7 +10,8 @@ import Search from './Search.js';
 import SearchResults from './SearchResults.js';
 import NavBar from './NavBar.js';
 import LoadingUser from './LoadingUser.js';
-import config from '../config.js';
+
+const config    = require('../config');
 
 const muiTheme = getMuiTheme({
   palette: { accent1Color: deepOrange500 }
@@ -21,7 +22,7 @@ class Users extends Component {
   componentDidMount() {
     console.log('componentDidMount <App />');
     console.log('Opening socket connection');
-    this.ws = io.connect(`ws${config.PORT}://desolate-temple-13043.herokuapp.com/` || `ws://localhost:${config.PORT}`);
+    this.ws = io.connect(`${config.HOST}:${config.PORT}`);
 
     this.ws.on('updateUpNext', (upNext) => {
       console.log('upNext', upNext);
