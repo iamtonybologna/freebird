@@ -2,12 +2,20 @@ const express   = require('express');
 const cors      = require('cors');
 const http      = require('http');
 const app       = express();
+
 app.use(cors());
+
 const server    = require('http').createServer(app);
 const io        = require('socket.io')(server);
 const uuid      = require('node-uuid');
 
 io.origins('*:*');
+
+app.use(express.static(`${__dirname}/build/static`));
+
+app.use((req, res) => {
+  res.sendFile(`${__dirname}/build/index.html`);
+});
 
 server.listen(4000);
 console.log('Server listening on port 4000');
