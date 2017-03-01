@@ -12,8 +12,8 @@ ReactDOM.render(
   <Router>
     <div>
       <Route
-        path='/'
-        render={() => <Redirect to={{ pathname: '/host' }} />}
+        exact path='/'
+        render={() => <Redirect to={{ pathname: '/users' }} />}
       />
       <Route path='/host' component={App} />
       <Route path='/users' component={Users} />

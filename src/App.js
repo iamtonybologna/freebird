@@ -11,6 +11,9 @@ import Loading from './Loading.js';
 
 const config    = require('../config');
 
+
+console.log(123, config)
+
 const muiTheme = getMuiTheme({
   palette: { accent1Color: deepOrange500 }
 });
