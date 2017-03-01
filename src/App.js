@@ -36,7 +36,7 @@ class App extends Component {
           return (
             <div>
               <VideoEmbed playList={this.state.playList} upNext={this.state.upNext} getUpNext={this.getUpNext} votes={this.state.votes} />
-              <HostVoteList votes={this.state.votes} upNext={this.state.upNext}/>
+              <HostVoteList votes={this.state.votes} upNext={this.state.upNext} />
               {this.state.userCount} user(s) in room
             </div>
           )
