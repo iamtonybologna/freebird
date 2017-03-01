@@ -8,7 +8,7 @@ import VideoEmbed from './VideoEmbed.js';
 import HostVoteList from './HostVoteList.js';
 import Splash from './splash.js';
 import Loading from './Loading.js';
-
+import config from '../config.js';
 
 const muiTheme = getMuiTheme({
   palette: { accent1Color: deepOrange500 }
@@ -55,7 +55,7 @@ class App extends Component {
     console.log('componentDidMount <App />');
     console.log('Opening socket connection');
     // connect to websocket server and listen for messages
-    this.ws = io.connect('ws://localhost:4000');
+    this.ws = io.connect(`ws${config.PORT}://desolate-temple-13043.herokuapp.com/` || `ws://localhost:${config.PORT}`);
 
     this.ws.on('updateUserCount', (data) => {
       console.log('Received a message from the server!', data);

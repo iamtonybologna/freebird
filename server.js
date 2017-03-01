@@ -8,6 +8,7 @@ app.use(cors());
 const server    = require('http').createServer(app);
 const io        = require('socket.io')(server);
 const uuid      = require('node-uuid');
+const config    = require('./config');
 
 io.origins('*:*');
 
@@ -17,8 +18,8 @@ app.use((req, res) => {
   res.sendFile(`${__dirname}/build/index.html`);
 });
 
-server.listen(4000);
-console.log('Server listening on port 4000');
+server.listen(process.env.PORT || config.PORT);
+console.log(`Server listening on port ${config.PORT}`);
 
 let initializing = true;
 let userCount = 0;
