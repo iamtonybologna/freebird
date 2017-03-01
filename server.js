@@ -41,7 +41,6 @@ io.on('connection', (client) => {
     usernames[id] = user.name;
     console.log('New user added to usernames', usernames);
     fn(id);
-    // io.emit('setUsername', { id: id, name: user.name });
     io.emit('checkForUpNext', { upNext: upNext });
   });
 
@@ -64,7 +63,7 @@ io.on('connection', (client) => {
 
   // add new song
   client.on('addNewSong', (songData) => {
-    console.log('Received new song from client', songData);
+    console.log('Received new song from client');
     let newSong = {
       uploader: songData.userId,
       songId: songData.songId,
@@ -109,7 +108,7 @@ io.on('connection', (client) => {
         upNext.push(newSongs[song]);
         votes[song] = [];
       };
-      console.log('Broadcasting new upNext list', upNext);
+      console.log('Broadcasting new upNext list');
       io.emit('updateUpNext', { data: upNext });
     };
   });
