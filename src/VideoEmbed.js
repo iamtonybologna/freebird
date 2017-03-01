@@ -145,6 +145,15 @@ class VideoEmbed extends Component {
       };
     };
 
+    //if no votes return the first video from up next
+    //if nothing in upnext play current video
+    if (sortArray.length === 0) {
+      if (!Object.keys(this.props.upNext)[0]){
+        return this.state.playing.videoId;
+      }
+      return this.props.upNext(Object.keys(this.props.upNext)[0]);
+    }
+
     sortArray.sort((a,b) => {
       return a[1] < b[1];
     });
