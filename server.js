@@ -12,10 +12,10 @@ const config    = require('./config');
 
 io.origins('*:*');
 
-app.use(express.static(`${__dirname}/build/static`));
+app.use(express.static(`/build/static`));
 
 app.use((req, res) => {
-  res.sendFile(`${__dirname}/build/index.html`);
+  res.sendFile(`/build/index.html`);
 });
 
 let PORT = process.env.PORT || config.PORT
