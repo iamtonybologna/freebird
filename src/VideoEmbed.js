@@ -99,7 +99,7 @@ class VideoEmbed extends Component {
   // start playing 2 seconds before display swap
   playerTimer = () => {
     let timePlayed = this.state.playing.getCurrentTime();
-    this.setState({timer: Math.floor(20 - timePlayed)});
+    this.setState({ timer: Math.floor(20 - timePlayed) });
     if (timePlayed >= 19) {
       this.state.notPlaying.cueVideoById(this.voteCalculate());
       setTimeout(() => {
@@ -135,7 +135,7 @@ class VideoEmbed extends Component {
     this.playerTimer();
   };
 
-  voteCalculate = () =>{
+  voteCalculate = () => {
     let sortArray = [];
     let votes = this.props.votes;
 

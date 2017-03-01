@@ -9,7 +9,7 @@ const styles = {
     display: 'flex',
     flexWrap: 'nowrap',
     overflowX: 'auto',
-    width: '100%',
+    width: '100%'
   },
   paper: {
     margin: '20px',

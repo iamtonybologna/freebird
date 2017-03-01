@@ -2,9 +2,7 @@ import React, {Component} from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 
 const styles = {
-  button: {
-    margin: 'auto',
-  },
+  button: { margin: 'auto' }
 };
 
 export default class Loading extends Component {
