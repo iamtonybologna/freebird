@@ -1,11 +1,11 @@
 const configs = {
   development: {
     PORT: 4000,
-    HOST: 'ws://localhost'
+    HOST: 'http://localhost'
   },
   production: {
     PORT: 4000,
-    HOST: 'ws://desolate-temple-13043.herokuapp.com'
+    HOST: 'https://desolate-temple-13043.herokuapp.com'
   }
 };
 
