@@ -13,9 +13,7 @@ import LoadingUser from './LoadingUser.js';
 
 
 const muiTheme = getMuiTheme({
-  palette: {
-    accent1Color: deepOrange500
-  }
+  palette: { accent1Color: deepOrange500 }
 });
 
 class Users extends Component {
@@ -33,7 +31,7 @@ class Users extends Component {
 
     this.ws.on('updateUpNext', (upNext) => {
       console.log('upNext', upNext);
-      this.setState({voteListLoaded: true, 'upNext': upNext.data });
+      this.setState({ voteListLoaded: true, 'upNext': upNext.data });
       console.log('Current state: ', this.state);
     });
 
@@ -73,21 +71,21 @@ class Users extends Component {
       switch (this.state.view) {
         case 0:
           return (
-            <Welcome handleNewName={this.handleNewName}/>
+            <Welcome handleNewName={this.handleNewName} />
         )
         case 1:
           if (this.state.voteListLoaded === false) {
             return (
             <div>
               <LoadingUser />
-              <NavBar switcher={this.switcher}/>
+              <NavBar switcher={this.switcher} />
             </div>
           )
             } else {
               return (
                 <div>
-                  <UserVoteList voteFor={this.handleSongClick} upNext={this.state.upNext}/>
-                  <NavBar switcher={this.switcher}/>
+                  <UserVoteList voteFor={this.handleSongClick} upNext={this.state.upNext} />
+                  <NavBar switcher={this.switcher} />
                 </div>
               )
             }
@@ -95,15 +93,15 @@ class Users extends Component {
           return (
             <div>
               <Search updateSearchResultsList={this.updateSearchResultsList} />
-              <NavBar switcher={this.switcher}/>
+              <NavBar switcher={this.switcher} />
             </div>
           )
         case 3:
           return (
             <div>
-              <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher}/>
-              <SearchResults results={this.state.searchResults} submitNewSong={this.handleSongAddition}/>
-              <NavBar switcher={this.switcher}/>
+              <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher} />
+              <SearchResults results={this.state.searchResults} submitNewSong={this.handleSongAddition} />
+              <NavBar switcher={this.switcher} />
             </div>
           )
         default:
@@ -118,11 +116,7 @@ class Users extends Component {
   };
 
   updateSearchResultsList = (results) => {
-    this.setState({
-        searchResults: results,
-        view: 3
-      }
-    );
+    this.setState({ searchResults: results, view: 3 });
   };
 
   handleNewName = (e) => {

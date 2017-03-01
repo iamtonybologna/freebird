@@ -2,9 +2,7 @@ import React, {Component} from 'react';
 import CircularProgress from 'material-ui/CircularProgress';
 
 const styles = {
-  root: {
-    margin: 'auto'
-  },
+  root: { margin: 'auto' }
 };
 
 export default class LoadingUser extends Component {

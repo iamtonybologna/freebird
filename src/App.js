@@ -11,15 +11,14 @@ import Loading from './Loading.js';
 
 
 const muiTheme = getMuiTheme({
-  palette: {
-    accent1Color: deepOrange500
-  }
+  palette: { accent1Color: deepOrange500 }
 });
 
 class App extends Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
       playList: { songOne : 'Pib8eYDSFEI', songTwo: 'lgSLz5FeXUg', songThree: 'sOOebk_dKFo' },
       votes: { songOne : [], songTwo: [], songThree: [] },
@@ -48,7 +47,7 @@ class App extends Component {
   };
 
   switcher = (newView) => {
-    this.setState({view: newView});
+    this.setState({ view: newView });
   }
 
 
@@ -64,11 +63,11 @@ class App extends Component {
     });
     this.ws.on('votes', (data) => {
       console.log('votes', data);
-      this.setState({ votes: data.votes});
+      this.setState({ votes: data.votes });
     });
     this.ws.on('updateUpNext', (upNext) => {
       console.log('updateUpNext', upNext);
-      this.setState({ upNext: upNext.data});
+      this.setState({ upNext: upNext.data });
       console.log('upNext', this.state.upNext);
     });
     this.ws.on('updatePlaylist', (playlist) => {

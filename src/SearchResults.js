@@ -9,7 +9,7 @@ const styles = {
     flexWrap: 'wrap',
     justifyContent: 'space-around',
     marginTop: '20%',
-    marginBottom: '20%',
+    marginBottom: '20%'
   },
   gridList: {
     width: '90%',
@@ -39,7 +39,7 @@ class SearchResults extends Component {
               onTouchTap={this.props.submitNewSong.bind(this, tile)}
               actionIcon={<IconButton><StarBorder color='white' /></IconButton>}
             >
-              <img src={tile.snippet.thumbnails.medium.url} role='presentation'/>
+              <img src={tile.snippet.thumbnails.medium.url} role='presentation' />
             </GridTile>
           ))}
         </GridList>

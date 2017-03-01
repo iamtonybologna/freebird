@@ -93,6 +93,7 @@ io.on('connection', (client) => {
   // grab 3 random songs from playlist, add to voting list, send to host and users
   client.on('getUpNext', () => {
     upNext = [];
+    votes = {};
     let newSongs = {};
     let i = 0;
     if (playlist.length > 2) {
