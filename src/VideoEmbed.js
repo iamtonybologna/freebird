@@ -104,7 +104,7 @@ class VideoEmbed extends Component {
     if (timePlayed >= 19) {
       this.state.notPlaying.cueVideoById(this.voteCalculate());
       this.state.timeouts.playerLoading = setTimeout(() => {
-        this.playerStart();
+        this.playerStart(5000);
       }, 10000);
     } else {
       this.state.timeouts.playerTimeCheck = setTimeout(() => {
@@ -113,12 +113,12 @@ class VideoEmbed extends Component {
     }
   };
 
-  playerStart = () => {
+  playerStart = (delay) => {
     this.state.notPlaying.playVideo();
     this.state.notPlaying.setVolume(100);
     this.state.timeouts.playerStart = setTimeout(() => {
       this.playerTimeout();
-    }, 5000);
+    }, delay);
   };
 
   playerTimeout = () => {
@@ -159,13 +159,15 @@ class VideoEmbed extends Component {
 
   gotoNextVideo = () =>{
     this.cancelTimers();
+    this.state.notPlaying.cueVideoById(this.voteCalculate());
+    this.playerStart(1000);
   };
 
   cancelTimers = () => {
     for (let timer in this.state.timeouts){
       clearTimeout(this.state.timeouts[timer]);
-      console.log(timer);
     }
+    return null;
   };
 
   render() {
@@ -179,7 +181,7 @@ class VideoEmbed extends Component {
           <div style={{display: this.state.player2Hidden}}>
             <Player id={"player2"}></Player>
           </div>
-          <button onClick={this.gotoNextVideo}>ABORT!</button>
+          <button onClick={this.gotoNextVideo}>Next</button>
         </div>
 
       </Paper>
