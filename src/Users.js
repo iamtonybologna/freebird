@@ -22,7 +22,7 @@ class Users extends Component {
   componentDidMount() {
     console.log('componentDidMount <App />');
     console.log('Opening socket connection');
-    this.ws = io.connect(`${config.HOST}:${config.PORT}`);
+    this.ws = io.connect();
 
     this.ws.on('updateUpNext', (upNext) => {
       console.log('upNext', upNext);
