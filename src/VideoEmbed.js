@@ -45,6 +45,7 @@ class VideoEmbed extends Component {
 
     this.problemCounter = 0;
     this.bufferCounter = 0;
+    this.backgroundVideoLoading = false;
   };
 
   componentDidMount() {
@@ -69,7 +70,7 @@ class VideoEmbed extends Component {
           playing: new window.YT.Player('player1', {
             height: '432',
             width: '970',
-            videoId: 'XDVS_303kQ',
+            videoId: 'X_DVS_303kQ',
             // this starts the first player
             events: {
               'onReady': this.onPlayerReady
@@ -139,13 +140,11 @@ class VideoEmbed extends Component {
         break;
     }
 
-    if (this.state.playing.getPlayerState() === 0) {
-
-    }
     if (timePlayed >= 19) {
       this.state.notPlaying.cueVideoById(this.voteCalculate());
+      this.backgroundVideoLoading = true;
       this.state.timeouts.playerLoading = setTimeout(() => {
-        this.playerStart(5000);
+        this.playerStart(500);
       }, 10000);
     } else {
       this.state.timeouts.playerTimeCheck = setTimeout(() => {
@@ -170,12 +169,25 @@ class VideoEmbed extends Component {
     this.setState({ player1Hidden: p1Hidden });
     this.setState({ player2Hidden: p2Hidden });
     this.state.playing.stopVideo();
+
     let tempPlayer = this.state.playing;
     this.setState({ playing : this.state.notPlaying });
     this.setState({ notPlaying : tempPlayer });
+    this.playerVolumeSync();
     this.props.getUpNext();
+    this.backgroundVideoLoading = false;
     this.playerTimer();
   };
+
+  playerVolumeSync(){
+    console.log(this.state.notPlaying.getVolume(), "volume");
+    this.state.playing.setVolume(this.state.notPlaying.getVolume());
+    if (this.state.notPlaying.isMuted() === true) {
+      this.state.playing.mute();
+    } else {
+      this.state.playing.unMute();
+    }
+  }
 
   voteCalculate = () => {
     let sortArray = [];
@@ -201,15 +213,18 @@ class VideoEmbed extends Component {
 
   gotoNextVideo = () =>{
     this.cancelTimers();
-    this.state.notPlaying.cueVideoById(this.voteCalculate());
-    this.playerTimeout();
+    if (!this.backgroundVideoLoading) {
+      this.state.notPlaying.cueVideoById(this.voteCalculate());
+    }
+    console.log(this.backgroundVideoLoading, 'background');
+    this.playerStart(500);
+
   };
 
   cancelTimers = () => {
     for (let timer in this.state.timeouts){
       clearTimeout(this.state.timeouts[timer]);
     }
-    return null;
   };
 
   render() {
