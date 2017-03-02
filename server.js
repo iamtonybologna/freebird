@@ -30,7 +30,7 @@ let upNext = [];
 let playlist = [];
 let currentSong = '';
 
-function newUpNext() => {
+function newUpNext() {
   let newSongs = {};
   if (playlist.length > 2) {
     let i = 0;
