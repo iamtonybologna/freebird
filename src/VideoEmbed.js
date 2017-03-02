@@ -37,7 +37,8 @@ class VideoEmbed extends Component {
       player2Hidden: "none",
       playing: null,
       notPlaying: null,
-      timer: 0
+      timer: 0,
+      timeouts: {playerTimeCheck: null, playerStart: null, playerLoading: null}
     };
   };
 
@@ -102,11 +103,11 @@ class VideoEmbed extends Component {
     this.setState({ timer: Math.floor(20 - timePlayed) });
     if (timePlayed >= 19) {
       this.state.notPlaying.cueVideoById(this.voteCalculate());
-      setTimeout(() => {
+      this.state.timeouts.playerLoading = setTimeout(() => {
         this.playerStart();
       }, 10000);
     } else {
-      setTimeout(() => {
+      this.state.timeouts.playerTimeCheck = setTimeout(() => {
         this.playerTimer();
       }, 1000);
     }
@@ -115,7 +116,7 @@ class VideoEmbed extends Component {
   playerStart = () => {
     this.state.notPlaying.playVideo();
     this.state.notPlaying.setVolume(100);
-    setTimeout(() => {
+    this.state.timeouts.playerStart = setTimeout(() => {
       this.playerTimeout();
     }, 5000);
   };
@@ -144,22 +145,27 @@ class VideoEmbed extends Component {
         sortArray.push([item, this.props.votes[item].length]);
       };
     };
-
-    //if no votes return the first video from up next
-    //if nothing in upnext play current video
-
     if (sortArray.length === 0) {
       if (this.props.upNext.length === 0){
         return this.state.playing.getVideoData().video_id;
       }
       return this.props.upNext[0].songId;
     }
-
     sortArray.sort((a,b) => {
       return a[1] < b[1];
     });
-
     return sortArray[0][0];
+  };
+
+  gotoNextVideo = () =>{
+    this.cancelTimers();
+  };
+
+  cancelTimers = () => {
+    for (let timer in this.state.timeouts){
+      clearTimeout(this.state.timeouts[timer]);
+      console.log(timer);
+    }
   };
 
   render() {
@@ -173,7 +179,9 @@ class VideoEmbed extends Component {
           <div style={{display: this.state.player2Hidden}}>
             <Player id={"player2"}></Player>
           </div>
+          <button onClick={this.gotoNextVideo}>ABORT!</button>
         </div>
+
       </Paper>
     )
   };
