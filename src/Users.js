@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './Users.css';
-import io from 'socket.io-client';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {deepOrange500} from 'material-ui/styles/colors';
@@ -22,21 +21,20 @@ class Users extends Component {
   componentDidMount() {
     console.log('componentDidMount <App />');
     console.log('Opening socket connection');
-    this.ws = io.connect();
 
-    this.ws.on('updateUpNext', (upNext) => {
+    this.props.ws.on('updateUpNext', (upNext) => {
       console.log('upNext', upNext);
       this.setState({ voteListLoaded: true, 'upNext': upNext.data });
       console.log('Current state: ', this.state);
     });
 
-    this.ws.on('updatePlaylist', (playlist) => {
+    this.props.ws.on('updatePlaylist', (playlist) => {
       console.log('playlist', playlist);
       this.setState({ playlist: playlist.data });
       console.log('Current state: ', this.state);
     });
 
-    this.ws.on('checkForUpNext', (data) => {
+    this.props.ws.on('checkForUpNext', (data) => {
       console.log('Received a message from the server!', data);
       if (data.upNext.length > 0) {
         this.setState({ upNext: data.upNext, voteListLoaded: true });
@@ -46,7 +44,7 @@ class Users extends Component {
 
   componentWillUnmount() {
     console.log('Closing socket connection');
-    this.ws.close();
+    this.props.ws.close();
   };
 
   constructor(props) {
@@ -118,7 +116,7 @@ class Users extends Component {
     if (e.key === 'Enter') {
       let name = e.target.value;
       console.log('Sending username to server', name);
-      this.ws.emit('setUsername', { 'name': name }, (userId) => {
+      this.props.ws.emit('setUsername', { 'name': name }, (userId) => {
         console.log('Received UUID from server', userId);
         this.setState({ user: { id: userId , name: name } });
         console.log('Current state: ', this.state);
@@ -128,12 +126,12 @@ class Users extends Component {
   };
 
   handleSongClick = (e) => {
-    this.ws.emit('setUserVote', { userId: this.state.user.id, 'songId': e });
+    this.props.ws.emit('setUserVote', { userId: this.state.user.id, 'songId': e });
     console.log('Vote sent to server', { userId: this.state.user.id, 'songId': e });
   };
 
   handleSongAddition = (e) => {
-    this.ws.emit('addNewSong', {
+    this.props.ws.emit('addNewSong', {
         'userId': this.state.user.id,
         'songId': e.id.videoId,
         'songTitle': e.snippet.title,

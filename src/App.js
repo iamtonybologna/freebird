@@ -3,7 +3,6 @@ import './App.css';
 import {deepOrange500} from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import io from 'socket.io-client';
 import VideoEmbed from './VideoEmbed.js';
 import HostVoteList from './HostVoteList.js';
 import Splash from './splash.js';
@@ -55,36 +54,31 @@ class App extends Component {
     console.log('componentDidMount <App />');
     console.log('Opening socket connection');
 
-    this.ws = io.connect();
-
-
-    console.log(this.ws)
-
-    this.ws.on('updateUserCount', (data) => {
+    this.props.ws.on('updateUserCount', (data) => {
       console.log('Received a message from the server!', data);
       this.setState({ userCount: data.userCount });
     });
-    this.ws.on('votes', (data) => {
+    this.props.ws.on('votes', (data) => {
       console.log('votes', data);
       this.setState({ votes: data.votes });
     });
-    this.ws.on('updateUpNext', (upNext) => {
+    this.props.ws.on('updateUpNext', (upNext) => {
       console.log('updateUpNext', upNext);
       this.setState({ upNext: upNext.data });
       console.log('upNext', this.state.upNext);
     });
-    this.ws.on('updatePlaylist', (playlist) => {
+    this.props.ws.on('updatePlaylist', (playlist) => {
       console.log('updateplaylist', playlist.data);
     });
   };
 
   componentWillUnmount() {
     console.log('Closing socket connection');
-    this.ws.close();
+    this.props.ws.close();
   };
 
   getUpNext = () => {
-    this.ws.emit('getUpNext');
+    this.props.ws.emit('getUpNext');
   };
 
   render() {
