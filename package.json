@@ -35,8 +35,8 @@
     "ws": "2.0.2"
   },
   "scripts": {
-    "start-dev": "reacts-scripts start && node server",
-    "start": "node server",
+    "start-dev": "react-scripts build && node server",
+    "start": "react-scripts start && react-scripts build && node server",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
