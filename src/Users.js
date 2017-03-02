@@ -11,7 +11,7 @@ import SearchResults from './SearchResults.js';
 import NavBar from './NavBar.js';
 import LoadingUser from './LoadingUser.js';
 
-const config    = require('../config');
+const config   = require('../config');
 
 const muiTheme = getMuiTheme({
   palette: { accent1Color: deepOrange500 }
