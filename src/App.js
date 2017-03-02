@@ -55,7 +55,10 @@ class App extends Component {
     console.log('componentDidMount <App />');
     console.log('Opening socket connection');
 
-    this.ws = io.connect(`${config.HOST}:${config.PORT}`);
+    this.ws = io.connect();
+
+
+    console.log(this.ws)
 
     this.ws.on('updateUserCount', (data) => {
       console.log('Received a message from the server!', data);
