@@ -8,7 +8,7 @@ import HostVoteList from './HostVoteList.js';
 import Splash from './splash.js';
 import Loading from './Loading.js';
 
-const config   = require('../config');
+const config = require('../config');
 
 const muiTheme = getMuiTheme({
   palette: { accent1Color: deepOrange500 }
