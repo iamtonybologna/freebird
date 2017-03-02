@@ -3,28 +3,14 @@ import Player from './Player.js';
 import Paper from 'material-ui/Paper';
 
 const styles = {
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around'
-  },
-  gridList: {
-    display: 'flex',
-    flexWrap: 'nowrap',
-    overflowX: 'auto'
-  },
   paper: {
-    margin: '20px',
-    display: 'flex'
+    width: '80%',
   },
-  paperVid: {
-    margin: '20px',
-    height: '450px'
-  },
-  video: {
-    width: '100%',
-    height: '450px',
-    overflow: 'auto'
+  videoWrapper: {
+    position: 'relative',
+    height: '0',
+    overflow: 'hidden',
+    paddingBottom: '56.25%',
   }
 };
 
@@ -61,9 +47,7 @@ class VideoEmbed extends Component {
         // create player one
         this.setState({
           playing: new window.YT.Player('player1', {
-            height: '432',
-            width: '970',
-            videoId: 'hqJKZVnNLT0',
+            videoId: 'CGKN6qiDqnk',
             // this starts the first player
             events: {
               'onReady': this.onPlayerReady
@@ -73,8 +57,6 @@ class VideoEmbed extends Component {
         // create player two
         this.setState({
           notPlaying: new window.YT.Player('player2', {
-            height: '432',
-            width: '970',
             videoId: 'mSLqhZk-hA4'
           })
         });
@@ -155,15 +137,14 @@ class VideoEmbed extends Component {
 
   render() {
     return (
-      <Paper style={styles.paperVid} zDepth={5} rounded={false}>
-        <div>
-          Time Left {this.state.timer}
-          <div style={{display: this.state.player1Hidden}}>
-            <Player id={"player1"}></Player>
-          </div>
-          <div style={{display: this.state.player2Hidden}}>
-            <Player id={"player2"}></Player>
-          </div>
+      <Paper zDepth={5} rounded={true} style={styles.paper}>
+        <div style={styles.videoWrapper}>
+            <div style={{display: this.state.player1Hidden}}>
+              <Player id={"player1"}></Player>
+            </div>
+            <div style={{display: this.state.player2Hidden}}>
+              <Player id={"player2"}></Player>
+            </div>
         </div>
       </Paper>
     )

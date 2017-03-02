@@ -11,7 +11,9 @@ const styles = {
     navBar: {
       position: 'fixed',
       bottom: '0',
-      display: 'block'
+      display: 'block',
+      width: '100%',
+      zIndex: '5'
     }
   };
 
