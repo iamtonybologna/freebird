@@ -101,6 +101,10 @@ class VideoEmbed extends Component {
   playerTimer = () => {
     let timePlayed = this.state.playing.getCurrentTime();
     this.setState({ timer: Math.floor(20 - timePlayed) });
+    if (this.state.playing.getPlayerState() === 0) {
+      this.gotoNextVideo();
+      return;
+    }
     if (timePlayed >= 19) {
       this.state.notPlaying.cueVideoById(this.voteCalculate());
       this.state.timeouts.playerLoading = setTimeout(() => {
@@ -174,14 +178,14 @@ class VideoEmbed extends Component {
     return (
       <Paper style={styles.paperVid} zDepth={5} rounded={false}>
         <div>
-          Time Left {this.state.timer}
+          Time Left {this.state.timer} <button onClick={this.gotoNextVideo}>Next</button>
           <div style={{display: this.state.player1Hidden}}>
             <Player id={"player1"}></Player>
           </div>
           <div style={{display: this.state.player2Hidden}}>
             <Player id={"player2"}></Player>
           </div>
-          <button onClick={this.gotoNextVideo}>Next</button>
+
         </div>
 
       </Paper>
