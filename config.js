@@ -4,7 +4,7 @@ const configs = {
     HOST: 'http://localhost'
   },
   production: {
-    PORT: 4000,
+    PORT: process.env.PORT,
     HOST: 'https://desolate-temple-13043.herokuapp.com'
   }
 };
