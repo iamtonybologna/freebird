@@ -37,7 +37,8 @@ class VideoEmbed extends Component {
       player2Hidden: "none",
       playing: null,
       notPlaying: null,
-      timer: 0
+      timer: 0,
+      timeouts: {playerTimeCheck: null, playerStart: null, playerLoading: null}
     };
   };
 
@@ -63,7 +64,7 @@ class VideoEmbed extends Component {
           playing: new window.YT.Player('player1', {
             height: '432',
             width: '970',
-            videoId: 'hqJKZVnNLT0',
+            videoId: 'X_DVS_303kQ',
             // this starts the first player
             events: {
               'onReady': this.onPlayerReady
@@ -100,24 +101,28 @@ class VideoEmbed extends Component {
   playerTimer = () => {
     let timePlayed = this.state.playing.getCurrentTime();
     this.setState({ timer: Math.floor(20 - timePlayed) });
+    if (this.state.playing.getPlayerState() === 0) {
+      this.gotoNextVideo();
+      return;
+    }
     if (timePlayed >= 19) {
       this.state.notPlaying.cueVideoById(this.voteCalculate());
-      setTimeout(() => {
-        this.playerStart();
+      this.state.timeouts.playerLoading = setTimeout(() => {
+        this.playerStart(5000);
       }, 10000);
     } else {
-      setTimeout(() => {
+      this.state.timeouts.playerTimeCheck = setTimeout(() => {
         this.playerTimer();
       }, 1000);
     }
   };
 
-  playerStart = () => {
+  playerStart = (delay) => {
     this.state.notPlaying.playVideo();
     this.state.notPlaying.setVolume(100);
-    setTimeout(() => {
+    this.state.timeouts.playerStart = setTimeout(() => {
       this.playerTimeout();
-    }, 5000);
+    }, delay);
   };
 
   playerTimeout = () => {
@@ -144,27 +149,45 @@ class VideoEmbed extends Component {
         sortArray.push([item, this.props.votes[item].length]);
       };
     };
-
+    if (sortArray.length === 0) {
+      if (this.props.upNext.length === 0){
+        return this.state.playing.getVideoData().video_id;
+      }
+      return this.props.upNext[0].songId;
+    }
     sortArray.sort((a,b) => {
       return a[1] < b[1];
     });
-
-    console.log("props next", this.props.upNext);
     return sortArray[0][0];
+  };
+
+  gotoNextVideo = () =>{
+    this.cancelTimers();
+    this.state.notPlaying.cueVideoById(this.voteCalculate());
+    this.playerStart(1000);
+  };
+
+  cancelTimers = () => {
+    for (let timer in this.state.timeouts){
+      clearTimeout(this.state.timeouts[timer]);
+    }
+    return null;
   };
 
   render() {
     return (
       <Paper style={styles.paperVid} zDepth={5} rounded={false}>
         <div>
-          Time Left {this.state.timer}
+          Time Left {this.state.timer} <button onClick={this.gotoNextVideo}>Next</button>
           <div style={{display: this.state.player1Hidden}}>
             <Player id={"player1"}></Player>
           </div>
           <div style={{display: this.state.player2Hidden}}>
             <Player id={"player2"}></Player>
           </div>
+
         </div>
+
       </Paper>
     )
   };

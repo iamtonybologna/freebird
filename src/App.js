@@ -20,8 +20,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      playList: { songOne : 'Pib8eYDSFEI', songTwo: 'lgSLz5FeXUg', songThree: 'sOOebk_dKFo' },
-      votes: { songOne : [], songTwo: [], songThree: [] },
+      votes: null,
       view: 'splash',
       upNext: []
     };
