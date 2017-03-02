@@ -9,7 +9,8 @@ import io from 'socket.io-client';
 
 injectTapEventPlugin();
 
-let ws = io.connect();
+
+let ws = io.connect('ws:4000//localhost');
 
 ReactDOM.render(
   <Router>
