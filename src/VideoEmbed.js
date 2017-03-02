@@ -30,6 +30,8 @@ const styles = {
 
 class VideoEmbed extends Component {
 
+
+
   constructor(props) {
     super(props);
     this.state = {
@@ -40,6 +42,9 @@ class VideoEmbed extends Component {
       timer: 0,
       timeouts: {playerTimeCheck: null, playerStart: null, playerLoading: null}
     };
+
+    this.problemCounter = 0;
+    this.bufferCounter = 0;
   };
 
   componentDidMount() {
@@ -64,7 +69,7 @@ class VideoEmbed extends Component {
           playing: new window.YT.Player('player1', {
             height: '432',
             width: '970',
-            videoId: 'X_DVS_303kQ',
+            videoId: 'XDVS_303kQ',
             // this starts the first player
             events: {
               'onReady': this.onPlayerReady
@@ -76,7 +81,7 @@ class VideoEmbed extends Component {
           notPlaying: new window.YT.Player('player2', {
             height: '432',
             width: '970',
-            videoId: 'mSLqhZk-hA4'
+            videoId: 'X_DVS_303kQ'
           })
         });
       }
@@ -101,9 +106,41 @@ class VideoEmbed extends Component {
   playerTimer = () => {
     let timePlayed = this.state.playing.getCurrentTime();
     this.setState({ timer: Math.floor(20 - timePlayed) });
+    console.log (this.state.playing.getPlayerState(), 'playerStatus');
+    switch (this.state.playing.getPlayerState()) {
+      case -1:
+        this.problemCounter ++;
+        if (this.problemCounter >= 5)
+        {
+          this.gotoNextVideo();
+        }
+        break;
+      case 0:
+        this.gotoNextVideo();
+        return;
+        break;
+      case 1:
+        this.problemCounter = 0;
+        this.bufferCounter = 0;
+        break;
+      case 3:
+        this.bufferCounter ++;
+        if (this.bufferCounter >= 15)
+        {
+          this.gotoNextVideo();
+        }
+        break;
+      case 5:
+        this.state.playing.playVideo();
+        this.problemCounter = 0;
+        this.bufferCounter = 0;
+        break;
+      default:
+        break;
+    }
+
     if (this.state.playing.getPlayerState() === 0) {
-      this.gotoNextVideo();
-      return;
+
     }
     if (timePlayed >= 19) {
       this.state.notPlaying.cueVideoById(this.voteCalculate());
@@ -151,6 +188,7 @@ class VideoEmbed extends Component {
     };
     if (sortArray.length === 0) {
       if (this.props.upNext.length === 0){
+        console.log("here");
         return this.state.playing.getVideoData().video_id;
       }
       return this.props.upNext[0].songId;
@@ -164,7 +202,7 @@ class VideoEmbed extends Component {
   gotoNextVideo = () =>{
     this.cancelTimers();
     this.state.notPlaying.cueVideoById(this.voteCalculate());
-    this.playerStart(1000);
+    this.playerTimeout();
   };
 
   cancelTimers = () => {
