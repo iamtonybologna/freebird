@@ -1,19 +1,47 @@
 import React, { Component } from 'react';
-import './Users.css';
+
+// theme information, imports colors and material-ui information from node modules
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import {deepOrange500} from 'material-ui/styles/colors';
+import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+import {fade} from 'material-ui/utils/colorManipulator';
+import {
+  cyan500, cyan700,
+  pinkA200,
+  grey100, grey300, grey400, grey500,
+  white, darkBlack, fullBlack,
+} from 'material-ui/styles/colors';
+
+// list of objects/ views being imported
+
 import Welcome from './Welcome.js';
 import UserVoteList from './UserVoteList.js';
 import Search from './Search.js';
 import SearchResults from './SearchResults.js';
 import NavBar from './NavBar.js';
 import LoadingUser from './LoadingUser.js';
+import DefaultSearch from './DefaultSearch.js';
 
 const config = require('../config');
 
 const muiTheme = getMuiTheme({
-  palette: { accent1Color: deepOrange500 }
+  palette: {
+    primary1Color: pinkA200,
+    primary2Color: cyan700,
+    primary3Color: grey400,
+    accent1Color: pinkA200,
+    accent2Color: grey100,
+    accent3Color: grey500,
+    textColor: darkBlack,
+    alternateTextColor: white,
+    canvasColor: white,
+    borderColor: grey300,
+    disabledColor: fade(darkBlack, 0.3),
+    pickerHeaderColor: cyan500,
+    clockCircleColor: fade(darkBlack, 0.07),
+    shadowColor: fullBlack,
+  },
 });
 
 class Users extends Component {
@@ -86,6 +114,7 @@ class Users extends Component {
           return (
             <div>
               <Search updateSearchResultsList={this.updateSearchResultsList} />
+              <DefaultSearch />
               <NavBar switcher={this.switcher} />
             </div>
           )
@@ -121,7 +150,11 @@ class Users extends Component {
         this.setState({ user: { id: userId , name: name } });
         console.log('Current state: ', this.state);
       });
-      this.setState({ view: 1 });
+        if (this.state.voteListLoaded === true) {
+        this.setState({ view: 1 });
+      } else {
+        this.setState({ view: 2 });
+      }
     };
   };
 
