@@ -18,7 +18,6 @@ export default class Splash extends Component {
         primary={true}
         style={styles.button}
         onTouchTap={() => this.select('loading')} />
-      <div>helo</div>
       </div>
     )
   };

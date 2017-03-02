@@ -25,9 +25,40 @@ console.log(`Server listening on port: ${PORT}`);
 let initializing = true;
 let userCount = 0;
 let usernames = {};
-let votes = {};
+let votes = {};              // votes = { songId: [userId, userId, userId] }
 let upNext = [];
 let playlist = [];
+let playedSongs = [];
+
+function newUpNext() {
+  // store songs that were just voted on and clear votes
+  for (let songId in votes) {
+    playedSongs.push(songId);
+  }
+  console.log('playedSongs', playedSongs);
+  votes = {};
+  let newSongs = {};
+  if (playlist.length > 2) {
+    let i = 0;
+    while (i < 3) {
+      let randomSong = playlist[Math.floor(Math.random() * playlist.length)];
+      if (
+          newSongs.hasOwnProperty(randomSong.songId) === false &&
+          playedSongs.indexOf(randomSong.songId) === -1
+         ) {
+        newSongs[randomSong.songId] = randomSong;
+        i++;
+      };
+    };
+    upNext = [];
+    for (let song in newSongs) {
+      upNext.push(newSongs[song]);
+      votes[song] = [];
+    };
+    console.log('Broadcasting new upNext list', upNext);
+    io.emit('updateUpNext', { data: upNext });
+  };
+};
 
 io.on('connection', (client) => {
 
@@ -62,7 +93,6 @@ io.on('connection', (client) => {
     io.emit('votes', { votes: votes });
     console.log('Updated votes', votes);
   });
-
   // add new song
   client.on('addNewSong', (songData) => {
     console.log('Received new song from client');
@@ -74,7 +104,6 @@ io.on('connection', (client) => {
       songImageHigh: songData.songImageHigh,
       upNext: false
     };
-
     // check if song is in playlist
     let songInPlaylist = false;
     for (let i = 0; i < playlist.length; i++) {
@@ -92,27 +121,10 @@ io.on('connection', (client) => {
     };
   });
 
-  // grab 3 random songs from playlist, add to voting list, send to host and users
+  // grab 3 new, random songs from playlist, add to voting list, send to host and users
   client.on('getUpNext', () => {
-    upNext = [];
-    votes = {};
-    let newSongs = {};
-    let i = 0;
-    if (playlist.length > 2) {
-      while (i < 3) {
-        let randomSong = playlist[Math.floor(Math.random() * playlist.length)];
-        if (newSongs.hasOwnProperty(randomSong.songId) === false) {
-          newSongs[randomSong.songId] = randomSong;
-          i++;
-        };
-      };
-      for (let song in newSongs) {
-        upNext.push(newSongs[song]);
-        votes[song] = [];
-      };
-      console.log('Broadcasting new upNext list');
-      io.emit('updateUpNext', { data: upNext });
-    };
+    // get 3 new, random songs, clear upNext, and add those songs to upNext
+    newUpNext();
   });
 
   client.on('disconnect', () => {
