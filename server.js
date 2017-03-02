@@ -28,9 +28,15 @@ let usernames = {};
 let votes = {};              // votes = { songId: [userId, userId, userId] }
 let upNext = [];
 let playlist = [];
-let currentSong = '';
+let playedSongs = [];
 
 function newUpNext() {
+  // store songs that were just voted on and clear votes
+  for (let songId in votes) {
+    playedSongs.push(songId);
+  }
+  console.log('playedSongs', playedSongs);
+  votes = {};
   let newSongs = {};
   if (playlist.length > 2) {
     let i = 0;
@@ -38,7 +44,7 @@ function newUpNext() {
       let randomSong = playlist[Math.floor(Math.random() * playlist.length)];
       if (
           newSongs.hasOwnProperty(randomSong.songId) === false &&
-          songsJustVotedOn.indexOf(randomSong.songId) === -1
+          playedSongs.indexOf(randomSong.songId) === -1
          ) {
         newSongs[randomSong.songId] = randomSong;
         i++;
@@ -117,13 +123,6 @@ io.on('connection', (client) => {
 
   // grab 3 new, random songs from playlist, add to voting list, send to host and users
   client.on('getUpNext', () => {
-    // store songs that were just voted on and clear votes
-    let songsJustVotedOn = [];
-    for (let songId in votes) {
-      songsJustVotedOn.push(songId);
-    }
-    console.log('songsJustVotedOn', songsJustVotedOn);
-    votes = {};
     // get 3 new, random songs, clear upNext, and add those songs to upNext
     newUpNext();
   });
