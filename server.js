@@ -42,7 +42,10 @@ newUpNext = () => {
     let i = 0;
     while (i < 3) {
       let randomSong = playlist[Math.floor(Math.random() * playlist.length)];
-      if (newSongs.hasOwnProperty(randomSong.songId) === false && playedSongs.indexOf(randomSong.songId) === -1) {
+      debugger;
+      if (newSongs.hasOwnProperty(randomSong.songId) === false) {
+        // add this to if statement to check against songs that were voted on
+        // && playedSongs.indexOf(randomSong.songId) === -1
         newSongs[randomSong.songId] = randomSong;
         i++;
       };
@@ -52,8 +55,8 @@ newUpNext = () => {
       upNext.push(newSongs[song]);
       votes[song] = [];
     };
-    console.log('Broadcasting new upNext list', upNext);
-    io.emit('updateUpNext', { data: upNext }); // THIS.IO? SCOPE ISSUE?
+    console.log('Broadcasting new upNext list');
+    io.emit('updateUpNext', { data: upNext });
   };
 };
 

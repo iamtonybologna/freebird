@@ -36,7 +36,6 @@ class VideoEmbed extends Component {
 
   componentDidMount() {
     // player startup
-    console.log(this.props.getUpNext);
     this.props.getUpNext();
     this.startUp();
 
