@@ -7,10 +7,10 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import {fade} from 'material-ui/utils/colorManipulator';
 import {
-  cyan500, cyan700,
-  pinkA200,
+  cyan500, cyan700, deepPurple500, deepPurple50, deepPurple100, deepPurple900,
+  pinkA200, lightGreenA400,
   grey100, grey300, grey400, grey500,
-  white, darkBlack, fullBlack,
+  white, darkBlack, fullBlack, fullWhite,
 } from 'material-ui/styles/colors';
 
 // list of objects/ views being imported
@@ -27,20 +27,20 @@ const config = require('../config');
 
 const muiTheme = getMuiTheme({
   palette: {
-    primary1Color: pinkA200,
-    primary2Color: cyan700,
+    primary1Color: deepPurple500,
+    primary2Color: deepPurple500,
     primary3Color: grey400,
-    accent1Color: pinkA200,
-    accent2Color: grey100,
-    accent3Color: grey500,
-    textColor: darkBlack,
-    alternateTextColor: white,
-    canvasColor: white,
-    borderColor: grey300,
-    disabledColor: fade(darkBlack, 0.3),
-    pickerHeaderColor: cyan500,
-    clockCircleColor: fade(darkBlack, 0.07),
-    shadowColor: fullBlack,
+    accent1Color: lightGreenA400,
+    accent2Color: deepPurple500,
+    accent3Color: deepPurple500,
+    textColor: deepPurple50,
+    alternateTextColor: '#303030',
+    canvasColor: '#303030',
+    borderColor: deepPurple50,
+    disabledColor: fade(deepPurple50, 0.3),
+    pickerHeaderColor: deepPurple500,
+    clockCircleColor: fade(deepPurple50, 0.07),
+    shadowColor: deepPurple100,
   },
 });
 
@@ -92,7 +92,7 @@ class Users extends Component {
       switch (this.state.view) {
         case 0:
           return (
-            <Welcome handleNewName={this.handleNewName} />
+            <Welcome handleNewName={this.handleNewName} handleWelcomeButtonClick={this.handleWelcomeButtonClick} />
         )
         case 1:
           if (this.state.voteListLoaded === false) {
@@ -142,6 +142,7 @@ class Users extends Component {
   };
 
   handleNewName = (e) => {
+    this.setState({ user: { name: e.target.value } });
     if (e.key === 'Enter') {
       let name = e.target.value;
       console.log('Sending username to server', name);
@@ -156,6 +157,21 @@ class Users extends Component {
         this.setState({ view: 2 });
       }
     };
+  };
+
+  handleWelcomeButtonClick = (e) => {
+    let name = this.state.user.name;
+    console.log('Sending username to server', name);
+    this.props.ws.emit('setUsername', { 'name': name }, (userId) => {
+      console.log('Received UUID from server', userId);
+      this.setState({ user: { id: userId , name: name } });
+      console.log('Current state: ', this.state);
+    });
+      if (this.state.voteListLoaded === true) {
+      this.setState({ view: 1 });
+    } else {
+      this.setState({ view: 2 });
+    }
   };
 
   handleSongClick = (e) => {

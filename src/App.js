@@ -6,6 +6,7 @@ import VideoEmbed from './VideoEmbed.js';
 import HostVoteList from './HostVoteList.js';
 import Splash from './splash.js';
 import Loading from './Loading.js';
+import RaisedButton from 'material-ui/RaisedButton';
 
 const config = require('../config');
 
@@ -27,9 +28,9 @@ class App extends Component {
     this.renderView = () => {
       switch(this.state.view) {
         case 'splash':
-          return <Splash switcher={this.switcher}/>
+          return <Splash switcher={this.switcher} />
         case 'loading':
-          return <Loading switcher={this.switcher} upNext={this.state.upNext}/>
+              return <Loading switcher={this.switcher} upNext={this.state.upNext} />
         case 'main':
           return (
             <div>
