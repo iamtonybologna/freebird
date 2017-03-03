@@ -92,7 +92,7 @@ class Users extends Component {
       switch (this.state.view) {
         case 0:
           return (
-            <Welcome handleNewName={this.handleNewName} />
+            <Welcome handleNewName={this.handleNewName} handleWelcomeButtonClick={this.handleWelcomeButtonClick} />
         )
         case 1:
           if (this.state.voteListLoaded === false) {
@@ -142,6 +142,7 @@ class Users extends Component {
   };
 
   handleNewName = (e) => {
+    this.setState({ user: { name: e.target.value } });
     if (e.key === 'Enter') {
       let name = e.target.value;
       console.log('Sending username to server', name);
@@ -156,6 +157,21 @@ class Users extends Component {
         this.setState({ view: 2 });
       }
     };
+  };
+
+  handleWelcomeButtonClick = (e) => {
+    let name = this.state.user.name;
+    console.log('Sending username to server', name);
+    this.props.ws.emit('setUsername', { 'name': name }, (userId) => {
+      console.log('Received UUID from server', userId);
+      this.setState({ user: { id: userId , name: name } });
+      console.log('Current state: ', this.state);
+    });
+      if (this.state.voteListLoaded === true) {
+      this.setState({ view: 1 });
+    } else {
+      this.setState({ view: 2 });
+    }
   };
 
   handleSongClick = (e) => {

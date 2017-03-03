@@ -12,7 +12,7 @@ const styles = {
     marginTop: '5%'
   },
   welText: {
-    width: '70%',
+    width: '70%'
   },
   paper: {
     height: '90vw',
@@ -22,10 +22,10 @@ const styles = {
     marginTop: '25vw',
     paddingTop: '30%',
     background: 'url("./userPlanet.png") no-repeat center center fixed',
-    backgoundSize: 'cover',
+    backgoundSize: 'cover'
   },
   floatingLabel: {
-  },
+  }
 };
 
 
@@ -43,8 +43,8 @@ export default class Welcome extends Component {
             onKeyUp={this.props.handleNewName.bind()}
           />
           <br/>
-          <FloatingActionButton style={styles.welcomeButton} zDepth={5} onTouchTap={this.props.handleNewName.bind()}>
-              <Send />
+          <FloatingActionButton style={styles.welcomeButton} zDepth={4} onTouchTap={this.props.handleWelcomeButtonClick.bind()}>
+            <Send />
           </FloatingActionButton>
         </Paper>
       </div>
