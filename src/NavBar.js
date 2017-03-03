@@ -24,10 +24,11 @@ class NavBar extends Component {
   select = (newView) => {this.props.switcher(newView); }
 
   render() {
+    console.log(this.props.view)
     return (
       <div style={styles.navBar}>
         <Paper zDepth={1} >
-          <BottomNavigation selectedIndex={this.props.view}>
+          <BottomNavigation selectedIndex={1}>
             <BottomNavigationItem
               label="Vote"
               icon={homeIcon}

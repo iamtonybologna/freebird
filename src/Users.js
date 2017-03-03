@@ -106,7 +106,7 @@ class Users extends Component {
               return (
                 <div>
                   <UserVoteList voteFor={this.handleSongClick} upNext={this.state.upNext} />
-                  <NavBar switcher={this.switcher} />
+                  <NavBar switcher={this.switcher} view={this.state.view}/>
                 </div>
               )
             }
