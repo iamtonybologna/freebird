@@ -30,7 +30,7 @@ let upNext = [];
 let playlist = [];
 let playedSongs = [];
 
-function newUpNext() {
+newUpNext = () => {
   // store songs that were just voted on and clear votes
   for (let songId in votes) {
     playedSongs.push(songId);
@@ -53,7 +53,7 @@ function newUpNext() {
       votes[song] = [];
     };
     console.log('Broadcasting new upNext list', upNext);
-    this.io.emit('updateUpNext', { data: upNext }); // THIS.IO? SCOPE ISSUE?
+    io.emit('updateUpNext', { data: upNext }); // THIS.IO? SCOPE ISSUE?
   };
 };
 
