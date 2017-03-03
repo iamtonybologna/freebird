@@ -5,8 +5,8 @@ import Paper from 'material-ui/Paper';
 const styles = {
   searchDiv: {
     top: '0',
-    marginLeft: '5%',
-    width: '90%',
+    marginLeft: '2.5%',
+    width: '95%',
     position: 'fixed',
     zIndex: '5'
   },

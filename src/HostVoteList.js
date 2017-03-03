@@ -9,11 +9,11 @@ const styles = {
     display: 'flex',
     flexWrap: 'nowrap',
     overflowX: 'auto',
-    width: '100%'
+    width: '100vw'
   },
   paper: {
-    margin: '20px',
-    display: 'flex'
+    display: 'flex',
+    height: '34.75%'
   },
 };
 
@@ -21,7 +21,7 @@ class HostVoteList extends Component {
   render() {
     return (
       <Paper style={styles.paper} zDepth={5} rounded={false}>
-        <GridList style={styles.gridList} cols={1.2}>
+        <GridList style={styles.gridList} cols={1.2} padding={0}>
           {this.props.upNext.map((tile) => (
             <GridTile
               key={tile.songId}

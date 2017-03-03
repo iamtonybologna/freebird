@@ -2,15 +2,14 @@ import React, {Component} from 'react';
 import {GridList, GridTile} from 'material-ui/GridList';
 import IconButton from 'material-ui/IconButton';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
-import Paper from 'material-ui/Paper';
 
 const styles = {
   root: {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
-    marginTop: '6%',
-    marginBottom: '20%'
+    marginTop: '13%',
+    marginBottom: '15%'
   },
   gridList: {
     width: '90%',
@@ -31,9 +30,10 @@ class SearchResults extends Component {
         <GridList
           style={styles.gridList}
           cols={0.1}
+          padding={3}
         >
           {this.props.results.map((tile) => (
-            <Paper zDepth={5} rounded={true} style={styles.paper}>
+
             <GridTile
               key={tile.id.videoId}
               title={tile.snippet.title}
@@ -42,7 +42,7 @@ class SearchResults extends Component {
             >
               <img src={tile.snippet.thumbnails.medium.url} role='presentation' />
             </GridTile>
-            </Paper>
+
           ))}
         </GridList>
       </div>
