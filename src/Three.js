@@ -1,28 +1,24 @@
 import React, {Component} from 'react';
 import THREE from './threejs/threeF';
+import io from 'socket.io-client';
 
 
-// require("script!./threejs/threeF.js");
-// require("script!./threejs/postprocessing/RenderPass.js"); xxx
-// require("script!./threejs/postprocessing/MaskPass.js"); xxx
-// require("script!./threejs/postprocessing/ShaderPass.js"); xxx
-//require("script!./threejs/postprocessing/EffectComposer.js");  XXX
-// require("script!./threejs/shaders/CopyShader.js"); xxx
-// require("script!./threejs/shaders/VignetteShader.js"); xxx
-// require("script!./threejs/shaders/FilmShader.js"); xxx
 
 
 export default class Three extends Component {
 
   componentDidMount(){
+    this.ws = io.connect('ws://localhost:4000');
 
-    console.log(THREE);
-    setTimeout(() => {
-      this.test();
-    }, 1000);
+    this.ws.on('updateUserCount', (data) => {
+      console.log('Received a message from the server!', data);
+      this.setState({ userCount: data.userCount });
+      window.wsUserCount = 0;
+    });
+    this.launchAnimation();
   };
 
-  test() {
+  launchAnimation = () => {
     var camera, scene, renderer;
     var light1 = new THREE.PointLight(0xffffff, 2, 1000);
     var mesh;
@@ -126,34 +122,62 @@ export default class Three extends Component {
       var vignettePass = new THREE.ShaderPass(THREE.VignetteShader);
       vignettePass.uniforms["darkness"].value = 1.0;
 
-      var filmPass = new THREE.ShaderPass(THREE.FilmShader);
-      filmPass.uniforms["tDiffuse"].value = 1;
-      filmPass.uniforms["time"].value = 1;
-      filmPass.uniforms["sCount"].value = 1024;
-      filmPass.uniforms["nIntensity"].value = 0.05;
-      filmPass.uniforms["grayscale"].value = 0.0;
+      window.filmPass = new THREE.ShaderPass(THREE.FilmShader);
+      window.filmPass.uniforms["tDiffuse"].value = 1;
+      window.filmPass.uniforms["time"].value = 1;
+      window.filmPass.uniforms["sCount"].value = 1024;
+      window.filmPass.uniforms["nIntensity"].value = 0.05;
+      window.filmPass.uniforms["grayscale"].value = 0.0;
 
 
       composer = new THREE.EffectComposer(renderer);
       composer.addPass(renderPass);
       composer.addPass(vignettePass);
-      composer.addPass(filmPass);
+      composer.addPass(window.filmPass);
       composer.addPass(copyPass);
       //set last pass in composer chain to renderToScreen
       copyPass.renderToScreen = true;
-
-      //
-
-      //
-
       window.addEventListener('resize', onWindowResize, false);
-
-
       // window.addEventListener( 'mousemove', onMouseMove, false );
       window.addEventListener('touchmove', onTouchMove, false);
       window.addEventListener('click', onClick, false);
-
     }
+
+
+    this.ws.on('updateUserCount', (data) => {
+      console.log('Received a message from the server!', data);
+      this.setState({ userCount: data.userCount });
+
+      var bitmap = document.createElement('canvas');
+      var g = bitmap.getContext('2d');
+      bitmap.width = 128;
+      bitmap.height = 128;
+      g.font = 'Bold 20px Arial';
+
+      g.fillStyle = 'white';
+      g.fillText(this.state.userCount, 0, 20);
+      g.strokeStyle = 'black';
+      g.strokeText(this.state.userCount, 0, 20);
+
+// canvas contents will be used for a texture
+      var texture = new THREE.Texture(bitmap)
+      texture.needsUpdate = true;
+
+      var material = new THREE.MeshLambertMaterial({ map : texture });
+      var plane = new THREE.Mesh(new THREE.PlaneBufferGeometry(10, 10), material);
+      plane.material.side = THREE.DoubleSide;
+      plane.position.x = 100;
+
+      plane.position.x = camera.position.x;
+      plane.position.y = camera.position.y;
+      plane.position.z = camera.position.z - 300;
+      scene.add(plane);
+
+
+
+    });
+
+
 
     function onMouseMove(event) {
 
@@ -185,41 +209,71 @@ export default class Three extends Component {
       camera.position.y = mouse.y * 100;
       camera.lookAt(new THREE.Vector3(0, 0, -1000000000000000));
       console.log(camera.position.x + ", " + camera.position.y);
-      var geometry = new THREE.BoxGeometry(100, 100, 100);
-      var material = new THREE.MeshLambertMaterial({color: 'red'});
-      mesh = new THREE.Mesh(geometry, material);
-      mesh.position.x = camera.position.x;
-      mesh.position.y = camera.position.y;
-      mesh.position.z = camera.position.z - 300;
-      scene.add(mesh);
+
+      // var geometry = new THREE.IcosahedronGeometry(6, 1);
+      //
+      // var material = new THREE.MeshLambertMaterial({color: 'red'});
+      //
+      // mesh = new THREE.Mesh(geometry, material);
+      // mesh.position.x = camera.position.x;
+      // mesh.position.y = camera.position.y;
+      // mesh.position.z = camera.position.z - 300;
+      // //scene.add(mesh);
+
+
+
+
+      var bitmap = document.createElement('canvas');
+      var g = bitmap.getContext('2d');
+      bitmap.width = 128;
+      bitmap.height = 128;
+      g.font = 'Bold 20px Arial';
+
+      g.fillStyle = 'white';
+      g.fillText('jenkins', 0, 20);
+      g.strokeStyle = 'black';
+      g.strokeText('jenkins', 0, 20);
+
+// canvas contents will be used for a texture
+      var texture = new THREE.Texture(bitmap)
+      texture.needsUpdate = true;
+
+      var material = new THREE.MeshLambertMaterial({ map : texture });
+      var plane = new THREE.Mesh(new THREE.PlaneBufferGeometry(10, 10), material);
+      plane.material.side = THREE.DoubleSide;
+      plane.position.x = 100;
+
+      plane.position.x = camera.position.x;
+      plane.position.y = camera.position.y;
+      plane.position.z = camera.position.z - 300;
+      scene.add(plane);
+
+
+
+
+
+
+
+
       console.log(mesh.position.z, camera.position.z);
-
-
     }
-
 
     function onWindowResize() {
 
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
-
       renderer.setSize(window.innerWidth, window.innerHeight);
-
     }
 
 
     function animate() {
-
       requestAnimationFrame(animate);
-
       frameCounter++;
-
       if (frameCounter % 3 == 0) {
         drawLines();
       }
 
-
-      camera.position.z -= 0;
+      camera.position.z -= 1;
       light1.position.z = camera.position.z;
       //console.log( camera.position.z + ", " + light1.position.z );
       //console.log( muscleLinkContainer.children[ 0 ].geometry.vertices[ 1 ].position );
@@ -234,10 +288,9 @@ export default class Three extends Component {
         }
       }
 
-      mesh.position.z -= 1;
-      //filmPass.uniforms["time"].value += 0.01;
+      //mesh.position.z -= 1;
+      window.filmPass.uniforms["time"].value += 0.01;
 
-      console.log(renderer);
       composer.render(0.1);
 
     }
