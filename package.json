@@ -30,6 +30,7 @@
     "react-router-dom": "^4.0.0-beta.6",
     "react-tap-event-plugin": "^2.0.1",
     "react-youtube": "^7.3.0",
+    "script-loader": "^0.7.0",
     "socket.io": "1.7.2",
     "velocity-react": "^1.2.1",
     "ws": "2.0.2"
