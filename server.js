@@ -42,10 +42,7 @@ function newUpNext() {
     let i = 0;
     while (i < 3) {
       let randomSong = playlist[Math.floor(Math.random() * playlist.length)];
-      if (
-          newSongs.hasOwnProperty(randomSong.songId) === false &&
-          playedSongs.indexOf(randomSong.songId) === -1
-         ) {
+      if (newSongs.hasOwnProperty(randomSong.songId) === false && playedSongs.indexOf(randomSong.songId) === -1) {
         newSongs[randomSong.songId] = randomSong;
         i++;
       };
@@ -56,7 +53,7 @@ function newUpNext() {
       votes[song] = [];
     };
     console.log('Broadcasting new upNext list', upNext);
-    io.emit('updateUpNext', { data: upNext });
+    this.io.emit('updateUpNext', { data: upNext }); // THIS.IO? SCOPE ISSUE?
   };
 };
 
