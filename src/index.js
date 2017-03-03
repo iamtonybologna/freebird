@@ -7,10 +7,11 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import io from 'socket.io-client';
 
+const config = require('../config');
+
 injectTapEventPlugin();
 
-
-let ws = io.connect('ws:4000//localhost');
+let ws = io.connect(config.IO);
 
 ReactDOM.render(
   <Router>

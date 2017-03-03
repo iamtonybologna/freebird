@@ -18,7 +18,7 @@ app.get('*', (req, res) => {
   res.sendFile(__dirname + `/build/index.html`);
 });
 
-let PORT = process.env.PORT || config.PORT
+let PORT = process.env.PORT || config.PORT;
 server.listen(PORT);
 console.log(`Server listening on port: ${PORT}`);
 
