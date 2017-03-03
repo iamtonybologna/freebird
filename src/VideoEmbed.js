@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import Player from './Player.js';
 import Paper from 'material-ui/Paper';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import Skip from 'material-ui/svg-icons/av/skip-next';
 
 const styles = {
   paper: {
@@ -11,6 +13,10 @@ const styles = {
     height: '0',
     overflow: 'hidden',
     paddingBottom: '56.25%',
+  },
+  button: {
+    float: 'right',
+    top: '0'
   }
 };
 
@@ -87,7 +93,7 @@ class VideoEmbed extends Component {
       this.gotoNextVideo();
       return;
     }
-    if (timePlayed >= 19) {
+    if (timePlayed >= 90) {
       this.state.notPlaying.cueVideoById(this.voteCalculate());
       this.state.timeouts.playerLoading = setTimeout(() => {
         this.playerStart(5000);
@@ -158,17 +164,21 @@ class VideoEmbed extends Component {
 
   render() {
     return (
-      <Paper zDepth={5} rounded={true} style={styles.paper}>
-        <button onClick={this.gotoNextVideo}>Next</button>
-        <div style={styles.videoWrapper}>
-            <div style={{display: this.state.player1Hidden}}>
-              <Player id={"player1"}></Player>
-            </div>
-            <div style={{display: this.state.player2Hidden}}>
-              <Player id={"player2"}></Player>
-            </div>
-        </div>
-      </Paper>
+      <div>
+        <FloatingActionButton onTouchTap={this.gotoNextVideo} style={styles.button}>
+          <Skip />
+        </FloatingActionButton>
+        <Paper zDepth={5} rounded={true} style={styles.paper}>
+          <div style={styles.videoWrapper}>
+              <div style={{display: this.state.player1Hidden}}>
+                <Player id={"player1"}></Player>
+              </div>
+              <div style={{display: this.state.player2Hidden}}>
+                <Player id={"player2"}></Player>
+              </div>
+          </div>
+        </Paper>
+      </div>
     )
   };
 };
