@@ -29,6 +29,415 @@ if ( Math.sign === undefined ) {
 }
 
 
+
+/**
+ * @author alteredq / http://alteredqualia.com/
+ *
+ * Film grain & scanlines shader
+ *
+ * - ported from HLSL to WebGL / GLSL
+ * http://www.truevision3d.com/forums/showcase/staticnoise_colorblackwhite_scanline_shaders-t18698.0.html
+ *
+ * Screen Space Static Postprocessor
+ *
+ * Produces an analogue noise overlay similar to a film grain / TV static
+ *
+ * Original implementation and noise algorithm
+ * Pat 'Hawthorne' Shearon
+ *
+ * Optimized scanlines + noise version with intensity scaling
+ * Georg 'Leviathan' Steinrohder
+ *
+ * This version is provided under a Creative Commons Attribution 3.0 License
+ * http://creativecommons.org/licenses/by/3.0/
+ */
+
+THREE.FilmShader = {
+
+  uniforms: {
+
+    "tDiffuse":   { type: "t", value: null },
+    "time":       { type: "f", value: 0.0 },
+    "nIntensity": { type: "f", value: 0.5 },
+    "sIntensity": { type: "f", value: 0.05 },
+    "sCount":     { type: "f", value: 4096 },
+    "grayscale":  { type: "i", value: 1 }
+
+  },
+
+  vertexShader: [
+
+    "varying vec2 vUv;",
+
+    "void main() {",
+
+    "vUv = uv;",
+    "gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
+
+    "}"
+
+  ].join("\n"),
+
+  fragmentShader: [
+
+    // control parameter
+    "uniform float time;",
+
+    "uniform bool grayscale;",
+
+    // noise effect intensity value (0 = no effect, 1 = full effect)
+    "uniform float nIntensity;",
+
+    // scanlines effect intensity value (0 = no effect, 1 = full effect)
+    "uniform float sIntensity;",
+
+    // scanlines effect count value (0 = no effect, 4096 = full effect)
+    "uniform float sCount;",
+
+    "uniform sampler2D tDiffuse;",
+
+    "varying vec2 vUv;",
+
+    "void main() {",
+
+    // sample the source
+    "vec4 cTextureScreen = texture2D( tDiffuse, vUv );",
+
+    // make some noise
+    "float x = vUv.x * vUv.y * time *  1000.0;",
+    "x = mod( x, 13.0 ) * mod( x, 123.0 );",
+    "float dx = mod( x, 0.01 );",
+
+    // add noise
+    "vec3 cResult = cTextureScreen.rgb + cTextureScreen.rgb * clamp( 0.1 + dx * 100.0, 0.0, 1.0 );",
+
+    // get us a sine and cosine
+    "vec2 sc = vec2( sin( vUv.y * sCount ), cos( vUv.y * sCount ) );",
+
+    // add scanlines
+    "cResult += cTextureScreen.rgb * vec3( sc.x, sc.y, sc.x ) * sIntensity;",
+
+    // interpolate between source and result by intensity
+    "cResult = cTextureScreen.rgb + clamp( nIntensity, 0.0,1.0 ) * ( cResult - cTextureScreen.rgb );",
+
+    // convert to grayscale if desired
+    "if( grayscale ) {",
+
+    "cResult = vec3( cResult.r * 0.3 + cResult.g * 0.59 + cResult.b * 0.11 );",
+
+    "}",
+
+    "gl_FragColor =  vec4( cResult, cTextureScreen.a );",
+
+    "}"
+
+  ].join("\n")
+
+};
+
+/**
+ * @author alteredq / http://alteredqualia.com/
+ */
+
+THREE.MaskPass = function ( scene, camera ) {
+
+  this.scene = scene;
+  this.camera = camera;
+
+  this.enabled = true;
+  this.clear = true;
+  this.needsSwap = false;
+
+  this.inverse = false;
+
+};
+
+THREE.MaskPass.prototype = {
+
+  render: function ( renderer, writeBuffer, readBuffer, delta ) {
+
+    var context = renderer.context;
+
+    // don't update color or depth
+
+    context.colorMask( false, false, false, false );
+    context.depthMask( false );
+
+    // set up stencil
+
+    var writeValue, clearValue;
+
+    if ( this.inverse ) {
+
+      writeValue = 0;
+      clearValue = 1;
+
+    } else {
+
+      writeValue = 1;
+      clearValue = 0;
+
+    }
+
+    context.enable( context.STENCIL_TEST );
+    context.stencilOp( context.REPLACE, context.REPLACE, context.REPLACE );
+    context.stencilFunc( context.ALWAYS, writeValue, 0xffffffff );
+    context.clearStencil( clearValue );
+
+    // draw into the stencil buffer
+
+    renderer.render( this.scene, this.camera, readBuffer, this.clear );
+    renderer.render( this.scene, this.camera, writeBuffer, this.clear );
+
+    // re-enable update of color and depth
+
+    context.colorMask( true, true, true, true );
+    context.depthMask( true );
+
+    // only render where stencil is set to 1
+
+    context.stencilFunc( context.EQUAL, 1, 0xffffffff );  // draw if == 1
+    context.stencilOp( context.KEEP, context.KEEP, context.KEEP );
+
+  }
+
+};
+
+
+THREE.ClearMaskPass = function () {
+
+  this.enabled = true;
+
+};
+
+THREE.ClearMaskPass.prototype = {
+
+  render: function ( renderer, writeBuffer, readBuffer, delta ) {
+
+    var context = renderer.context;
+
+    context.disable( context.STENCIL_TEST );
+
+  }
+
+};
+
+
+THREE.VignetteShader = {
+
+  uniforms: {
+
+    "tDiffuse": { type: "t", value: null },
+    "offset":   { type: "f", value: 1.0 },
+    "darkness": { type: "f", value: 1.0 }
+
+  },
+
+  vertexShader: [
+
+    "varying vec2 vUv;",
+
+    "void main() {",
+
+    "vUv = uv;",
+    "gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
+
+    "}"
+
+  ].join("\n"),
+
+  fragmentShader: [
+
+    "uniform float offset;",
+    "uniform float darkness;",
+
+    "uniform sampler2D tDiffuse;",
+
+    "varying vec2 vUv;",
+
+    "void main() {",
+
+    // Eskil's vignette
+
+    "vec4 texel = texture2D( tDiffuse, vUv );",
+    "vec2 uv = ( vUv - vec2( 0.5 ) ) * vec2( offset );",
+    "gl_FragColor = vec4( mix( texel.rgb, vec3( 1.0 - darkness ), dot( uv, uv ) ), texel.a );",
+
+		/*
+		 // alternative version from glfx.js
+		 // this one makes more "dusty" look (as opposed to "burned")
+
+		 "vec4 color = texture2D( tDiffuse, vUv );",
+		 "float dist = distance( vUv, vec2( 0.5 ) );",
+		 "color.rgb *= smoothstep( 0.8, offset * 0.799, dist *( darkness + offset ) );",
+		 "gl_FragColor = color;",
+		 */
+
+    "}"
+
+  ].join("\n")
+
+};
+/**
+ * @author alteredq / http://alteredqualia.com/
+ */
+
+THREE.RenderPass = function ( scene, camera, overrideMaterial, clearColor, clearAlpha ) {
+
+  this.scene = scene;
+  this.camera = camera;
+
+  this.overrideMaterial = overrideMaterial;
+
+  this.clearColor = clearColor;
+  this.clearAlpha = ( clearAlpha !== undefined ) ? clearAlpha : 1;
+
+  this.oldClearColor = new THREE.Color();
+  this.oldClearAlpha = 1;
+
+  this.enabled = true;
+  this.clear = true;
+  this.needsSwap = false;
+
+};
+
+THREE.RenderPass.prototype = {
+
+  render: function ( renderer, writeBuffer, readBuffer, delta ) {
+
+    this.scene.overrideMaterial = this.overrideMaterial;
+
+    if ( this.clearColor ) {
+
+      this.oldClearColor.copy( renderer.getClearColor() );
+      this.oldClearAlpha = renderer.getClearAlpha();
+
+      renderer.setClearColor( this.clearColor, this.clearAlpha );
+
+    }
+
+    renderer.render( this.scene, this.camera, readBuffer, this.clear );
+
+    if ( this.clearColor ) {
+
+      renderer.setClearColor( this.oldClearColor, this.oldClearAlpha );
+
+    }
+
+    this.scene.overrideMaterial = null;
+
+  }
+
+};
+
+
+
+/**
+ * @author alteredq / http://alteredqualia.com/
+ */
+
+THREE.ShaderPass = function ( shader, textureID ) {
+
+  this.textureID = ( textureID !== undefined ) ? textureID : "tDiffuse";
+
+  this.uniforms = THREE.UniformsUtils.clone( shader.uniforms );
+
+  this.material = new THREE.ShaderMaterial( {
+
+    defines: shader.defines || {},
+    uniforms: this.uniforms,
+    vertexShader: shader.vertexShader,
+    fragmentShader: shader.fragmentShader
+
+  } );
+
+  this.renderToScreen = false;
+
+  this.enabled = true;
+  this.needsSwap = true;
+  this.clear = false;
+
+
+  this.camera = new THREE.OrthographicCamera( -1, 1, 1, -1, 0, 1 );
+  this.scene  = new THREE.Scene();
+
+  this.quad = new THREE.Mesh( new THREE.PlaneBufferGeometry( 2, 2 ), null );
+  this.scene.add( this.quad );
+
+};
+
+THREE.ShaderPass.prototype = {
+
+  render: function ( renderer, writeBuffer, readBuffer, delta ) {
+
+    if ( this.uniforms[ this.textureID ] ) {
+
+      this.uniforms[ this.textureID ].value = readBuffer;
+
+    }
+
+    this.quad.material = this.material;
+
+    if ( this.renderToScreen ) {
+
+      renderer.render( this.scene, this.camera );
+
+    } else {
+
+      renderer.render( this.scene, this.camera, writeBuffer, this.clear );
+
+    }
+
+  }
+
+};
+
+
+THREE.CopyShader = {
+
+  uniforms: {
+
+    "tDiffuse": { type: "t", value: null },
+    "opacity":  { type: "f", value: 1.0 }
+
+  },
+
+  vertexShader: [
+
+    "varying vec2 vUv;",
+
+    "void main() {",
+
+    "vUv = uv;",
+    "gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
+
+    "}"
+
+  ].join("\n"),
+
+  fragmentShader: [
+
+    "uniform float opacity;",
+
+    "uniform sampler2D tDiffuse;",
+
+    "varying vec2 vUv;",
+
+    "void main() {",
+
+    "vec4 texel = texture2D( tDiffuse, vUv );",
+    "gl_FragColor = opacity * texel;",
+
+    "}"
+
+  ].join("\n")
+
+};
+
+
+
+
+
 THREE.EffectComposer = function ( renderer, renderTarget ) {
 
   this.renderer = renderer;
@@ -164,6 +573,8 @@ THREE.EffectComposer.prototype = {
   }
 
 };
+
+
 
 
 

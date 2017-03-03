@@ -1,15 +1,15 @@
 import React, {Component} from 'react';
 import THREE from './threejs/threeF';
-//import THREE.RenderPass from './threejs/postprocessing/RenderPass';
+
 
 // require("script!./threejs/threeF.js");
-// require("script!./threejs/postprocessing/RenderPass.js");
-// require("script!./threejs/postprocessing/MaskPass.js");
-// require("script!./threejs/postprocessing/ShaderPass.js");
-//require("script!./threejs/postprocessing/EffectComposer.js");
-// require("script!./threejs/shaders/CopyShader.js");
-// require("script!./threejs/shaders/VignetteShader.js");
-// require("script!./threejs/shaders/FilmShader.js");
+// require("script!./threejs/postprocessing/RenderPass.js"); xxx
+// require("script!./threejs/postprocessing/MaskPass.js"); xxx
+// require("script!./threejs/postprocessing/ShaderPass.js"); xxx
+//require("script!./threejs/postprocessing/EffectComposer.js");  XXX
+// require("script!./threejs/shaders/CopyShader.js"); xxx
+// require("script!./threejs/shaders/VignetteShader.js"); xxx
+// require("script!./threejs/shaders/FilmShader.js"); xxx
 
 
 export default class Three extends Component {
@@ -114,29 +114,33 @@ export default class Three extends Component {
       scene.add(asteroidLinkContainer);
       scene.add(asteroidHighlightContainer);
 
+
+
       //POST PROCESSING
       //Create Shader Passes
-      //var renderPass = new THREE.RenderPass(scene, camera);
-     // var copyPass = new THREE.ShaderPass(THREE.CopyShader);
 
-      //var vignettePass = new THREE.ShaderPass(THREE.VignetteShader);
-      //vignettePass.uniforms["darkness"].value = 1.0;
+      console.log(renderer);
+      var renderPass = new THREE.RenderPass(scene, camera);
+      var copyPass = new THREE.ShaderPass(THREE.CopyShader);
 
-      //var filmPass = new THREE.ShaderPass(THREE.FilmShader);
-      //filmPass.uniforms["tDiffuse"].value = 1;
-      //filmPass.uniforms["time"].value = 1;
-      //filmPass.uniforms["sCount"].value = 1024;
-      //filmPass.uniforms["nIntensity"].value = 0.05;
-      //filmPass.uniforms["grayscale"].value = 0.0;
+      var vignettePass = new THREE.ShaderPass(THREE.VignetteShader);
+      vignettePass.uniforms["darkness"].value = 1.0;
+
+      var filmPass = new THREE.ShaderPass(THREE.FilmShader);
+      filmPass.uniforms["tDiffuse"].value = 1;
+      filmPass.uniforms["time"].value = 1;
+      filmPass.uniforms["sCount"].value = 1024;
+      filmPass.uniforms["nIntensity"].value = 0.05;
+      filmPass.uniforms["grayscale"].value = 0.0;
 
 
       composer = new THREE.EffectComposer(renderer);
-      //composer.addPass(renderPass);
-      //composer.addPass(vignettePass);
-      //composer.addPass(filmPass);
-      //composer.addPass(copyPass);
+      composer.addPass(renderPass);
+      composer.addPass(vignettePass);
+      composer.addPass(filmPass);
+      composer.addPass(copyPass);
       //set last pass in composer chain to renderToScreen
-      //copyPass.renderToScreen = true;
+      copyPass.renderToScreen = true;
 
       //
 
@@ -233,6 +237,7 @@ export default class Three extends Component {
       mesh.position.z -= 1;
       //filmPass.uniforms["time"].value += 0.01;
 
+      console.log(renderer);
       composer.render(0.1);
 
     }
