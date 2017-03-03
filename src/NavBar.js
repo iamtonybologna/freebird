@@ -19,7 +19,9 @@ const styles = {
 
 class NavBar extends Component {
 
-  select = (newView) => this.props.switcher(newView);
+
+
+  select = (newView) => {this.props.switcher(newView); }
 
   render() {
     return (

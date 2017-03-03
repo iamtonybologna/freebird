@@ -89,7 +89,11 @@ io.on('connection', (client) => {
         votes[song].splice(index, 1);
       };
     };
-    votes[vote.songId].push(vote.userId);
+    if (votes[vote.songId]) {
+      votes[vote.songId].push(vote.userId);
+    } else {
+      votes[vote.songId] = [vote.userId];
+    }
     io.emit('votes', { votes: votes });
     console.log('Updated votes', votes);
   });
