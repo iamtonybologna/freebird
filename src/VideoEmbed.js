@@ -6,7 +6,8 @@ import Skip from 'material-ui/svg-icons/av/skip-next';
 
 const styles = {
   paper: {
-    width: '80%',
+    width: '70vw',
+    marginLeft: '15vw'
   },
   videoWrapper: {
     position: 'relative',

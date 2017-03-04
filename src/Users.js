@@ -30,17 +30,17 @@ const muiTheme = getMuiTheme({
     primary1Color: deepPurple500,
     primary2Color: pinkA200,
     primary3Color: lightGreenA400,
-    accent1Color: lightGreenA400,
+    accent1Color: deepPurple900,
     accent2Color: deepPurple500,
     accent3Color: deepPurple500,
-    textColor: deepPurple500,
-    alternateTextColor: '#303030',
+    textColor: fullWhite,
+    alternateTextColor: deepPurple900,
     canvasColor: '#303030',
-    borderColor: deepPurple500,
-    disabledColor: fade(deepPurple500, 0.3),
+    borderColor: deepPurple900,
+    disabledColor: deepPurple100,
     pickerHeaderColor: deepPurple500,
     clockCircleColor: fade(deepPurple500, 0.07),
-    shadowColor: deepPurple100,
+    shadowColor: deepPurple500,
   },
 });
 
@@ -79,7 +79,7 @@ class Users extends Component {
     super(props);
 
     this.state = {
-      view: 0,
+      view: 3,
       userCount: 0,
       searchResults: [],
       user: { id: 0, name: '' },
@@ -90,16 +90,16 @@ class Users extends Component {
 
     this.renderView = () => {
       switch (this.state.view) {
-        case 0:
+        case 3:
           return (
             <Welcome handleNewName={this.handleNewName} />
         )
-        case 1:
+        case 0:
           if (this.state.voteListLoaded === false) {
             return (
             <div>
               <LoadingUser />
-              <NavBar switcher={this.switcher} />
+              <NavBar switcher={this.switcher} view={this.state.view}/>
             </div>
           )
             } else {
@@ -110,22 +110,24 @@ class Users extends Component {
                 </div>
               )
             }
-        case 2:
-          return (
+        case 1:
+          if (this.state.searchResults > 1 ){
+            return (
             <div>
-              <Search updateSearchResultsList={this.updateSearchResultsList} />
-              <DefaultSearch />
-              <NavBar switcher={this.switcher} />
-            </div>
+            <Search updateSearchResultsList={this.updateSearchResultsList} />
+            <DefaultSearch />
+            <NavBar switcher={this.switcher} view={this.state.view}/>
+          </div>
           )
-        case 3:
-          return (
-            <div>
-              <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher} />
-              <SearchResults results={this.state.searchResults} submitNewSong={this.handleSongAddition} />
-              <NavBar switcher={this.switcher} />
-            </div>
-          )
+            } else {
+              return (
+                <div>
+                  <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher} />
+                  <SearchResults results={this.state.searchResults} submitNewSong={this.handleSongAddition} />
+                  <NavBar switcher={this.switcher} view={this.state.view}/>
+                </div>
+              )
+            }
         default:
           break;
       };
@@ -134,11 +136,10 @@ class Users extends Component {
 
   switcher = (newView) => {
     this.setState({ view: newView });
-    console.log(this.state.searchResults);
   };
 
   updateSearchResultsList = (results) => {
-    this.setState({ searchResults: results, view: 3 });
+    this.setState({ searchResults: results});
   };
 
   handleNewName = (e) => {
@@ -151,9 +152,9 @@ class Users extends Component {
         console.log('Current state: ', this.state);
       });
         if (this.state.voteListLoaded === true) {
-        this.setState({ view: 1 });
+        this.setState({ view: 0 });
       } else {
-        this.setState({ view: 2 });
+        this.setState({ view: 1 });
       }
     };
   };
