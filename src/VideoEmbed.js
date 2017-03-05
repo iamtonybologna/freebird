@@ -122,28 +122,32 @@ class VideoEmbed extends Component {
         break;
     }
 
-
-    if (timePlayed >= 19) {
+    let timeOuts = this.state.timeouts;
+    if (timePlayed >= 120) {
       let newWinner = this.voteCalculate();
       this.props.winner(newWinner);
       this.state.notPlaying.cueVideoById(this.voteCalculate());
       this.backgroundVideoLoading = true;
-      this.state.timeouts.playerLoading = setTimeout(() => {
+      // setState()
+      timeOuts.playerLoading = setTimeout(() => {
         this.playerStart(500);
       }, 10000);
     } else {
-      this.state.timeouts.playerTimeCheck = setTimeout(() => {
+      timeOuts.playerTimeCheck = setTimeout(() => {
         this.playerTimer();
       }, 1000);
     }
+    this.setState({timeouts: timeOuts});
   };
 
   playerStart = (delay) => {
+    let timeOuts = this.state.timeouts;
     this.state.notPlaying.playVideo();
     this.state.notPlaying.setVolume(100);
-    this.state.timeouts.playerStart = setTimeout(() => {
+    timeOuts.playerStart = setTimeout(() => {
       this.playerTimeout();
     }, delay);
+    this.setState({timeouts: timeOuts});
   };
 
   playerTimeout = () => {
@@ -206,7 +210,9 @@ class VideoEmbed extends Component {
 
   cancelTimers = () => {
     for (let timer in this.state.timeouts) {
-      clearTimeout(this.state.timeouts[timer]);
+      if (this.state.timeouts.hasOwnProperty(timer)) {
+        clearTimeout(this.state.timeouts[timer]);
+      }
     }
   };
 
