@@ -45,17 +45,22 @@ export default class Three extends Component {
     function init() {
 
       renderer = new THREE.WebGLRenderer({alpha: true});
+      renderer.setClearColor( 0x000000, 0 );
+
       renderer.setPixelRatio(window.devicePixelRatio);
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setClearColor(0xFFFFF9, 1);
-      document.body.appendChild(renderer.domElement);
+      //renderer.setSize(window.innerWidth, window.innerHeight);
+
+      renderer.setSize(500,500);
+      //renderer.setClearColor(0xFFFFF9, 1);
+      var addNode = document.getElementById('threeContainer');
+      addNode.appendChild(renderer.domElement);
       camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
       camera.position.z = 500;
       camera.lookAt(new THREE.Vector3(0, 0, -1000000000000000));
 
       scene = new THREE.Scene();
-
-      scene.fog = new THREE.Fog(0xFFFFF9, 30, 800);
+      scene.background = new THREE.Color( 0xff0000 );
+      //scene.fog = new THREE.Fog(0xFFFFF9, 30, 800);
 
       light1.position.set(0, 0, 500);
 
@@ -138,7 +143,7 @@ export default class Three extends Component {
       //set last pass in composer chain to renderToScreen
       copyPass.renderToScreen = true;
       window.addEventListener('resize', onWindowResize, false);
-      // window.addEventListener( 'mousemove', onMouseMove, false );
+      window.addEventListener( 'mousemove', onMouseMove, false );
       window.addEventListener('touchmove', onTouchMove, false);
       window.addEventListener('click', onClick, false);
     }
@@ -247,14 +252,6 @@ export default class Three extends Component {
       plane.position.y = camera.position.y;
       plane.position.z = camera.position.z - 300;
       scene.add(plane);
-
-
-
-
-
-
-
-
       console.log(mesh.position.z, camera.position.z);
     }
 
@@ -291,7 +288,9 @@ export default class Three extends Component {
       //mesh.position.z -= 1;
       window.filmPass.uniforms["time"].value += 0.01;
 
-      composer.render(0.1);
+      renderer.render(scene,camera);
+      //composer causes problems with alpha channel
+      //composer.render(0.1);
 
     }
 

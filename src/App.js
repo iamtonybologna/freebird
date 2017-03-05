@@ -8,6 +8,7 @@ import VideoEmbed from './VideoEmbed.js';
 import HostVoteList from './HostVoteList.js';
 import Splash from './splash.js';
 import Loading from './Loading.js';
+import Three from './Three.js';
 
 
 const muiTheme = getMuiTheme({
@@ -34,6 +35,7 @@ class App extends Component {
         case 'main':
           return (
             <div>
+              <Three/>
               <VideoEmbed playList={this.state.playList} upNext={this.state.upNext} getUpNext={this.getUpNext} votes={this.state.votes} />
               <HostVoteList votes={this.state.votes} upNext={this.state.upNext}/>
               {this.state.userCount} user(s) in room
