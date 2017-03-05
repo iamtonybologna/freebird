@@ -102,7 +102,6 @@ class VideoEmbed extends Component {
       case 0:
         this.gotoNextVideo();
         return;
-        break;
       case 1:
         this.problemCounter = 0;
         this.bufferCounter = 0;

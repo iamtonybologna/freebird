@@ -6,9 +6,6 @@ import VideoEmbed from './VideoEmbed.js';
 import HostVoteList from './HostVoteList.js';
 import Splash from './splash.js';
 import Loading from './Loading.js';
-import RaisedButton from 'material-ui/RaisedButton';
-
-const config = require('../config');
 
 const muiTheme = getMuiTheme({
   palette: { accent1Color: deepOrange500 }

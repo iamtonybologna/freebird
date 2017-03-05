@@ -1,20 +1,12 @@
 import React, { Component } from 'react';
 
 // theme information, imports colors and material-ui information from node modules
-
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import {fade} from 'material-ui/utils/colorManipulator';
-import {
-  cyan500, cyan700, deepPurple500, deepPurple50, deepPurple100, deepPurple900,
-  pinkA200, lightGreenA400,
-  grey100, grey300, grey400, grey500,
-  white, darkBlack, fullBlack, fullWhite,
-} from 'material-ui/styles/colors';
+import { deepPurple500, deepPurple100, pinkA200, lightGreenA400 } from 'material-ui/styles/colors';
 
 // list of objects/ views being imported
-
 import Welcome from './Welcome.js';
 import UserVoteList from './UserVoteList.js';
 import Search from './Search.js';
@@ -22,8 +14,6 @@ import SearchResults from './SearchResults.js';
 import NavBar from './NavBar.js';
 import LoadingUser from './LoadingUser.js';
 import DefaultSearch from './DefaultSearch.js';
-
-const config = require('../config');
 
 const muiTheme = getMuiTheme({
   palette: {
