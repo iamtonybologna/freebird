@@ -14,6 +14,16 @@ io.origins('*:*');
 
 app.use(express.static(`build`));
 
+let partyButtonCount = 51;
+
+app.get('/party', (req, res) => {
+  if (partyButtonCount > 50) {
+    res.status(404).send();
+  } else {
+    res.status(200).send();
+  }
+});
+
 app.get('*', (req, res) => {
   res.sendFile(__dirname + `/build/index.html`);
 });
@@ -29,6 +39,7 @@ let votes = {};              // votes = { songId: [userId, userId, userId] }
 let upNext = [];
 let playlist = [];
 let playedSongs = [];
+
 
 newUpNext = () => {
   // store songs that were just voted on and clear votes
@@ -129,6 +140,14 @@ io.on('connection', (client) => {
   client.on('getUpNext', () => {
     // get 3 new, random songs, clear upNext, and add those songs to upNext
     newUpNext();
+  });
+
+  // partyButton listener and conditional partyOn switch
+  client.on('partyButton', () => {
+    partyButtonCount++;
+    if (partyButtonCount > 5) {
+      io.broadcast.emit('partyOn', { partyOn: true });
+    }
   });
 
   client.on('disconnect', () => {
