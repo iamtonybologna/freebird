@@ -125,7 +125,7 @@ class Users extends Component {
               return (
                 <div>
                   <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher} />
-                  <SearchResults results={this.state.searchResults} submitNewSong={this.handleSongAddition} selectedSongs={this.state.selectedSongs}/>
+                  <SearchResults results={this.state.searchResults} submitNewSong={this.handleSongAddition} selectedSongs={this.state.selectedSongs} playlist={this.state.playlist}/>
                   <NavBar switcher={this.switcher} view={this.state.view}/>
                 </div>
               )
@@ -170,8 +170,14 @@ class Users extends Component {
   handleSongAddition = (e) => {
 
     let newList = this.state.selectedSongs
-    newList.push(e.id.videoId)
-    this.setState({selectedSongs: newList})
+    if (this.state.selectedSongs.indexOf(e.id.videoId) === -1 ) {
+      newList.push(e.id.videoId)
+      this.setState({selectedSongs: newList})
+    } else {
+      let index = newList.indexOf(e.id.videoId);
+      newList.splice(index, 1);
+      this.setState({selectedSongs: newList})
+    }
 
     this.props.ws.emit('addNewSong', {
         'userId': this.state.user.id,
