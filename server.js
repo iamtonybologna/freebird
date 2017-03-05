@@ -18,9 +18,9 @@ let partyButtonCount = 51;
 
 app.get('/party', (req, res) => {
   if (partyButtonCount > 50) {
-    res.status(404).send();
-  } else {
     res.status(200).send();
+  } else {
+    res.status(404).send();
   }
 });
 
