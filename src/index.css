@@ -1,6 +1,9 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css");
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
 body {
   background-image: url("../public/deep-space.jpg");
   background-color: #303030;
   backgound-size: cover;
+  font-family: 'Roboto';
 }

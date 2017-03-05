@@ -26,6 +26,7 @@ import DefaultSearch from './DefaultSearch.js';
 const config = require('../config');
 
 const muiTheme = getMuiTheme({
+  fontFamily: 'Roboto, sans-serif',
   palette: {
     primary1Color: deepPurple500,
     primary2Color: pinkA200,
