@@ -145,9 +145,6 @@ io.on('connection', (client) => {
   // partyButton listener and conditional partyOn switch
   client.on('partyButton', () => {
     partyButtonCount++;
-    if (partyButtonCount > 5) {
-      io.broadcast.emit('partyOn', { partyOn: true });
-    }
   });
 
   client.on('disconnect', () => {
