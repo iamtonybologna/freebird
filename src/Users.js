@@ -87,14 +87,15 @@ class Users extends Component {
       upNext: [],
       playlist: [],
       selectedSongs: [],
-      newVoteId: ''
+      newVoteId: '',
+      name: '',
     };
 
     this.renderView = () => {
       switch (this.state.view) {
         case 3:
           return (
-            <Welcome handleNewName={this.handleNewName} />
+            <Welcome handleNewName={this.handleNewName} handleSubmitName={this.handleSubmitName}/>
         )
         case 0:
           if (this.state.voteListLoaded === false) {
@@ -144,9 +145,26 @@ class Users extends Component {
     this.setState({ searchResults: results});
   };
 
+  handleSubmitName = () => {
+    let name = this.state.name;
+    console.log('Sending username to server', name);
+    this.props.ws.emit('setUsername', { 'name': name }, (userId) => {
+      console.log('Received UUID from server', userId);
+      this.setState({ user: { id: userId , name: name } });
+      console.log('Current state: ', this.state);
+    });
+      if (this.state.voteListLoaded === true) {
+      this.setState({ view: 0 });
+    } else {
+      this.setState({ view: 1 });
+    }
+  };
+
   handleNewName = (e) => {
+    let oldName = this.state.name;
+    this.setState({name: oldName + e.key})
     if (e.key === 'Enter') {
-      let name = e.target.value;
+      let name = this.state.name;
       console.log('Sending username to server', name);
       this.props.ws.emit('setUsername', { 'name': name }, (userId) => {
         console.log('Received UUID from server', userId);

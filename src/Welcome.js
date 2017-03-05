@@ -48,7 +48,7 @@ export default class Welcome extends Component {
             textareaStyle={styles.text}
           />
           <br/>
-          <FloatingActionButton style={styles.welcomeButton} zDepth={2} onTouchTap={this.props.handleNewName.bind()}>
+          <FloatingActionButton style={styles.welcomeButton} zDepth={2} onTouchTap={this.props.handleSubmitName.bind()}>
               <Send />
           </FloatingActionButton>
         </Paper>

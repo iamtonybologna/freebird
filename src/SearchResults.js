@@ -36,15 +36,15 @@ class SearchResults extends Component {
   }
 
   handleTouchTap = (tile) => {
-    if (this.state.songName === 'Added ' + tile.snippet.title + ' to playlist') {
+    if (this.state.selectedSongs.indexOf(tile.id.videoId) === -1 ) {
       this.setState({
         open: true,
-        songName: 'Removed ' + tile.snippet.title + ' from playlist',
+        songName: 'Added ' + tile.snippet.title + ' to playlist',
       });
     } else {
       this.setState({
         open: true,
-        songName: 'Added ' + tile.snippet.title + ' to playlist',
+        songName: 'Removed ' + tile.snippet.title + ' from playlist',
       });
     }
     console.log(this.props)
@@ -69,10 +69,8 @@ class SearchResults extends Component {
   renderShadow = (id) => {
     if (this.state.selectedSongs.indexOf(id) === -1 ) {
       return "linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
-    } else if (this.props.playlist.indexOf(id) === -1){
-      return "linear-gradient(to top, #D500F9 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)"
     } else {
-      return "linear-gradient(to top, #76FF03 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)"
+      return "linear-gradient(to top, #D500F9 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)"
     }
   }
 
