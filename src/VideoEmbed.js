@@ -95,7 +95,9 @@ class VideoEmbed extends Component {
       return;
     }
     if (timePlayed >= 90) {
-      this.state.notPlaying.cueVideoById(this.voteCalculate());
+      let newWinner = this.voteCalculate();
+      this.props.winner(newWinner);
+      this.state.notPlaying.cueVideoById(newWinner);
       this.state.timeouts.playerLoading = setTimeout(() => {
         this.playerStart(5000);
       }, 10000);

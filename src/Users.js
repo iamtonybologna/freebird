@@ -85,7 +85,9 @@ class Users extends Component {
       user: { id: 0, name: '' },
       voteListLoaded: false,
       upNext: [],
-      playlist: []
+      playlist: [],
+      selectedSongs: [],
+      newVoteId: ''
     };
 
     this.renderView = () => {
@@ -105,7 +107,7 @@ class Users extends Component {
             } else {
               return (
                 <div>
-                  <UserVoteList voteFor={this.handleSongClick} upNext={this.state.upNext} />
+                  <UserVoteList voteFor={this.handleSongClick} upNext={this.state.upNext} newVoteId={this.state.newVoteId}/>
                   <NavBar switcher={this.switcher} view={this.state.view}/>
                 </div>
               )
@@ -123,7 +125,7 @@ class Users extends Component {
               return (
                 <div>
                   <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher} />
-                  <SearchResults results={this.state.searchResults} submitNewSong={this.handleSongAddition} />
+                  <SearchResults results={this.state.searchResults} submitNewSong={this.handleSongAddition} selectedSongs={this.state.selectedSongs}/>
                   <NavBar switcher={this.switcher} view={this.state.view}/>
                 </div>
               )
@@ -160,11 +162,17 @@ class Users extends Component {
   };
 
   handleSongClick = (e) => {
+    this.setState({newVoteId: e})
     this.props.ws.emit('setUserVote', { userId: this.state.user.id, 'songId': e });
     console.log('Vote sent to server', { userId: this.state.user.id, 'songId': e });
   };
 
   handleSongAddition = (e) => {
+
+    let newList = this.state.selectedSongs
+    newList.push(e.id.videoId)
+    this.setState({selectedSongs: newList})
+
     this.props.ws.emit('addNewSong', {
         'userId': this.state.user.id,
         'songId': e.id.videoId,

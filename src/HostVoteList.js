@@ -17,6 +17,9 @@ const styles = {
     height: '100%',
     width: '100%'
   },
+  tile: {
+    height: '100%'
+  }
 };
 
 class HostVoteList extends Component {
@@ -32,7 +35,8 @@ class HostVoteList extends Component {
             <GridTile
               key={tile.songId}
               title={tile.songTitle}
-              titleBackground={"linear-gradient(to top, #D500F9 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)"}
+              style={styles.tile}
+              titleBackground="linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
             >
               <img role="presentation" src={tile.songImageHigh} />
             </GridTile>
