@@ -9,16 +9,25 @@ const styles = {
     display: 'flex',
     flexWrap: 'nowrap',
     overflowX: 'auto',
-    width: '100vw'
+    height: '100%',
+    width: '100%'
   },
   paper: {
     display: 'flex',
-    height: '34.75%'
+    height: '100%',
+    width: '100%'
   },
+  tile: {
+    height: '100%'
+  }
 };
 
 class HostVoteList extends Component {
+
+
+
   render() {
+
     return (
       <Paper style={styles.paper} zDepth={5} rounded={false}>
         <GridList style={styles.gridList} cols={1.2} padding={0}>
@@ -26,8 +35,8 @@ class HostVoteList extends Component {
             <GridTile
               key={tile.songId}
               title={tile.songTitle}
-              actionIcon={<IconButton><StarBorder color="rgb(0, 188, 212)" /></IconButton>}
-              titleBackground="linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)"
+              style={styles.tile}
+              titleBackground="linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
             >
               <img role="presentation" src={tile.songImageHigh} />
             </GridTile>

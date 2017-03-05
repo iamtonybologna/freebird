@@ -17,7 +17,7 @@ const styles = {
 
 class Search extends Component {
 
-  selectSearch = (results) => this.props.updateSearchResultsList(results);
+  selectSearch = (results) => this.props.updateSearchResultsList(results) 
 
   render() {
     return (

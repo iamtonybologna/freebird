@@ -6,7 +6,8 @@ import Skip from 'material-ui/svg-icons/av/skip-next';
 
 const styles = {
   paper: {
-    width: '80%',
+    width: '70vw',
+    marginLeft: '15vw'
   },
   videoWrapper: {
     position: 'relative',
@@ -120,7 +121,11 @@ class VideoEmbed extends Component {
       default:
         break;
     }
+
+
     if (timePlayed >= 19) {
+      let newWinner = this.voteCalculate();
+      this.props.winner(newWinner);
       this.state.notPlaying.cueVideoById(this.voteCalculate());
       this.backgroundVideoLoading = true;
       this.state.timeouts.playerLoading = setTimeout(() => {

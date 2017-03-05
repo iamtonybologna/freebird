@@ -11,6 +11,12 @@ const muiTheme = getMuiTheme({
   palette: { accent1Color: deepOrange500 }
 });
 
+const styles = {
+    container: {
+      height: '100vh',
+      width: '100vw'
+    }
+  };
 class App extends Component {
 
   constructor(props) {
@@ -19,7 +25,8 @@ class App extends Component {
     this.state = {
       votes: null,
       view: 'splash',
-      upNext: []
+      upNext: [],
+      winner: ''
     };
 
     this.renderView = () => {
@@ -31,8 +38,8 @@ class App extends Component {
         case 'main':
           return (
             <div>
-              <VideoEmbed playList={this.state.playList} upNext={this.state.upNext} getUpNext={this.getUpNext} votes={this.state.votes} />
-              <HostVoteList votes={this.state.votes} upNext={this.state.upNext} />
+              <VideoEmbed winner={this.setWinner} playList={this.state.playList} upNext={this.state.upNext} getUpNext={this.getUpNext} votes={this.state.votes} />
+              <HostVoteList votes={this.state.votes} upNext={this.state.upNext} winner={this.state.winner}/>
               {this.state.userCount} user(s) in room
             </div>
           )
@@ -77,10 +84,14 @@ class App extends Component {
     this.props.ws.emit('getUpNext');
   };
 
+  setWinner = (newWinner) => {
+    this.setState({ winner: newWinner });
+  };
+
   render() {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
-        <div>
+        <div style={styles.container}>
           { this.renderView() }
         </div>
       </MuiThemeProvider>

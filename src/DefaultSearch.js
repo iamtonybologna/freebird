@@ -15,8 +15,6 @@ class DefaultSearch extends Component {
   render() {
     return (
         <div style={styles.noSearchDiv} >
-            Why dont you add some music.<br/>
-            Im sure everybody would looooove to hear what you like.
         </div>
     )
   };

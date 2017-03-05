@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import {GridList, GridTile} from 'material-ui/GridList';
 import IconButton from 'material-ui/IconButton';
-import StarBorder from 'material-ui/svg-icons/toggle/star-border';
+import PlaylistAdd from 'material-ui/svg-icons/av/playlist-add';
+import PlaylistAddCheck from 'material-ui/svg-icons/av/playlist-add-check';
+import Snackbar from 'material-ui/Snackbar';
 
 const styles = {
   root: {
@@ -17,16 +19,56 @@ const styles = {
     overflowY: 'auto',
     margin: 'auto'
   },
-  paper: {
+  snackBar: {
   }
 };
 
 
 class SearchResults extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: false,
+      songName: '',
+      selectedSongs: this.props.selectedSongs,
+    };
+  }
+
+  handleTouchTap = (tile) => {
+    this.setState({
+      open: true,
+      songName: tile.snippet.title + ' added to playlist',
+    });
+    this.props.submitNewSong(tile)
+  };
+
+  handleRequestClose = () => {
+    this.setState({
+      open: false,
+      message: ''
+    });
+  };
+
+  renderIcon = (id) => {
+      if (this.state.selectedSongs.indexOf(id) === -1 ) {
+        return <IconButton><PlaylistAdd color='white' /></IconButton>
+      } else {
+        return <IconButton><PlaylistAddCheck color='white' /></IconButton>
+      }
+  }
+
+  renderShadow = (id) => {
+    if (this.state.selectedSongs.indexOf(id) === -1 ) {
+      return "linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
+    } else {
+      return "linear-gradient(to top, #D500F9 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)"
+    }
+  }
+
   render() {
     return (
-      <div style={styles.root}>
+      <div style={styles.root} >
         <GridList
           style={styles.gridList}
           cols={0.1}
@@ -37,14 +79,22 @@ class SearchResults extends Component {
             <GridTile
               key={tile.id.videoId}
               title={tile.snippet.title}
-              onTouchTap={this.props.submitNewSong.bind(this, tile)}
-              actionIcon={<IconButton><StarBorder color='white' /></IconButton>}
+              onTouchTap={() => this.handleTouchTap(tile)}
+              actionIcon={this.renderIcon(tile.id.videoId)}
+              titleBackground={this.renderShadow(tile.id.videoId)}
             >
               <img src={tile.snippet.thumbnails.medium.url} role='presentation' />
             </GridTile>
 
           ))}
         </GridList>
+        <Snackbar
+          open={this.state.open}
+          message={this.state.songName}
+          autoHideDuration={3000}
+          onRequestClose={this.handleRequestClose}
+          style={styles.snackBar}
+        />
       </div>
     )
   }
