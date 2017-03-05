@@ -4,7 +4,14 @@ import React, { Component } from 'react';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {fade} from 'material-ui/utils/colorManipulator';
-import { deepPurple500, deepPurple100, pinkA200, lightGreenA400 } from 'material-ui/styles/colors';
+import {
+  deepPurple900,
+  deepPurple500,
+  deepPurple100,
+  pinkA200,
+  lightGreenA400,
+  fullWhite
+} from 'material-ui/styles/colors';
 
 // list of objects/ views being imported
 import Welcome from './Welcome.js';
