@@ -49,6 +49,7 @@ export default class Welcome extends Component {
           <FloatingActionButton style={styles.welcomeButton} zDepth={2} onTouchTap={this.props.handleNewName.bind()}>
               <Send />
           </FloatingActionButton>
+          <a href="/auth/twitter">Sign in with Twitter</a>
         </Paper>
       </div>
     )

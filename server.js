@@ -9,12 +9,46 @@ const server    = require('http').createServer(app);
 const io        = require('socket.io')(server);
 const uuid      = require('node-uuid');
 const config    = require('./config');
+const passport  = require('passport');
+const TwitterStrategy = require('passport-twitter').Strategy;
+
+passport.use(new TwitterStrategy({
+    consumerKey: 'A0gR3Q1JaRFMPiibvlqsrKQOO',
+    consumerSecret: 'vfyWKuJ2OxGGbGEKXWE51gvmiLzANWN69DTZCXS0h0rHwB6s1D',
+    callbackURL: "http://127.0.0.1:3000/auth/twitter/callback"
+  },
+  function(token, tokenSecret, profile, done) {
+    User.findOrCreate({ 'twitter.id': profile.id }, function(err, user) {
+      if (err) { return done(err); }
+      done(null, user);
+    });
+  }
+));
 
 io.origins('*:*');
 
 app.use(express.static(`build`));
 
+app.use(require('cookie-parser')());
+app.use(require('body-parser').urlencoded({ extended: true }));
+app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
+
 let partyButtonCount = 51;
+
+// Redirect the user to Twitter for authentication. When complete, Twitter
+// will redirect the user back to the application at
+//   /auth/twitter/callback
+app.get('/auth/twitter', passport.authenticate('twitter'));
+
+// Twitter will redirect the user to this URL after approval. Finish the
+// authentication process by attempting to obtain an access token. If
+// access was granted, the user will be logged in. Otherwise,
+// authentication has failed.
+app.get('/auth/twitter/callback',
+  passport.authenticate('twitter', { successRedirect: '/',
+                                     failureRedirect: '/login' }));
 
 app.get('/party', (req, res) => {
   if (partyButtonCount > 50) {
@@ -53,7 +87,6 @@ newUpNext = () => {
     let i = 0;
     while (i < 3) {
       let randomSong = playlist[Math.floor(Math.random() * playlist.length)];
-      debugger;
       if (newSongs.hasOwnProperty(randomSong.songId) === false) {
         // add this to if statement to check against songs that were voted on
         // && playedSongs.indexOf(randomSong.songId) === -1
