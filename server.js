@@ -1,27 +1,60 @@
-const express   = require('express');
-const cors      = require('cors');
-const http      = require('http');
-const app       = express();
+const express         = require('express');
+const cors            = require('cors');
+const http            = require('http');
+const app             = express();
 
 app.use(cors());
 
-const server    = require('http').createServer(app);
-const io        = require('socket.io')(server);
-const uuid      = require('node-uuid');
-const config    = require('./config');
-const passport  = require('passport');
-const TwitterStrategy = require('passport-twitter').Strategy;
+const server          = require('http').createServer(app);
+const io              = require('socket.io')(server);
+const uuid            = require('node-uuid');
+const config          = require('./config');
+const passport        = require('passport');
+var TwitterStrategy   = require('passport-twitter').Strategy
+  , twitterAuthn
+  , twitterAuthz
+  , user              = { id: "foo" }
+  , OAuth             = require('oauth').OAuth
+  , oa
+  ;
+
+function initTwitterOauth() {
+  oa = new OAuth(
+    "https://twitter.com/oauth/request_token"
+  , "https://twitter.com/oauth/access_token"
+  , config.CONSUMER_KEY
+  , config.CONSUMER_SECRET
+  , "1.0A"
+  , "http://127.0.0.1:3000/authn/twitter/callback"
+  , "HMAC-SHA1"
+  );
+}
+
+// In order to tweet we must have the user's token and secret
+// (which we've stored in our poor man's db
+// Notice how easy OAuth is, we don't even need a library
+// https://dev.twitter.com/docs/api/1/post/statuses/update
+function makeTweet(cb) {
+  if (!user.token) {
+    console.error("You didn't have the user log in first");
+  }
+  oa.post(
+    "https://api.twitter.com/1.1/statuses/update.json"
+  , user.token
+  , user.tokenSecret
+  // We just have a hard-coded tweet for now
+  , { "status": "PARTY PARTY PARTY" }
+  , cb
+  );
+}
 
 passport.use(new TwitterStrategy({
-    consumerKey: 'A0gR3Q1JaRFMPiibvlqsrKQOO',
-    consumerSecret: 'vfyWKuJ2OxGGbGEKXWE51gvmiLzANWN69DTZCXS0h0rHwB6s1D',
+    consumerKey: config.CONSUMER_KEY,
+    consumerSecret: config.CONSUMER_SECRET,
     callbackURL: "http://127.0.0.1:3000/auth/twitter/callback"
   },
   function(token, tokenSecret, profile, done) {
-    User.findOrCreate({ 'twitter.id': profile.id }, function(err, user) {
-      if (err) { return done(err); }
-      done(null, user);
-    });
+    user[profile.id] = profile;
   }
 ));
 
@@ -56,6 +89,20 @@ app.get('/party', (req, res) => {
   } else {
     res.status(404).send();
   }
+});
+
+// This is where we handle the tweet link
+// (which should have been a form with user input)
+app.get('/twitter/tweet', function (req, res) {
+  makeTweet(function (error, data) {
+    if (error) {
+      console.log(require('sys').inspect(error));
+      res.end('bad stuff happened, negative on the tweetage');
+    } else {
+      console.log(data);
+      res.end('go check your tweets!');
+    }
+  });
 });
 
 app.get('*', (req, res) => {
