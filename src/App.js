@@ -51,8 +51,8 @@ class App extends Component {
     this.state = {
       votes: null,
       view: 'splash',
-      upNext: [],
-      winner: ''
+      upNext: [{songId: 'X_DVS_303kQ'}],
+      winner: '',
     };
 
     this.renderView = () => {
@@ -94,6 +94,7 @@ class App extends Component {
     this.props.ws.on('updateUpNext', (upNext) => {
       console.log('updateUpNext', upNext);
       this.setState({ upNext: upNext.data });
+      this.setState({ votes: null});
       console.log('upNext', this.state.upNext);
     });
     this.props.ws.on('updatePlaylist', (playlist) => {

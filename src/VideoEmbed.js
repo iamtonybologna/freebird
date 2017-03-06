@@ -77,7 +77,8 @@ class VideoEmbed extends Component {
           this.startUp();
         }, 1000);
       }
-    };
+    }
+    ;
   };
 
   // get everything going after player1 onReady is fired
@@ -91,8 +92,8 @@ class VideoEmbed extends Component {
   // start playing 2 seconds before display swap
   playerTimer = () => {
     let timePlayed = this.state.playing.getCurrentTime();
-    this.setState({ timer: Math.floor(20 - timePlayed) });
-    console.log(this.state.playing.getPlayerState(), 'playerStatus');
+    this.setState({timer: Math.floor(20 - timePlayed)});
+    console.log(this.state.playing.getPlayerState(), timePlayed, 'playerStatus');
     switch (this.state.playing.getPlayerState()) {
       case -1:
         this.problemCounter++;
@@ -107,6 +108,10 @@ class VideoEmbed extends Component {
         this.problemCounter = 0;
         this.bufferCounter = 0;
         break;
+      case 2:
+        break;
+        this.problemCounter = 0;
+        this.bufferCounter = 0;
       case 3:
         this.bufferCounter++;
         if (this.bufferCounter >= 15) {
@@ -152,17 +157,18 @@ class VideoEmbed extends Component {
     let p2Hidden = "none";
     if (this.state.player1Hidden === "none") p1Hidden = "block";
     if (this.state.player2Hidden === "none") p2Hidden = "block";
-    this.setState({ player1Hidden: p1Hidden });
-    this.setState({ player2Hidden: p2Hidden });
+    this.setState({player1Hidden: p1Hidden});
+    this.setState({player2Hidden: p2Hidden});
     this.state.playing.stopVideo();
     let tempPlayer = this.state.playing;
-    this.setState({ playing: this.state.notPlaying });
-    this.setState({ notPlaying: tempPlayer });
+    this.setState({playing: this.state.notPlaying});
+    this.setState({notPlaying: tempPlayer});
     this.playerVolumeSync();
+    this.setState({votes: null});
     this.props.getUpNext();
     this.backgroundVideoLoading = false;
     this.playerTimer();
-    console.log("should be playing" ,this.state.playing.getVideoUrl(), "was playing", this.state.notPlaying.getVideoUrl())
+    console.log("should be playing", this.state.playing.getVideoUrl(), "was playing", this.state.notPlaying.getVideoUrl())
   };
 
   playerVolumeSync() {
@@ -182,12 +188,9 @@ class VideoEmbed extends Component {
     for (let item in votes) {
       if (votes.hasOwnProperty(item)) {
         sortArray.push([item, this.props.votes[item].length]);
-      };
-    };
-    if (sortArray.length === 0) {
-      if (this.props.upNext.length === 0){
-        return this.state.playing.getVideoData().video_id;
       }
+    }
+    if (sortArray.length === 0) {
       return this.props.upNext[0].songId;
     }
     sortArray.sort((a, b) => {
@@ -220,17 +223,18 @@ class VideoEmbed extends Component {
         </FloatingActionButton>
         <Paper zDepth={5} rounded={true} style={styles.paper}>
           <div style={styles.videoWrapper}>
-              <div style={{display: this.state.player1Hidden}}>
-                <Player id={"player1"}></Player>
-              </div>
-              <div style={{display: this.state.player2Hidden}}>
-                <Player id={"player2"}></Player>
-              </div>
+            <div style={{display: this.state.player1Hidden}}>
+              <Player id={"player1"}></Player>
+            </div>
+            <div style={{display: this.state.player2Hidden}}>
+              <Player id={"player2"}></Player>
+            </div>
           </div>
         </Paper>
       </div>
     )
   };
-};
+}
+;
 
 export default VideoEmbed;
