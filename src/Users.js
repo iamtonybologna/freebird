@@ -175,16 +175,16 @@ class Users extends Component {
   };
 
   handleSongClick = (e) => {
-    this.setState({newVoteId: e})
+    this.setState({newVoteId: e});
     this.props.ws.emit('setUserVote', { userId: this.state.user.id, 'songId': e });
     console.log('Vote sent to server', { userId: this.state.user.id, 'songId': e });
   };
 
   handleSongAddition = (e) => {
 
-    let newList = this.state.selectedSongs
-    newList.push(e.id.videoId)
-    this.setState({selectedSongs: newList})
+    let newList = this.state.selectedSongs;
+    newList.push(e.id.videoId);
+    this.setState({ selectedSongs: newList });
 
     this.props.ws.emit('addNewSong', {
         'userId': this.state.user.id,
