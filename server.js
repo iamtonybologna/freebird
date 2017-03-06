@@ -39,7 +39,6 @@ let upNext = [];
 let playlist = [];
 let lastUpNextList = [];
 
-
 newUpNext = () => {
   // store songs that were just voted on and clear votes
   for (let songId in votes) {
