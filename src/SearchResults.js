@@ -20,6 +20,8 @@ const styles = {
     margin: 'auto'
   },
   snackBar: {
+    marginBottom: '56px',
+    zIndex: '5'
   }
 };
 

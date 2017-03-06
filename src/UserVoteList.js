@@ -20,6 +20,10 @@ const styles = {
   paper: {
     margin: 'auto'
   },
+  snackBar: {
+    marginBottom: '56px',
+    zIndex: '5',
+  }
 };
 
 class UserVoteList extends Component {

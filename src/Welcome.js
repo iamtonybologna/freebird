@@ -5,18 +5,18 @@ import Send from 'material-ui/svg-icons/content/send';
 import Paper from 'material-ui/Paper';
 
 const styles = {
-  welcomeDiv: {
-    textAlign: 'center'
+  button: {
+    marginTop: '3vh'
   },
   welcomeButton: {
-    marginTop: '3vh',
-
+    textAlign: 'center',
+    margin: 'auto',
   },
   welText: {
-    width: '70vw',
-    marginTop: '15vh',
-    textAlign: 'center'
-
+    width: '90vw',
+    marginTop: '20vh',
+    textAlign: 'center',
+    background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)'
   },
   paper: {
     height: '90vw',
@@ -25,10 +25,12 @@ const styles = {
     borderRadius: '50%',
     marginTop: '25vw',
     marginLeft: '5vw',
-    background: 'url("./userPlanet.png") no-repeat center center fixed',
+    background: 'url("./sun.png") no-repeat center center fixed',
     backgoundSize: 'cover',
+    borderRadius: '50%',
   },
   text: {
+    textAlign: 'center'
   },
 };
 
@@ -39,7 +41,7 @@ export default class Welcome extends Component {
 
     return (
 
-      <div style={styles.welcomeDiv}>
+      <div style={styles.welcomeDiv} >
         <Paper style={styles.paper} zDepth={3} circle={true}>
           <TextField
             style={styles.welText}
@@ -48,9 +50,11 @@ export default class Welcome extends Component {
             textareaStyle={styles.text}
           />
           <br/>
-          <FloatingActionButton style={styles.welcomeButton} zDepth={2} onTouchTap={this.props.handleSubmitName.bind()}>
-              <Send />
-          </FloatingActionButton>
+          <div style={styles.welcomeButton}>
+            <FloatingActionButton  style={styles.button} zDepth={2} onTouchTap={this.props.handleSubmitName.bind()}>
+                <Send />
+            </FloatingActionButton>
+          </div>
         </Paper>
       </div>
     )
