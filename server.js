@@ -1,3 +1,4 @@
+require('dotenv').load();
 const express   = require('express');
 const cors      = require('cors');
 const http      = require('http');
@@ -9,10 +10,24 @@ const server    = require('http').createServer(app);
 const io        = require('socket.io')(server);
 const uuid      = require('node-uuid');
 const config    = require('./config');
+const Twitter = require('twitter');
 
 io.origins('*:*');
 
+var client = new Twitter({
+  consumer_key: process.env.TWITTER_CONSUMER_KEY,
+  consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+  access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
+  access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+});
+
 app.use(express.static(`build`));
+
+client.post('statuses/update', { status: 'I Love Twitter' },  function(error, tweet, response) {
+  if(error) throw error;
+  console.log(tweet);  // Tweet body.
+  console.log(response);  // Raw response object.
+});
 
 let partyButtonCount = 51;
 
