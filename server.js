@@ -53,9 +53,7 @@ newUpNext = () => {
     while (i < 3) {
       let randomSong = playlist[Math.floor(Math.random() * playlist.length)];
       debugger;
-      if (newSongs.hasOwnProperty(randomSong.songId) === false) {
-        // add this to if statement to check against songs that were voted on
-        && lastUpNextList.indexOf(randomSong.songId) === -1
+      if (newSongs.hasOwnProperty(randomSong.songId) === false && lastUpNextList.indexOf(randomSong.songId) === -1) {
         newSongs[randomSong.songId] = randomSong;
         i++;
       };
