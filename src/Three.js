@@ -3,11 +3,13 @@ import THREE from './threejs/threeF';
 import io from 'socket.io-client';
 
 
-
-
 export default class Three extends Component {
+  constructor(props) {
+    super(props);
+  }
 
-  componentDidMount(){
+
+  componentDidMount = () =>{
     this.ws = io.connect('ws://localhost:4000');
 
     this.ws.on('updateUserCount', (data) => {
@@ -15,20 +17,43 @@ export default class Three extends Component {
       this.setState({ userCount: data.userCount });
       window.wsUserCount = 0;
     });
-    this.launchAnimation();
+    this.threeLoaders();
   };
 
-  launchAnimation = () => {
+
+
+  threeLoaders = () =>{
+    const material = new THREE.MeshBasicMaterial();
+    //material.map = THREE.ImageUtils.loadTexture('../public/obj/20facestar.mtl');
+    const loader = new THREE.JSONLoader();
+
+
+    loader.load(
+      // resource URL
+      '../public/star.json',
+      // Function when resource is loaded
+      ( obj ) => {
+        console.log(obj);
+        const mesh = new THREE.Mesh(obj);
+        this.launchAnimation(mesh);
+      });
+  }
+
+
+  launchAnimation = (obj) => {
     var camera, scene, renderer;
     var light1 = new THREE.PointLight(0xffffff, 2, 1000);
     var mesh;
-    var animateNoise = 0;
     var mouse = new THREE.Vector2();
     var bufferLimit = 300;
-    var numAsteroids = 200;
+    var numAsteroids = 50;
+    // instantiate a loader
+    var star = obj;
+    console.log(star, "star 1");
+    // load a resource
+
 
     var frameCounter = 0;
-
     var nodeContainer = new THREE.Object3D();
     var directLinkContainer = new THREE.Object3D();
     var muscleLinkContainer = new THREE.Object3D();
@@ -69,7 +94,6 @@ export default class Three extends Component {
       var geometry = new THREE.BoxGeometry(200, 200, 200);
       var material = new THREE.MeshLambertMaterial({color: 'red'});
       mesh = new THREE.Mesh(geometry, material);
-      //scene.add( mesh );
 
 
       scene.add(nodeContainer);
@@ -89,13 +113,26 @@ export default class Three extends Component {
         opacity: 0.8,
         shading: THREE.FlatShading
       });
+      //Add random asteroids
       for (var i = 0; i < numAsteroids; i++) {
 
         var radius = 1 + (Math.random() * 5);
 
         var circleGeometry = new THREE.IcosahedronGeometry(radius, 0);
-        var circle = new THREE.Mesh(circleGeometry, material);
+        console.log(star);
+
+
+        //var circle = new THREE.Mesh(circleGeometry, material);
+        let circle = new THREE.Mesh(star.geometry, star.material);//var newStar = new THREE.Mesh(star);
+
+        circle.scale.x = 5;
+        circle.scale.y = 5;
+        circle.scale.z = 5;
+        circle.rotation.x = 90;
+
+
         asteroidContainer.add(circle);
+
         circle.position.x = -480 + ( Math.random() * 960 );
         circle.position.y = -480 + ( Math.random() * 960 );
         circle.position.z = camera.position.z - (Math.random() * 1000);
@@ -120,7 +157,7 @@ export default class Three extends Component {
       //POST PROCESSING
       //Create Shader Passes
 
-      console.log(renderer);
+
       var renderPass = new THREE.RenderPass(scene, camera);
       var copyPass = new THREE.ShaderPass(THREE.CopyShader);
 
@@ -148,7 +185,7 @@ export default class Three extends Component {
       window.addEventListener('click', onClick, false);
     }
 
-
+    //Websocket responses
     this.ws.on('updateUserCount', (data) => {
       console.log('Received a message from the server!', data);
       this.setState({ userCount: data.userCount });
@@ -177,9 +214,6 @@ export default class Three extends Component {
       plane.position.y = camera.position.y;
       plane.position.z = camera.position.z - 300;
       scene.add(plane);
-
-
-
     });
 
 
@@ -217,42 +251,18 @@ export default class Three extends Component {
 
       // var geometry = new THREE.IcosahedronGeometry(6, 1);
       //
-      // var material = new THREE.MeshLambertMaterial({color: 'red'});
+       var material = new THREE.MeshLambertMaterial({color: 'red'});
       //
-      // mesh = new THREE.Mesh(geometry, material);
-      // mesh.position.x = camera.position.x;
-      // mesh.position.y = camera.position.y;
-      // mesh.position.z = camera.position.z - 300;
-      // //scene.add(mesh);
 
+      console.log(star);
+      let mesh = new THREE.Mesh(star.geometry, material);
 
+        mesh.position.x = camera.position.x;
+        mesh.position.y = camera.position.y;
+        mesh.position.z = camera.position.z - 300;
+        mesh.rotation.x = 90;
+       scene.add(mesh);
 
-
-      var bitmap = document.createElement('canvas');
-      var g = bitmap.getContext('2d');
-      bitmap.width = 128;
-      bitmap.height = 128;
-      g.font = 'Bold 20px Arial';
-
-      g.fillStyle = 'white';
-      g.fillText('jenkins', 0, 20);
-      g.strokeStyle = 'black';
-      g.strokeText('jenkins', 0, 20);
-
-// canvas contents will be used for a texture
-      var texture = new THREE.Texture(bitmap)
-      texture.needsUpdate = true;
-
-      var material = new THREE.MeshLambertMaterial({ map : texture });
-      var plane = new THREE.Mesh(new THREE.PlaneBufferGeometry(10, 10), material);
-      plane.material.side = THREE.DoubleSide;
-      plane.position.x = 100;
-
-      plane.position.x = camera.position.x;
-      plane.position.y = camera.position.y;
-      plane.position.z = camera.position.z - 300;
-      scene.add(plane);
-      console.log(mesh.position.z, camera.position.z);
     }
 
     function onWindowResize() {
@@ -266,10 +276,13 @@ export default class Three extends Component {
     function animate() {
       requestAnimationFrame(animate);
       frameCounter++;
+
+      //remove the draw lines function
       if (frameCounter % 3 == 0) {
-        drawLines();
+        //drawLines();
       }
 
+      mesh.rotation.y -= 0.01;
       camera.position.z -= 1;
       light1.position.z = camera.position.z;
       //console.log( camera.position.z + ", " + light1.position.z );
@@ -277,7 +290,9 @@ export default class Three extends Component {
 
       //generate the rand asteroid and red spinners
       for (var i = 0; i < asteroidContainer.children.length; i++) {
-        asteroidHighlightContainer.children[i].rotation.z += 0.05;
+       // asteroidHighlightContainer.children[i].rotation.z += 0.05;
+
+        //if you are past the camera move back forward and randomize
         if (asteroidContainer.children[i].position.z > camera.position.z) {
           asteroidContainer.children[i].position.z = camera.position.z - 1000 - (Math.random() * 1000);
           // asteroidHighlightContainer.children[ i ].position.z = asteroidContainer.children[ i ].position.z;
@@ -455,6 +470,10 @@ export default class Three extends Component {
 
 
   };
+
+
+
+
 
   render() {
     return (

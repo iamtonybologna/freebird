@@ -28,4 +28,4 @@ ReactDOM.render(
       <Route path='/users' component={() => <Users ws={ws} />} />
     </div>
   </Router>
-), document.getElementById('root'));
+, document.getElementById('root'));

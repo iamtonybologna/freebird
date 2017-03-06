@@ -16,6 +16,10 @@ app.use(express.static(`build`));
 
 let partyButtonCount = 51;
 
+app.post('/public/star.json', (req,res) => {
+  res.sendFile(__dirname + `/public/star.json`);
+});
+
 app.get('/party', (req, res) => {
   if (partyButtonCount > 50) {
     res.status(200).send();
