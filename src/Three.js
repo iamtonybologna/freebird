@@ -9,36 +9,244 @@ export default class Three extends Component {
   }
 
 
-  componentDidMount = () =>{
+  componentDidMount = () => {
     this.ws = io.connect('ws://localhost:4000');
 
     this.ws.on('updateUserCount', (data) => {
       console.log('Received a message from the server!', data);
-      this.setState({ userCount: data.userCount });
+      this.setState({userCount: data.userCount});
       window.wsUserCount = 0;
     });
     this.threeLoaders();
   };
 
 
-
-  threeLoaders = () =>{
-    const material = new THREE.MeshBasicMaterial();
-    //material.map = THREE.ImageUtils.loadTexture('../public/obj/20facestar.mtl');
+  threeLoaders = () => {
     const loader = new THREE.JSONLoader();
-
 
     loader.load(
       // resource URL
       '../public/star.json',
       // Function when resource is loaded
-      ( obj ) => {
+      (obj) => {
         console.log(obj);
         const mesh = new THREE.Mesh(obj);
-        this.launchAnimation(mesh);
+        this.launchSimpleAnimation(mesh);
       });
   }
 
+  launchSimpleAnimation(obj) {
+    var camera, scene, renderer;
+    var light1 = new THREE.PointLight(0xffffff, 2, 1000);
+    var mouse = new THREE.Vector2();
+    var numAsteroids = 50;
+    var star = obj;
+
+    var nodeContainer = new THREE.Object3D();
+    var asteroidContainer = new THREE.Object3D();
+
+    init();
+    animate();
+
+    function init() {
+
+      renderer = new THREE.WebGLRenderer({alpha: true});
+      renderer.setClearColor(0x000000, 0);
+
+      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      var addNode = document.getElementById('threeContainer');
+      addNode.appendChild(renderer.domElement);
+      camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
+      camera.position.z = 500;
+      camera.lookAt(new THREE.Vector3(0, 0, -1000000000000000));
+
+      scene = new THREE.Scene();
+      //scene.background = new THREE.Color(0xff0000);
+      light1.position.set(0, 0, 500);
+      scene.add(light1);
+      scene.add(nodeContainer);
+
+
+      var material = new THREE.MeshPhongMaterial({
+        color: 0xF36F5E,
+        transparent: true,
+        opacity: 0.8,
+        shading: THREE.FlatShading
+      });
+      //Add random asteroids
+      for (var i = 0; i < numAsteroids; i++) {
+        var radius = 1 + (Math.random() * 5);
+        let newStar = new THREE.Mesh(star.geometry, material);//var newStar = new THREE.Mesh(star);
+
+        newStar.scale.x = 5;
+        newStar.scale.y = 5;
+        newStar.scale.z = 5;
+        newStar.rotation.x = 90;
+        asteroidContainer.add(newStar);
+        newStar.position.x = -480 + ( Math.random() * 960 );
+        newStar.position.y = -480 + ( Math.random() * 960 );
+        newStar.position.z = camera.position.z - (Math.random() * 1000);
+      }
+      scene.add(asteroidContainer);
+      window.addEventListener('resize', onWindowResize, false);
+      window.addEventListener('click', onClick, false);
+      window.addEventListener('mousemove', onMouseMove, false);
+
+    }
+
+    //Websocket responses
+    this.ws.on('updateUserCount', (data) => {
+      console.log('Received a message from the server!', data);
+      this.setState({userCount: data.userCount});
+
+      var bitmap = document.createElement('canvas');
+      var g = bitmap.getContext('2d');
+      bitmap.width = 128;
+      bitmap.height = 128;
+      g.font = 'Bold 20px Arial';
+
+      g.fillStyle = 'white';
+      g.fillText(this.state.userCount, 0, 20);
+      g.strokeStyle = 'black';
+      g.strokeText(this.state.userCount, 0, 20);
+
+// canvas contents will be used for a texture
+      var texture = new THREE.Texture(bitmap)
+      texture.needsUpdate = true;
+
+      var material = new THREE.MeshLambertMaterial({map: texture});
+      var plane = new THREE.Mesh(new THREE.PlaneBufferGeometry(10, 10), material);
+      plane.material.side = THREE.DoubleSide;
+      plane.position.x = 100;
+
+      plane.position.x = camera.position.x;
+      plane.position.y = camera.position.y;
+      plane.position.z = camera.position.z - 300;
+      scene.add(plane);
+    });
+
+
+    this.ws.on('updatePlaylist', (playlist) => {
+      console.log('updateplaylist', playlist.data);
+
+
+
+      var bitmap = document.createElement('canvas');
+      var img = new Image();
+      img.src = 'https://i.ytimg.com/vi/-n4yN6uiAeM/hqdefault.jpg';
+      img.onload = function() {
+        var g = bitmap.getContext('2d');
+        g.drawImage(img, 128, 128);
+        bitmap.width = 128;
+        bitmap.height = 128;
+
+        // canvas contents will be used for a texture
+        var texture = new THREE.Texture(bitmap);
+        texture.needsUpdate = true;
+
+        var material = new THREE.MeshLambertMaterial({map: texture});
+        var plane = new THREE.Mesh(new THREE.PlaneBufferGeometry(10, 10), material);
+        plane.material.side = THREE.DoubleSide;
+        plane.position.x = 100;
+
+        plane.position.x = camera.position.x;
+        plane.position.y = camera.position.y;
+        plane.position.z = camera.position.z - 300;
+        scene.add(plane);
+      }
+
+    });
+
+    function onMouseMove(event) {
+
+      mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+      mouse.y = -( event.clientY / window.innerHeight ) * 2 + 1;
+
+      camera.position.x = mouse.x * 100;
+      camera.position.y = mouse.y * 100;
+      camera.lookAt(new THREE.Vector3(0, 0, -1000000000000000));
+
+    }
+
+    function onClick(event) {
+      mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+      mouse.y = -( event.clientY / window.innerHeight ) * 2 + 1;
+
+      camera.position.x = mouse.x * 100;
+      camera.position.y = mouse.y * 100;
+      camera.lookAt(new THREE.Vector3(0, 0, -1000000000000000));
+      console.log(camera.position.x + ", " + camera.position.y);
+
+      var material = new THREE.MeshPhongMaterial({
+        color: 'red',
+        specular: 'blue',
+        reflectivity: 1,
+        shininess: 1,
+        shading: THREE.SmoothShading,
+      });
+
+      let mesh = new THREE.Mesh(star.geometry, material);
+
+      mesh.position.x = camera.position.x;
+      mesh.position.y = camera.position.y;
+      mesh.position.z = camera.position.z - 300;
+      mesh.rotation.x = 90;
+     // scene.add(mesh);
+
+
+      var bitmap = document.createElement('canvas');
+      var img = new Image();
+      img.crossOrigin = "anonymous";
+      img.src = 'https://i.ytimg.com/vi/d8kCTPPwfpM/hqdefault.jpg';
+      img.onload = function() {
+        var g = bitmap.getContext('2d');
+        g.drawImage(img, 128, 128);
+        bitmap.width = 128;
+        bitmap.height = 128;
+        document.appendChild(bitmap);
+
+        // canvas contents will be used for a texture
+        var texture = new THREE.Texture(bitmap);
+        texture.needsUpdate = true;
+
+        var material = new THREE.MeshLambertMaterial({map: texture});
+        var plane = new THREE.Mesh(new THREE.PlaneBufferGeometry(100, 100), material);
+        plane.material.side = THREE.DoubleSide;
+
+        plane.position.x = camera.position.x;
+        plane.position.y = camera.position.y;
+        plane.position.z = camera.position.z - 100;
+        console.log(img,bitmap,plane);
+        scene.add(plane);
+      }
+
+
+    }
+
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      camera.position.z -= 1;
+      light1.position.z = camera.position.z;
+
+      for (var i = 0; i < asteroidContainer.children.length; i++) {
+
+
+        if (asteroidContainer.children[i].position.z > camera.position.z) {
+          asteroidContainer.children[i].position.z = camera.position.z - 1000 - (Math.random() * 1000);
+
+        }
+      }
+      renderer.render(scene, camera);
+    }
+  }
 
   launchAnimation = (obj) => {
     var camera, scene, renderer;
@@ -70,12 +278,12 @@ export default class Three extends Component {
     function init() {
 
       renderer = new THREE.WebGLRenderer({alpha: true});
-      renderer.setClearColor( 0x000000, 0 );
+      renderer.setClearColor(0x000000, 0);
 
       renderer.setPixelRatio(window.devicePixelRatio);
-      //renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setSize(window.innerWidth, window.innerHeight);
 
-      renderer.setSize(500,500);
+      //renderer.setSize(500,500);
       //renderer.setClearColor(0xFFFFF9, 1);
       var addNode = document.getElementById('threeContainer');
       addNode.appendChild(renderer.domElement);
@@ -84,7 +292,7 @@ export default class Three extends Component {
       camera.lookAt(new THREE.Vector3(0, 0, -1000000000000000));
 
       scene = new THREE.Scene();
-      scene.background = new THREE.Color( 0xff0000 );
+      scene.background = new THREE.Color(0xff0000);
       //scene.fog = new THREE.Fog(0xFFFFF9, 30, 800);
 
       light1.position.set(0, 0, 500);
@@ -107,7 +315,7 @@ export default class Three extends Component {
         shading: THREE.FlatShading
       });
       //var material2 = new THREE.MeshLambertMaterial( { color: 0x547DA6, transparent: true, opacity: 0.8, shading: THREE.FlatShading } );
-      var material2 = new THREE.MeshLambertMaterial({
+      var material2 = new THREE.MeshPhongMaterial({
         color: 0xF36F5E,
         transparent: true,
         opacity: 0.8,
@@ -123,7 +331,7 @@ export default class Three extends Component {
 
 
         //var circle = new THREE.Mesh(circleGeometry, material);
-        let circle = new THREE.Mesh(star.geometry, star.material);//var newStar = new THREE.Mesh(star);
+        let circle = new THREE.Mesh(star.geometry, material2);//var newStar = new THREE.Mesh(star);
 
         circle.scale.x = 5;
         circle.scale.y = 5;
@@ -153,7 +361,6 @@ export default class Three extends Component {
       scene.add(asteroidHighlightContainer);
 
 
-
       //POST PROCESSING
       //Create Shader Passes
 
@@ -180,7 +387,7 @@ export default class Three extends Component {
       //set last pass in composer chain to renderToScreen
       copyPass.renderToScreen = true;
       window.addEventListener('resize', onWindowResize, false);
-      window.addEventListener( 'mousemove', onMouseMove, false );
+      window.addEventListener('mousemove', onMouseMove, false);
       window.addEventListener('touchmove', onTouchMove, false);
       window.addEventListener('click', onClick, false);
     }
@@ -188,7 +395,7 @@ export default class Three extends Component {
     //Websocket responses
     this.ws.on('updateUserCount', (data) => {
       console.log('Received a message from the server!', data);
-      this.setState({ userCount: data.userCount });
+      this.setState({userCount: data.userCount});
 
       var bitmap = document.createElement('canvas');
       var g = bitmap.getContext('2d');
@@ -205,7 +412,7 @@ export default class Three extends Component {
       var texture = new THREE.Texture(bitmap)
       texture.needsUpdate = true;
 
-      var material = new THREE.MeshLambertMaterial({ map : texture });
+      var material = new THREE.MeshLambertMaterial({map: texture});
       var plane = new THREE.Mesh(new THREE.PlaneBufferGeometry(10, 10), material);
       plane.material.side = THREE.DoubleSide;
       plane.position.x = 100;
@@ -215,7 +422,6 @@ export default class Three extends Component {
       plane.position.z = camera.position.z - 300;
       scene.add(plane);
     });
-
 
 
     function onMouseMove(event) {
@@ -251,17 +457,27 @@ export default class Three extends Component {
 
       // var geometry = new THREE.IcosahedronGeometry(6, 1);
       //
-       var material = new THREE.MeshLambertMaterial({color: 'red'});
+      var material = new THREE.MeshLambertMaterial({color: 'red'});
       //
+
+
+      var material = new THREE.MeshToonMaterial({
+        color: 'red',
+        specular: 'blue',
+        reflectivity: 1,
+        shininess: 1,
+        shading: THREE.SmoothShading,
+      });
+
 
       console.log(star);
       let mesh = new THREE.Mesh(star.geometry, material);
 
-        mesh.position.x = camera.position.x;
-        mesh.position.y = camera.position.y;
-        mesh.position.z = camera.position.z - 300;
-        mesh.rotation.x = 90;
-       scene.add(mesh);
+      mesh.position.x = camera.position.x;
+      mesh.position.y = camera.position.y;
+      mesh.position.z = camera.position.z - 300;
+      mesh.rotation.x = 90;
+      scene.add(mesh);
 
     }
 
@@ -290,7 +506,7 @@ export default class Three extends Component {
 
       //generate the rand asteroid and red spinners
       for (var i = 0; i < asteroidContainer.children.length; i++) {
-       // asteroidHighlightContainer.children[i].rotation.z += 0.05;
+        // asteroidHighlightContainer.children[i].rotation.z += 0.05;
 
         //if you are past the camera move back forward and randomize
         if (asteroidContainer.children[i].position.z > camera.position.z) {
@@ -303,7 +519,7 @@ export default class Three extends Component {
       //mesh.position.z -= 1;
       window.filmPass.uniforms["time"].value += 0.01;
 
-      renderer.render(scene,camera);
+      renderer.render(scene, camera);
       //composer causes problems with alpha channel
       //composer.render(0.1);
 
@@ -470,9 +686,6 @@ export default class Three extends Component {
 
 
   };
-
-
-
 
 
   render() {
