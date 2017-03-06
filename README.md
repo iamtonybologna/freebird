@@ -1,6 +1,8 @@
 # Freebird
 =====================
 Playlist Voting App Using Node.js, React, and Websockets
+Host page: https://desolate-temple-13043.herokuapp.com/host
+Mobile user page: https://desolate-temple-13043.herokuapp.com/users
 
 ## Setup
 
@@ -14,6 +16,11 @@ Install the dependencies
 
 ```
 npm install
+```
+
+Run the app
+```
+npm start
 ```
 
 ## Dependencies
