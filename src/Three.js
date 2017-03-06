@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import THREE from './threejs/threeF';
+//import THREE from 'three';
 import io from 'socket.io-client';
+import THREELib from "three-js";
+const THREE = THREELib(['GPUParticleSystem']);
 
 
 export default class Three extends Component {
@@ -24,15 +26,29 @@ export default class Three extends Component {
   threeLoaders = () => {
     const loader = new THREE.JSONLoader();
 
-    loader.load(
-      // resource URL
-      '../public/star.json',
-      // Function when resource is loaded
-      (obj) => {
-        console.log(obj);
-        const mesh = new THREE.Mesh(obj);
-        this.launchSimpleAnimation(mesh);
-      });
+    const textureLoader = new THREE.TextureLoader();
+
+    textureLoader.load("../assets/perlin-512.png",
+      (texture) => {
+        window.PARTICLE_NOISE_TEXTURE = texture;
+        console.log(window.PARTICLE_NOISE_TEXTURE);
+
+        textureLoader.load("../assets/perlin-512.png", (texture) => {
+          window.PARTICLE_SPRITE_TEXTURE = texture;
+          console.log(window.PARTICLE_SPRITE_TEXTURE);
+
+        loader.load(
+          // resource URL
+          '../assets/star.json',
+          // Function when resource is loaded
+          (obj) => {
+            console.log(obj);
+            const mesh = new THREE.Mesh(obj);
+            this.launchSimpleAnimation(mesh);
+          });
+      })
+      }
+    );
   }
 
   launchSimpleAnimation(obj) {
@@ -42,8 +58,32 @@ export default class Three extends Component {
     var numAsteroids = 50;
     var star = obj;
 
+    var particleSystem = null;
     var nodeContainer = new THREE.Object3D();
     var asteroidContainer = new THREE.Object3D();
+    var clock = new THREE.Clock(true);
+    var tick = 0;
+    var options = {
+      position: new THREE.Vector3(),
+      positionRandomness: .3,
+      velocity: new THREE.Vector3(),
+      velocityRandomness: .5,
+      color: 0xaa88ff,
+      colorRandomness: .2,
+      turbulence: .5,
+      lifetime: 2,
+      size: 5,
+      sizeRandomness: 1
+    };
+    var spawnerOptions = {
+      spawnRate: 15000,
+      horizontalSpeed: 1.5,
+      verticalSpeed: 1.33,
+      timeScale: 1
+    };
+
+
+
 
     init();
     animate();
@@ -68,10 +108,20 @@ export default class Three extends Component {
       scene.add(nodeContainer);
 
 
+     particleSystem = new THREE.GPUParticleSystem({
+        maxParticles: 2500000
+      });
+      scene.add( particleSystem);
+
+
+
+
+
+
       var material = new THREE.MeshPhongMaterial({
         color: 0xF36F5E,
         transparent: true,
-        opacity: 0.8,
+        opacity: 1,
         shading: THREE.FlatShading
       });
       //Add random asteroids
@@ -195,13 +245,14 @@ export default class Three extends Component {
      // scene.add(mesh);
 
 
+
+
       var bitmap = document.createElement('canvas');
       var img = new Image();
-      img.crossOrigin = "anonymous";
       img.src = 'https://i.ytimg.com/vi/d8kCTPPwfpM/hqdefault.jpg';
       img.onload = function() {
         var g = bitmap.getContext('2d');
-        g.drawImage(img, 128, 128);
+        g.drawImage(img, 0, 0);
         bitmap.width = 128;
         bitmap.height = 128;
         document.appendChild(bitmap);
@@ -233,7 +284,7 @@ export default class Three extends Component {
     function animate() {
       requestAnimationFrame(animate);
 
-      camera.position.z -= 1;
+      //camera.position.z -= 1;
       light1.position.z = camera.position.z;
 
       for (var i = 0; i < asteroidContainer.children.length; i++) {
@@ -244,6 +295,26 @@ export default class Three extends Component {
 
         }
       }
+
+
+      var delta = clock.getDelta() * spawnerOptions.timeScale;
+      tick += delta;
+      if (tick < 0) tick = 0;
+      if (delta > 0) {
+        options.position.x = Math.sin(tick * spawnerOptions.horizontalSpeed) * 20;
+        options.position.y = Math.sin(tick * spawnerOptions.verticalSpeed) * 10;
+        options.position.z = Math.sin(tick * spawnerOptions.horizontalSpeed + spawnerOptions.verticalSpeed) * 5;
+        for (var x = 0; x < spawnerOptions.spawnRate * delta; x++) {
+          // Yep, that's really it.	Spawning particles is super cheap, and once you spawn them, the rest of
+          // their lifecycle is handled entirely on the GPU, driven by a time uniform updated below
+          particleSystem.spawnParticle(options);
+        }
+      }
+      particleSystem.update(tick);
+
+
+
+
       renderer.render(scene, camera);
     }
   }

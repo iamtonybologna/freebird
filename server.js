@@ -16,8 +16,8 @@ app.use(express.static(`build`));
 
 let partyButtonCount = 51;
 
-app.post('/public/star.json', (req,res) => {
-  res.sendFile(__dirname + `/public/star.json`);
+app.get('/assets/:id', (req,res) => {
+  res.sendFile(__dirname + `/assets/` + req.params.id);
 });
 
 app.get('/party', (req, res) => {
