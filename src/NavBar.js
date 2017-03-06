@@ -4,22 +4,27 @@ import Paper from 'material-ui/Paper';
 import YoutubeSearchedFor from 'material-ui/svg-icons/action/youtube-searched-for';
 import Input from 'material-ui/svg-icons/action/input';
 
-const homeIcon = <Input />;
-const searchIcon = <YoutubeSearchedFor />;
+const homeIcon = <Input className="material-icons"/>;
+const searchIcon = <YoutubeSearchedFor className="material-icons"/>;
 
 const styles = {
     navBar: {
       position: 'fixed',
       bottom: '0',
-      display: 'block'
+      display: 'block',
+      width: '100%',
+      zIndex: '5'
     }
   };
 
 class NavBar extends Component {
 
-  select = (newView) => this.props.switcher(newView);
+
+
+  select = (newView) => {this.props.switcher(newView); }
 
   render() {
+    console.log(this.props.view)
     return (
       <div style={styles.navBar}>
         <Paper zDepth={1} >
@@ -27,12 +32,12 @@ class NavBar extends Component {
             <BottomNavigationItem
               label="Vote"
               icon={homeIcon}
-              onTouchTap={() => this.select(1)}
+              onTouchTap={() => this.select(0)}
             />
             <BottomNavigationItem
               label="Search"
               icon={searchIcon}
-              onTouchTap={() => this.select(3)}
+              onTouchTap={() => this.select(1)}
             />
           </BottomNavigation>
         </Paper>

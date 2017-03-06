@@ -8,24 +8,68 @@ app.use(cors());
 const server    = require('http').createServer(app);
 const io        = require('socket.io')(server);
 const uuid      = require('node-uuid');
+const config    = require('./config');
 
 io.origins('*:*');
 
-app.use(express.static(`${__dirname}/build/static`));
+app.use(express.static(`build`));
 
-app.use((req, res) => {
-  res.sendFile(`${__dirname}/build/index.html`);
+let partyButtonCount = 51;
+
+app.get('/party', (req, res) => {
+  if (partyButtonCount > 50) {
+    res.status(200).send();
+  } else {
+    res.status(404).send();
+  }
 });
 
-server.listen(4000);
-console.log('Server listening on port 4000');
+app.get('*', (req, res) => {
+  res.sendFile(__dirname + `/build/index.html`);
+});
+
+let PORT = process.env.PORT || config.PORT;
+server.listen(PORT);
+console.log(`Server listening on port: ${PORT}`);
 
 let initializing = true;
 let userCount = 0;
 let usernames = {};
-let votes = {};
+let votes = {};              // votes = { songId: [userId, userId, userId] }
 let upNext = [];
 let playlist = [];
+let playedSongs = [];
+
+
+newUpNext = () => {
+  // store songs that were just voted on and clear votes
+  for (let songId in votes) {
+    playedSongs.push(songId);
+  }
+  console.log('playedSongs', playedSongs);
+  votes = {};
+  let newSongs = {};
+  if (playlist.length > 2) {
+    let i = 0;
+    while (i < 3) {
+      let randomSong = playlist[Math.floor(Math.random() * playlist.length)];
+      debugger;
+      if (newSongs.hasOwnProperty(randomSong.songId) === false) {
+        // add this to if statement to check against songs that were voted on
+        // && playedSongs.indexOf(randomSong.songId) === -1
+        newSongs[randomSong.songId] = randomSong;
+        i++;
+      };
+    };
+    upNext = [];
+    for (let song in newSongs) {
+      upNext.push(newSongs[song]);
+      votes[song] = [];
+    };
+    console.log('Broadcasting new upNext list');
+    io.emit('updateUpNext', { data: upNext });
+  };
+};
 
 io.on('connection', (client) => {
 
@@ -56,11 +100,14 @@ io.on('connection', (client) => {
         votes[song].splice(index, 1);
       };
     };
-    votes[vote.songId].push(vote.userId);
+    if (votes[vote.songId]) {
+      votes[vote.songId].push(vote.userId);
+    } else {
+      votes[vote.songId] = [vote.userId];
+    }
     io.emit('votes', { votes: votes });
     console.log('Updated votes', votes);
   });
-
   // add new song
   client.on('addNewSong', (songData) => {
     console.log('Received new song from client');
@@ -72,7 +119,6 @@ io.on('connection', (client) => {
       songImageHigh: songData.songImageHigh,
       upNext: false
     };
-
     // check if song is in playlist
     let songInPlaylist = false;
     for (let i = 0; i < playlist.length; i++) {
@@ -90,27 +136,15 @@ io.on('connection', (client) => {
     };
   });
 
-  // grab 3 random songs from playlist, add to voting list, send to host and users
+  // grab 3 new, random songs from playlist, add to voting list, send to host and users
   client.on('getUpNext', () => {
-    upNext = [];
-    votes = {};
-    let newSongs = {};
-    let i = 0;
-    if (playlist.length > 2) {
-      while (i < 3) {
-        let randomSong = playlist[Math.floor(Math.random() * playlist.length)];
-        if (newSongs.hasOwnProperty(randomSong.songId) === false) {
-          newSongs[randomSong.songId] = randomSong;
-          i++;
-        };
-      };
-      for (let song in newSongs) {
-        upNext.push(newSongs[song]);
-        votes[song] = [];
-      };
-      console.log('Broadcasting new upNext list');
-      io.emit('updateUpNext', { data: upNext });
-    };
+    // get 3 new, random songs, clear upNext, and add those songs to upNext
+    newUpNext();
+  });
+
+  // partyButton listener and conditional partyOn switch
+  client.on('partyButton', () => {
+    partyButtonCount++;
   });
 
   client.on('disconnect', () => {

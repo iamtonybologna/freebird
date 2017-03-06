@@ -6,10 +6,10 @@
     "react-scripts": "0.9.0"
   },
   "license": "MIT",
-  "homepage": "https://github.com/",
+  "homepage": "https://desolate-temple-13043.herokuapp.com/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/iamtonybologna/freebird.git"
+    "url": "https://github.com/iamtonybologna/freebird"
   },
   "keywords": [
     "react",
@@ -38,8 +38,8 @@
     "ws": "2.0.2"
   },
   "scripts": {
-    "start": "node server.js",
     "dev": "react-scripts start",
+    "start": "node server",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"

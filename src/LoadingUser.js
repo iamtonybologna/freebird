@@ -2,15 +2,18 @@ import React, {Component} from 'react';
 import CircularProgress from 'material-ui/CircularProgress';
 
 const styles = {
-  root: { margin: 'auto' }
+  loadingUser: {
+    marginTop: '50%',
+    textAlign: 'center',
+  }
 };
 
 export default class LoadingUser extends Component {
 
   render() {
     return (
-      <div style={styles.root}>
-        <CircularProgress size={80} thickness={5} /> <br/> Waiting on first vote...
+      <div style={styles.loadingUser}>
+        <CircularProgress size={200} secondary={true} thickness={10} />
       </div>
     )
   };

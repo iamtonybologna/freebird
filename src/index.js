@@ -5,16 +5,27 @@ import Users from './Users';
 import Three from './Three';
 import './index.css';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import io from 'socket.io-client';
+
+const config = require('../config');
 
 injectTapEventPlugin();
 
-ReactDOM.render((
+let ws = io.connect(config.IO);
+
+
+ReactDOM.render(
   <Router>
     <div>
-      <Route path='/host' component={App} />
       <Route path='/three' component={Three} />
-      <Route path='/users' component={Users} />
+
+      <Route
+        exact path='/'
+        render={() => <Redirect to={{ pathname: '/users' }} />}
+      />
+      <Route path='/host' component={() => <App ws={ws} />} />
+      <Route path='/users' component={() => <Users ws={ws} />} />
     </div>
   </Router>
 ), document.getElementById('root'));

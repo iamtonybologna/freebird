@@ -3,7 +3,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 const styles = {
   button: {
-    margin: 'auto'
+    textAlign: 'center',
+    marginTop: '50vh'
   },
 };
 
@@ -13,13 +14,13 @@ export default class Splash extends Component {
 
   render() {
     return (
-      <div>
-        <RaisedButton
-        label="Start Party"
-        primary={true}
-        style={styles.button}
-        onTouchTap={() => this.select('loading')} />
+      <div style={styles.button}>
+          <RaisedButton
+          label="Are you ready for ze party ???"
+          primary={true}
+          onTouchTap={() => this.select('loading')} />
       </div>
+
     )
   };
 };

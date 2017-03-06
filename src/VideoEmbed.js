@@ -1,35 +1,27 @@
 import React, {Component} from 'react';
 import Player from './Player.js';
 import Paper from 'material-ui/Paper';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import Skip from 'material-ui/svg-icons/av/skip-next';
 
 const styles = {
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around'
-  },
-  gridList: {
-    display: 'flex',
-    flexWrap: 'nowrap',
-    overflowX: 'auto'
-  },
   paper: {
-    margin: '20px',
-    display: 'flex'
+    width: '70vw',
+    marginLeft: '15vw'
   },
-  paperVid: {
-    margin: '20px',
-    height: '450px'
+  videoWrapper: {
+    position: 'relative',
+    height: '0',
+    overflow: 'hidden',
+    paddingBottom: '56.25%',
   },
-  video: {
-    width: '100%',
-    height: '450px',
-    overflow: 'auto'
+  button: {
+    float: 'right',
+    top: '0'
   }
 };
 
 class VideoEmbed extends Component {
-
 
   constructor(props) {
     super(props);
@@ -49,7 +41,6 @@ class VideoEmbed extends Component {
 
   componentDidMount() {
     // player startup
-    console.log(this.props.getUpNext);
     this.props.getUpNext();
     this.startUp();
   };
@@ -66,8 +57,6 @@ class VideoEmbed extends Component {
         // create player one
         this.setState({
           playing: new window.YT.Player('player1', {
-            height: '432',
-            width: '970',
             videoId: 'X_DVS_303kQ',
             // this starts the first player
             events: {
@@ -78,9 +67,7 @@ class VideoEmbed extends Component {
         // create player two
         this.setState({
           notPlaying: new window.YT.Player('player2', {
-            height: '432',
-            width: '970',
-            videoId: 'X_DVS_303kQ'
+            videoId: 'mSLqhZk-hA4'
           })
         });
       }
@@ -90,8 +77,7 @@ class VideoEmbed extends Component {
           this.startUp();
         }, 1000);
       }
-    }
-    ;
+    };
   };
 
   // get everything going after player1 onReady is fired
@@ -105,7 +91,7 @@ class VideoEmbed extends Component {
   // start playing 2 seconds before display swap
   playerTimer = () => {
     let timePlayed = this.state.playing.getCurrentTime();
-    this.setState({timer: Math.floor(20 - timePlayed)});
+    this.setState({ timer: Math.floor(20 - timePlayed) });
     console.log(this.state.playing.getPlayerState(), 'playerStatus');
     switch (this.state.playing.getPlayerState()) {
       case -1:
@@ -117,7 +103,6 @@ class VideoEmbed extends Component {
       case 0:
         this.gotoNextVideo();
         return;
-        break;
       case 1:
         this.problemCounter = 0;
         this.bufferCounter = 0;
@@ -137,7 +122,10 @@ class VideoEmbed extends Component {
         break;
     }
 
+
     if (timePlayed >= 19) {
+      let newWinner = this.voteCalculate();
+      this.props.winner(newWinner);
       this.state.notPlaying.cueVideoById(this.voteCalculate());
       this.backgroundVideoLoading = true;
       this.state.timeouts.playerLoading = setTimeout(() => {
@@ -163,12 +151,12 @@ class VideoEmbed extends Component {
     let p2Hidden = "none";
     if (this.state.player1Hidden === "none") p1Hidden = "block";
     if (this.state.player2Hidden === "none") p2Hidden = "block";
-    this.setState({player1Hidden: p1Hidden});
-    this.setState({player2Hidden: p2Hidden});
+    this.setState({ player1Hidden: p1Hidden });
+    this.setState({ player2Hidden: p2Hidden });
     this.state.playing.stopVideo();
     let tempPlayer = this.state.playing;
-    this.setState({playing: this.state.notPlaying});
-    this.setState({notPlaying: tempPlayer});
+    this.setState({ playing: this.state.notPlaying });
+    this.setState({ notPlaying: tempPlayer });
     this.playerVolumeSync();
     this.props.getUpNext();
     this.backgroundVideoLoading = false;
@@ -192,13 +180,10 @@ class VideoEmbed extends Component {
     for (let item in votes) {
       if (votes.hasOwnProperty(item)) {
         sortArray.push([item, this.props.votes[item].length]);
-      }
-      ;
-    }
-    ;
+      };
+    };
     if (sortArray.length === 0) {
-      if (this.props.upNext.length === 0) {
-        console.log("here");
+      if (this.props.upNext.length === 0){
         return this.state.playing.getVideoData().video_id;
       }
       return this.props.upNext[0].songId;
@@ -227,23 +212,23 @@ class VideoEmbed extends Component {
 
   render() {
     return (
-      <Paper style={styles.paperVid} zDepth={5} rounded={false}>
-        <div>
-          Time Left {this.state.timer}
-          <button onClick={this.gotoNextVideo}>Next</button>
-          <div style={{display: this.state.player1Hidden}}>
-            <Player id={"player1"}></Player>
+      <div>
+        <FloatingActionButton onTouchTap={this.gotoNextVideo} style={styles.button}>
+          <Skip />
+        </FloatingActionButton>
+        <Paper zDepth={5} rounded={true} style={styles.paper}>
+          <div style={styles.videoWrapper}>
+              <div style={{display: this.state.player1Hidden}}>
+                <Player id={"player1"}></Player>
+              </div>
+              <div style={{display: this.state.player2Hidden}}>
+                <Player id={"player2"}></Player>
+              </div>
           </div>
-          <div style={{display: this.state.player2Hidden}}>
-            <Player id={"player2"}></Player>
-          </div>
-
-        </div>
-
-      </Paper>
+        </Paper>
+      </div>
     )
   };
-}
-;
+};
 
 export default VideoEmbed;
