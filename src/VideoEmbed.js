@@ -127,6 +127,7 @@ class VideoEmbed extends Component {
       let newWinner = this.voteCalculate();
       this.props.winner(newWinner);
       this.state.notPlaying.cueVideoById(this.voteCalculate());
+      console.log('Winner should be played next:', this.voteCalculate());
       this.backgroundVideoLoading = true;
       this.state.timeouts.playerLoading = setTimeout(() => {
         this.playerStart(500);
@@ -161,6 +162,7 @@ class VideoEmbed extends Component {
     this.props.getUpNext();
     this.backgroundVideoLoading = false;
     this.playerTimer();
+    console.log("should be playing" ,this.state.playing.getVideoUrl(), "was playing", this.state.notPlaying.getVideoUrl())
   };
 
   playerVolumeSync() {
