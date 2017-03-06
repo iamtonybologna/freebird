@@ -32,21 +32,20 @@ let PORT = process.env.PORT || config.PORT;
 server.listen(PORT);
 console.log(`Server listening on port: ${PORT}`);
 
-let initializing = true;
 let userCount = 0;
 let usernames = {};
 let votes = {};              // votes = { songId: [userId, userId, userId] }
 let upNext = [];
 let playlist = [];
-let playedSongs = [];
+let lastUpNextList = [];
 
 
 newUpNext = () => {
   // store songs that were just voted on and clear votes
   for (let songId in votes) {
-    playedSongs.push(songId);
+    lastUpNextList = 0;
+    lastUpNextList.push(songId);
   }
-  console.log('playedSongs', playedSongs);
   votes = {};
   let newSongs = {};
   if (playlist.length > 2) {
@@ -56,7 +55,7 @@ newUpNext = () => {
       debugger;
       if (newSongs.hasOwnProperty(randomSong.songId) === false) {
         // add this to if statement to check against songs that were voted on
-        // && playedSongs.indexOf(randomSong.songId) === -1
+        && lastUpNextList.indexOf(randomSong.songId) === -1
         newSongs[randomSong.songId] = randomSong;
         i++;
       };
@@ -121,18 +120,26 @@ io.on('connection', (client) => {
     };
     // check if song is in playlist
     let songInPlaylist = false;
+    let songInPlaylistUploader = '';
+    let songInPlaylistArrayPosition = 0;
     for (let i = 0; i < playlist.length; i++) {
       if (playlist[i].songId === newSong.songId) {
         songInPlaylist = true;
+        songInPlaylistUploader = playlist[i].uploader;
+        songInPlaylistArrayPosition = i;
       };
     };
     // if song is not in playlist, add to playlist
     if (!songInPlaylist) {
       playlist.push(newSong);
-      if (initializing) {
-        console.log('Broadcasting playlist data');
-        io.emit('updatePlaylist', { data: playlist });
-      };
+      console.log('Broadcasting playlist data');
+      io.emit('updatePlaylist', { data: playlist });
+    } else {
+      console.log('song found in playlist');
+      if (newSong.uploader === songInPlaylistUploader) {
+        console.log('uploader id matches song in playlist uploader id');
+        array.splice(songInPlaylistArrayPosition, 1);
+      }
     };
   });
 
