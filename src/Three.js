@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-//import THREE from 'three';
 import io from 'socket.io-client';
 import THREELib from "three-js";
 const THREE = THREELib(['GPUParticleSystem']);
@@ -73,7 +72,9 @@ export default class Three extends Component {
       turbulence: .5,
       lifetime: 2,
       size: 5,
-      sizeRandomness: 1
+      sizeRandomness: 1,
+      particleNoiseTex: window.PARTICLE_NOISE_TEXTURE,
+      particleSpriteTex: window.PARTICLE_SPRITE_TEXTURE,
     };
     var spawnerOptions = {
       spawnRate: 15000,
