@@ -14,9 +14,8 @@ const styles = {
   },
   welText: {
     width: '90vw',
-    marginTop: '20vh',
+    marginTop: '15vh',
     textAlign: 'center',
-    background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)'
   },
   paper: {
     height: '90vw',
@@ -25,13 +24,17 @@ const styles = {
     borderRadius: '50%',
     marginTop: '25vw',
     marginLeft: '5vw',
-    background: 'url("./sun.png") no-repeat center center fixed',
     backgoundSize: 'cover',
     borderRadius: '50%',
+    background: 'url("./userPlanet.png") no-repeat center center fixed',
   },
   text: {
-    textAlign: 'center'
+    textAlign: 'center',
+    marginLeft: '30vw'
   },
+  center: {
+    textAlign: 'center',
+  }
 };
 
 
@@ -43,17 +46,22 @@ export default class Welcome extends Component {
 
       <div style={styles.welcomeDiv} >
         <Paper style={styles.paper} zDepth={3} circle={true}>
-          <TextField
-            style={styles.welText}
-            floatingLabelText="They call me..."
-            onKeyUp={this.props.handleNewName.bind()}
-            textareaStyle={styles.text}
-          />
-          <br/>
-          <div style={styles.welcomeButton}>
-            <FloatingActionButton  style={styles.button} zDepth={2} onTouchTap={this.props.handleSubmitName.bind()}>
-                <Send />
-            </FloatingActionButton>
+          <div><div className={'sun'}></div>
+              <TextField
+                style={styles.welText}
+                floatingLabelText="They call me..."
+                onKeyUp={this.props.handleNewName.bind()}
+                textareaStyle={styles.text}
+                hintStyle={styles.text}
+                floatingLabelStyle={styles.text}
+                inputStyle={styles.center}
+                floatingLabelFocusStyle={styles.text}
+              />
+              <div style={styles.welcomeButton}>
+                <FloatingActionButton  style={styles.button} zDepth={2} onTouchTap={this.props.handleSubmitName.bind()}>
+                    <Send />
+                </FloatingActionButton>
+              </div>
           </div>
         </Paper>
       </div>

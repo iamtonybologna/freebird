@@ -14,12 +14,9 @@ const styles = {
   },
   paper: {
     display: 'flex',
-    height: '100%',
+    height: '28vh',
     width: '100%'
   },
-  tile: {
-    height: '100%'
-  }
 };
 
 class HostVoteList extends Component {
@@ -30,7 +27,7 @@ class HostVoteList extends Component {
 
     return (
       <Paper style={styles.paper} zDepth={5} rounded={false}>
-        <GridList style={styles.gridList} cols={1.2} padding={0}>
+        <GridList style={styles.gridList} cols={1.2} cellHeight={'auto'} padding={0}>
           {this.props.upNext.map((tile) => (
             <GridTile
               key={tile.songId}
@@ -38,7 +35,7 @@ class HostVoteList extends Component {
               style={styles.tile}
               titleBackground="linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
             >
-              <img role="presentation" src={tile.songImageHigh} />
+              <img role="presentation" src={tile.songImageHigh}/>
             </GridTile>
           ))}
         </GridList>

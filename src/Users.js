@@ -115,13 +115,13 @@ class Users extends Component {
               )
             }
         case 1:
-          if (this.state.searchResults > 1 ){
+          if (this.state.searchResults < 1 ){
             return (
             <div>
-            <Search updateSearchResultsList={this.updateSearchResultsList} />
-            <DefaultSearch />
-            <NavBar switcher={this.switcher} view={this.state.view}/>
-          </div>
+              <Search updateSearchResultsList={this.updateSearchResultsList} />
+              <DefaultSearch />
+              <NavBar switcher={this.switcher} view={this.state.view}/>
+            </div>
           )
             } else {
               return (
@@ -147,24 +147,26 @@ class Users extends Component {
   };
 
   handleSubmitName = () => {
-    let name = this.state.name;
-    console.log('Sending username to server', name);
-    this.props.ws.emit('setUsername', { 'name': name }, (userId) => {
-      console.log('Received UUID from server', userId);
-      this.setState({ user: { id: userId , name: name } });
-      console.log('Current state: ', this.state);
-    });
-      if (this.state.voteListLoaded === true) {
-      this.setState({ view: 0 });
-    } else {
-      this.setState({ view: 1 });
+    if (this.state.name.length >= 1){
+      let name = this.state.name;
+      console.log('Sending username to server', name);
+      this.props.ws.emit('setUsername', { 'name': name }, (userId) => {
+        console.log('Received UUID from server', userId);
+        this.setState({ user: { id: userId , name: name } });
+        console.log('Current state: ', this.state);
+      });
+        if (this.state.voteListLoaded === true) {
+        this.setState({ view: 0 });
+      } else {
+        this.setState({ view: 1 });
+      }
     }
   };
 
   handleNewName = (e) => {
     let oldName = this.state.name;
     this.setState({name: oldName + e.key})
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && this.state.name.length >= 1) {
       let name = this.state.name;
       console.log('Sending username to server', name);
       this.props.ws.emit('setUsername', { 'name': name }, (userId) => {
