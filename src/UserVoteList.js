@@ -15,10 +15,11 @@ const styles = {
     width: '90%',
     height: 'auto',
     overflowY: 'auto',
-    margin: 'auto'
+    marginBottom: '56px'
   },
   paper: {
-    margin: 'auto'
+    margin: 'auto',
+    marginBottom: '56px'
   },
   snackBar: {
     marginBottom: '56px',

@@ -21,12 +21,8 @@ const styles = {
     height: '90vw',
     width: '90vw',
     display: 'inline-block',
-    borderRadius: '50%',
     marginTop: '25vw',
     marginLeft: '5vw',
-    backgoundSize: 'cover',
-    borderRadius: '50%',
-    background: 'url("./userPlanet.png") no-repeat center center fixed',
   },
   text: {
     textAlign: 'center',

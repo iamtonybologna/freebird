@@ -86,7 +86,6 @@ class Users extends Component {
       playlist: [],
       selectedSongs: [],
       newVoteId: '',
-      name: '',
     };
 
     this.renderView = () => {
@@ -144,8 +143,8 @@ class Users extends Component {
   };
 
   handleSubmitName = () => {
-    if (this.state.name.length >= 1){
-      let name = this.state.name;
+    if (this.state.user.name.length >= 1){
+      let name = this.state.user.name;
       console.log('Sending username to server', name);
       this.props.ws.emit('setUsername', { 'name': name }, (userId) => {
         console.log('Received UUID from server', userId);
@@ -161,10 +160,9 @@ class Users extends Component {
   };
 
   handleNewName = (e) => {
-    let oldName = this.state.name;
-    this.setState({name: oldName + e.key})
-    if (e.key === 'Enter' && this.state.name.length >= 1) {
-      let name = this.state.name;
+    this.setState({ user: { name: e.target.value } });
+    if (e.key === 'Enter' && this.state.user.name.length >= 1) {
+      let name = this.state.user.name;
       console.log('Sending username to server', name);
       this.props.ws.emit('setUsername', { 'name': name }, (userId) => {
         console.log('Received UUID from server', userId);
@@ -177,21 +175,6 @@ class Users extends Component {
         this.setState({ view: 1 });
       }
     };
-  };
-
-  handleWelcomeButtonClick = (e) => {
-    let name = this.state.user.name;
-    console.log('Sending username to server', name);
-    this.props.ws.emit('setUsername', { 'name': name }, (userId) => {
-      console.log('Received UUID from server', userId);
-      this.setState({ user: { id: userId , name: name } });
-      console.log('Current state: ', this.state);
-    });
-      if (this.state.voteListLoaded === true) {
-      this.setState({ view: 1 });
-    } else {
-      this.setState({ view: 2 });
-    }
   };
 
   handleSongClick = (e) => {
