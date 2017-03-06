@@ -2,11 +2,9 @@ import React, {Component} from 'react';
 
 const styles = {
   noSearchDiv: {
-    marginTop: '50%',
-    width: '90%',
-    marginLeft: '5%',
+    marginTop: '20vh',
     zIndex: '5',
-    textAlign: 'center'
+    textAlign: 'center',
   },
 };
 
@@ -14,8 +12,9 @@ class DefaultSearch extends Component {
 
   render() {
     return (
-        <div style={styles.noSearchDiv} >
-        </div>
+      <div style={styles.noSearchDiv}>
+          <p><a>Add some music!</a></p>
+      </div>
     )
   };
 };

@@ -25,7 +25,6 @@ function getStyles(props) {
     top: 38,
     transition: _transitions2.default.easeOut(),
     zIndex: 1, // Needed to display label above Chrome's autocomplete field background
-    cursor: props.disabled ? 'not-allowed' : 'text',
     transform: 'scale(1) translate(0, 0)',
     transformOrigin: 'left top',
     pointerEvents: 'auto',
@@ -43,11 +42,11 @@ function getStyles(props) {
 }
 
 var TextFieldLabel = function TextFieldLabel(props) {
-  var muiTheme = props.muiTheme;
-  var className = props.className;
-  var children = props.children;
-  var htmlFor = props.htmlFor;
-  var onTouchTap = props.onTouchTap;
+  var muiTheme = props.muiTheme,
+      className = props.className,
+      children = props.children,
+      htmlFor = props.htmlFor,
+      onTouchTap = props.onTouchTap;
   var prepareStyles = muiTheme.prepareStyles;
 
   var styles = getStyles(props);
@@ -64,7 +63,7 @@ var TextFieldLabel = function TextFieldLabel(props) {
   );
 };
 
-TextFieldLabel.propTypes = {
+process.env.NODE_ENV !== "production" ? TextFieldLabel.propTypes = {
   /**
    * The label contents.
    */
@@ -88,6 +87,8 @@ TextFieldLabel.propTypes = {
   muiTheme: _react.PropTypes.object.isRequired,
   /**
    * Callback function for when the label is selected via a touch tap.
+   *
+   * @param {object} event TouchTap event targeting the text field label.
    */
   onTouchTap: _react.PropTypes.func,
   /**
@@ -95,14 +96,14 @@ TextFieldLabel.propTypes = {
    */
   shrink: _react.PropTypes.bool,
   /**
-   * Override the inline-styles of the root element when focused.
+   * Override the inline-styles of the root element when shrunk.
    */
   shrinkStyle: _react.PropTypes.object,
   /**
    * Override the inline-styles of the root element.
    */
   style: _react.PropTypes.object
-};
+} : void 0;
 
 TextFieldLabel.defaultProps = {
   disabled: false,

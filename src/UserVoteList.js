@@ -20,6 +20,10 @@ const styles = {
   paper: {
     margin: 'auto'
   },
+  snackBar: {
+    marginBottom: '56px',
+    zIndex: '5',
+  }
 };
 
 class UserVoteList extends Component {
@@ -34,11 +38,13 @@ class UserVoteList extends Component {
   }
 
   handleTouchTap = (newVote, newVoteId) => {
-    this.setState({
-      open: true,
-      votedFor: 'Voted for ' + newVote,
-      newVoteId: newVoteId
-    });
+    if (this.state.newVoteId !== newVoteId) {
+      this.setState({
+        open: true,
+        votedFor: 'Voting for ' + newVote,
+        newVoteId: newVoteId
+      });
+    }
     this.props.voteFor(newVoteId);
   };
 
@@ -50,11 +56,11 @@ class UserVoteList extends Component {
   };
 
   renderIcon = (votedForId) => {
-      if ( this.state.newVoteId === votedForId ) {
-        return <IconButton><Star color='white' /></IconButton>
-      } else {
-        return <IconButton><StarBorder color='white' /></IconButton>
-      }
+    if ( this.state.newVoteId === votedForId ) {
+      return <IconButton><Star color='white' /></IconButton>
+    } else {
+      return <IconButton><StarBorder color='white' /></IconButton>
+    }
   }
   renderShadow = (votedForId) => {
     if ( this.state.newVoteId === votedForId ) {

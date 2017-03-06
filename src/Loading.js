@@ -2,25 +2,25 @@ import React, {Component} from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 
 const styles = {
-  button: {
+  div: {
+    marginTop: '50vh',
     textAlign: 'center',
-    marginTop: '50vh'
-  },
+  }
 };
 
 export default class Loading extends Component {
 
   select = (newView) => this.props.switcher(newView);
 
-
-
   render() {
       return (
-        <div style={styles.button}>
-            <RaisedButton
-            label="you seem kind of cool, come party"
-            primary={true}
-            onTouchTap={() => this.select('main')} />
+        <div style={styles.div}>
+          <br/><br/>
+          <RaisedButton
+          label="you seem kind of cool, come party"
+          primary={true}
+          style={styles.button}
+          onTouchTap={() => this.select('main')} />
         </div>
       )
   };

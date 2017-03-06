@@ -5,10 +5,10 @@ import Paper from 'material-ui/Paper';
 const styles = {
   searchDiv: {
     top: '0',
-    marginLeft: '2.5%',
-    width: '95%',
+    width: '100%',
     position: 'fixed',
-    zIndex: '5'
+    zIndex: '5',
+    textAlign: 'center',
   },
   paper: {
     textAlign: 'center'
@@ -17,7 +17,7 @@ const styles = {
 
 class Search extends Component {
 
-  selectSearch = (results) => this.props.updateSearchResultsList(results) 
+  selectSearch = (results) => this.props.updateSearchResultsList(results)
 
   render() {
     return (

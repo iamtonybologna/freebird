@@ -20,6 +20,8 @@ const styles = {
     margin: 'auto'
   },
   snackBar: {
+    marginBottom: '56px',
+    zIndex: '5'
   }
 };
 
@@ -36,10 +38,18 @@ class SearchResults extends Component {
   }
 
   handleTouchTap = (tile) => {
-    this.setState({
-      open: true,
-      songName: tile.snippet.title + ' added to playlist',
-    });
+    if (this.state.selectedSongs.indexOf(tile.id.videoId) === -1 ) {
+      this.setState({
+        open: true,
+        songName: 'Added ' + tile.snippet.title + ' to playlist',
+      });
+    } else {
+      this.setState({
+        open: true,
+        songName: 'Removed ' + tile.snippet.title + ' from playlist',
+      });
+    }
+    console.log(this.props)
     this.props.submitNewSong(tile)
   };
 

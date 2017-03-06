@@ -1,14 +1,40 @@
 import React, { Component } from 'react';
-import {deepOrange500} from 'material-ui/styles/colors';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+import {fade} from 'material-ui/utils/colorManipulator';
+import {
+  cyan500, cyan700, deepPurple500, deepPurple50, deepPurple100, deepPurple900,
+  pinkA200, lightGreenA400,
+  grey100, grey300, grey400, grey500,
+  white, darkBlack, fullBlack, fullWhite,
+} from 'material-ui/styles/colors';
+
 import VideoEmbed from './VideoEmbed.js';
 import HostVoteList from './HostVoteList.js';
 import Splash from './splash.js';
 import Loading from './Loading.js';
 
+
 const muiTheme = getMuiTheme({
-  palette: { accent1Color: deepOrange500 }
+  fontFamily: 'Roboto, sans-serif',
+  palette: {
+    primary1Color: deepPurple500,
+    primary2Color: pinkA200,
+    primary3Color: lightGreenA400,
+    accent1Color: deepPurple900,
+    accent2Color: deepPurple500,
+    accent3Color: deepPurple500,
+    textColor: fullWhite,
+    alternateTextColor: deepPurple900,
+    canvasColor: '#303030',
+    borderColor: deepPurple900,
+    disabledColor: deepPurple100,
+    pickerHeaderColor: deepPurple500,
+    clockCircleColor: fade(deepPurple500, 0.07),
+    shadowColor: deepPurple500,
+  },
 });
 
 const styles = {

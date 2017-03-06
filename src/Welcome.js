@@ -5,18 +5,17 @@ import Send from 'material-ui/svg-icons/content/send';
 import Paper from 'material-ui/Paper';
 
 const styles = {
-  welcomeDiv: {
-    textAlign: 'center'
+  button: {
+    marginTop: '3vh'
   },
   welcomeButton: {
-    marginTop: '3vh',
-
+    textAlign: 'center',
+    margin: 'auto',
   },
   welText: {
-    width: '70vw',
+    width: '90vw',
     marginTop: '15vh',
-    textAlign: 'center'
-
+    textAlign: 'center',
   },
   paper: {
     height: '90vw',
@@ -25,11 +24,17 @@ const styles = {
     borderRadius: '50%',
     marginTop: '25vw',
     marginLeft: '5vw',
-    background: 'url("./userPlanet.png") no-repeat center center fixed',
     backgoundSize: 'cover',
+    borderRadius: '50%',
+    background: 'url("./userPlanet.png") no-repeat center center fixed',
   },
   text: {
+    textAlign: 'center',
+    marginLeft: '30vw'
   },
+  center: {
+    textAlign: 'center',
+  }
 };
 
 
@@ -37,18 +42,25 @@ export default class Welcome extends Component {
 
   render() {
     return (
-      <div style={styles.welcomeDiv}>
+      <div style={styles.welcomeDiv} >
         <Paper style={styles.paper} zDepth={3} circle={true}>
-          <TextField
-            style={styles.welText}
-            floatingLabelText="They call me..."
-            onKeyUp={this.props.handleNewName.bind()}
-            textareaStyle={styles.text}
-          />
-          <br/>
-          <FloatingActionButton style={styles.welcomeButton} zDepth={2} onTouchTap={this.props.handleNewName.bind()}>
-              <Send />
-          </FloatingActionButton>
+          <div><div className={'sun'}></div>
+              <TextField
+                style={styles.welText}
+                floatingLabelText="They call me..."
+                onKeyUp={this.props.handleNewName.bind()}
+                textareaStyle={styles.text}
+                hintStyle={styles.text}
+                floatingLabelStyle={styles.text}
+                inputStyle={styles.center}
+                floatingLabelFocusStyle={styles.text}
+              />
+              <div style={styles.welcomeButton}>
+                <FloatingActionButton  style={styles.button} zDepth={2} onTouchTap={this.props.handleSubmitName.bind()}>
+                    <Send />
+                </FloatingActionButton>
+              </div>
+          </div>
         </Paper>
       </div>
     )
