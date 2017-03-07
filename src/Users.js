@@ -92,7 +92,7 @@ class Users extends Component {
       playlist: [],
       selectedSongs: [],
       newVoteId: '',
-      readyToParty: true,
+      readyToParty: false,
     };
 
     this.renderView = () => {
@@ -158,7 +158,7 @@ class Users extends Component {
   };
 
   handlePartyPress = () => {
-    
+
   };
 
   handleSubmitName = () => {
