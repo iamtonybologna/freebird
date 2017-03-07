@@ -55,18 +55,18 @@ export default class Three extends Component {
       velocity: new THREE.Vector3(),
       velocityRandomness: .5,
       color: 0xff0000,
-      colorRandomness: .2,
+      colorRandomness: 1,
       turbulence: .5,
-      lifetime: 2,
+      lifetime: 3,
       size: 5,
       sizeRandomness: 1,
-      particleNoiseTex: window.PARTICLE_NOISE_TEXTURE,
-      particleSpriteTex: window.PARTICLE_SPRITE_TEXTURE,
+      //particleNoiseTex: window.PARTICLE_NOISE_TEXTURE,
+      //particleSpriteTex: window.PARTICLE_SPRITE_TEXTURE,
     };
     var spawnerOptions = {
-      spawnRate: 15000,
-      horizontalSpeed: 1.5,
-      verticalSpeed: 1.33,
+      spawnRate: 15,
+      horizontalSpeed: 0,
+      verticalSpeed: 0,
       timeScale: 1
     };
 
@@ -152,6 +152,7 @@ export default class Three extends Component {
       plane.position.y = camera.position.y;
       plane.position.z = camera.position.z - 300;
       scene.add(plane);
+
     });
 
     //PLAYLIST UPDATE LOADER
@@ -222,9 +223,7 @@ export default class Three extends Component {
       let newStar = new THREE.Mesh(star.geometry, material);
       newStar.position.x = camera.position.x;
       newStar.position.y = camera.position.y;
-      newStar.position.z = camera.position.z - 300;
-      newStar.rotation.x = 90;
-      newStar.rotation.y = 110;
+      newStar.position.z = camera.position.z - 200;
       newStar.scale.x = 0.1;
       newStar.scale.y = 0.1;
       newStar.scale.z = 0.1;
@@ -232,12 +231,14 @@ export default class Three extends Component {
 
 
       particleSystem = new THREE.GPUParticleSystem({
-        maxParticles: 25000
+        maxParticles: 5000
       });
       particleSystem.position.x = camera.position.x;
-      particleSystem.position.y = camera.position.y;
-      particleSystem.position.z = camera.position.z -320;
+      particleSystem.position.y = camera.position.y + 1;
+      particleSystem.position.z = camera.position.z -200;
+      particleSystem.rotation.x = 90;
       scene.add(particleSystem);
+      console.log(scene);
       }
 
     function onWindowResize() {
@@ -252,6 +253,7 @@ export default class Three extends Component {
       camera.position.z -= 1;
       light1.position.z = camera.position.z;
 
+
       for (var i = 0; i < asteroidContainer.children.length; i++) {
         if (asteroidContainer.children[i].position.z > camera.position.z) {
           asteroidContainer.children[i].position.z = camera.position.z - 1000 - (Math.random() * 1000);
@@ -261,13 +263,18 @@ export default class Three extends Component {
       tick += delta;
       if (tick < 0) tick = 0;
       if (delta > 0) {
-        //options.position.x = Math.sin(tick * spawnerOptions.horizontalSpeed) * 20;
-        //options.position.y = Math.sin(tick * spawnerOptions.verticalSpeed) * 10;
-        //options.position.z = Math.sin(tick * spawnerOptions.horizontalSpeed + spawnerOptions.verticalSpeed) * 5;
+        options.position.x = Math.sin(tick * spawnerOptions.horizontalSpeed) * 20;
+        options.position.y = Math.sin(tick * spawnerOptions.verticalSpeed) * 10;
+        options.position.z = Math.sin(tick * spawnerOptions.horizontalSpeed + spawnerOptions.verticalSpeed) * 5;
         for (var x = 0; x < spawnerOptions.spawnRate * delta; x++) {
           particleSystem.spawnParticle(options);
         }
       }
+
+      scene.children.forEach((mesh) => {
+
+       });
+
       particleSystem.update(tick);
       renderer.render(scene, camera);
     }
