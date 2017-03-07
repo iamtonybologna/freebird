@@ -74,6 +74,7 @@ io.on('connection', (client) => {
   userCount++;
   console.log(userCount + ' clients connected!');
   io.emit('updateUserCount', { userCount: userCount });
+  io.emit('updatePlaylist', { data: playlist });
 
   // set username
   client.on('setUsername', (user, fn) => {
@@ -137,6 +138,8 @@ io.on('connection', (client) => {
       if (newSong.uploader === songInPlaylistUploader) {
         console.log('uploader id matches song in playlist uploader id');
         playlist.splice(songInPlaylistArrayPosition, 1);
+        io.emit('updatePlaylist', { data: playlist });
+      } else {
         io.emit('updatePlaylist', { data: playlist });
       }
     };
