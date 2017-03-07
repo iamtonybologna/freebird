@@ -48,8 +48,8 @@ let lastUpNextList = [];
 
 newUpNext = () => {
   // store songs that were just voted on and clear votes
+  lastUpNextList = [];
   for (let songId in votes) {
-    lastUpNextList = [];
     lastUpNextList.push(songId);
   };
   votes = {};
