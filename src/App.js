@@ -15,6 +15,8 @@ import VideoEmbed from './VideoEmbed.js';
 import HostVoteList from './HostVoteList.js';
 import Splash from './splash.js';
 import Loading from './Loading.js';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import Skip from 'material-ui/svg-icons/av/skip-next';
 
 
 const muiTheme = getMuiTheme({
@@ -64,7 +66,7 @@ class App extends Component {
         case 'main':
           return (
             <div>
-              <VideoEmbed winner={this.setWinner} playList={this.state.playList} upNext={this.state.upNext} getUpNext={this.getUpNext} votes={this.state.votes} />
+              <VideoEmbed winner={this.setWinner} playList={this.state.playList} upNext={this.state.upNext} getUpNext={this.getUpNext} votes={this.state.votes} startParty={this.startParty} />
               <HostVoteList votes={this.state.votes} upNext={this.state.upNext} winner={this.state.winner}/>
               {this.state.userCount} user(s) in room
             </div>
@@ -112,6 +114,10 @@ class App extends Component {
 
   setWinner = (newWinner) => {
     this.setState({ winner: newWinner });
+  };
+
+  startParty = () => {
+
   };
 
   render() {

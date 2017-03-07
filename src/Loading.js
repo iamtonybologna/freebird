@@ -3,7 +3,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 const styles = {
   div: {
-    marginTop: '50vh',
+    marginTop: '20vh',
     textAlign: 'center',
   }
 };

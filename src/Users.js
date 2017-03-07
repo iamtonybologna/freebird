@@ -21,6 +21,7 @@ import SearchResults from './SearchResults.js';
 import NavBar from './NavBar.js';
 import LoadingUser from './LoadingUser.js';
 import DefaultSearch from './DefaultSearch.js';
+import PartyButton from './PartyButton.js';
 
 const muiTheme = getMuiTheme({
   fontFamily: 'Roboto, sans-serif',
@@ -91,6 +92,7 @@ class Users extends Component {
       playlist: [],
       selectedSongs: [],
       newVoteId: '',
+      readyToParty: true,
     };
 
     this.renderView = () => {
@@ -107,7 +109,15 @@ class Users extends Component {
               <NavBar switcher={this.switcher} view={this.state.view}/>
             </div>
           )
-            } else {
+        } else if (this.state.readyToParty === true) {
+          return (
+            <div>
+              <PartyButton handlePartyPress={this.handlePartyPress}/>
+              <UserVoteList voteFor={this.handleSongClick} upNext={this.state.upNext} newVoteId={this.state.newVoteId}/>
+              <NavBar switcher={this.switcher} view={this.state.view}/>
+            </div>
+          )
+        } else {
               return (
                 <div>
                   <UserVoteList voteFor={this.handleSongClick} upNext={this.state.upNext} newVoteId={this.state.newVoteId}/>
@@ -147,8 +157,12 @@ class Users extends Component {
     this.setState({ searchResults: results});
   };
 
+  handlePartyPress = () => {
+    
+  };
+
   handleSubmitName = () => {
-    if (this.state.user.name.length >= 1){
+    if (this.state.user.name) {
       let name = this.state.user.name;
       console.log('Sending username to server', name);
       this.props.ws.emit('setUsername', { 'name': name }, (userId) => {
@@ -166,7 +180,7 @@ class Users extends Component {
 
   handleNewName = (e) => {
     this.setState({ user: { name: e.target.value } });
-    if (e.key === 'Enter' && this.state.user.name.length >= 1) {
+    if (e.key === 'Enter' && this.state.user.name) {
       let name = this.state.user.name;
       console.log('Sending username to server', name);
       this.props.ws.emit('setUsername', { 'name': name }, (userId) => {

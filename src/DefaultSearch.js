@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 const styles = {
   noSearchDiv: {
-    marginTop: '20vh',
+    marginTop: '40vh',
     zIndex: '5',
     textAlign: 'center',
   },

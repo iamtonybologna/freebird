@@ -14,7 +14,7 @@ const styles = {
   },
   welText: {
     width: '90vw',
-    marginTop: '15vh',
+    marginTop: '20vh',
     textAlign: 'center',
   },
   paper: {
@@ -26,10 +26,16 @@ const styles = {
   },
   text: {
     textAlign: 'center',
-    marginLeft: '30vw'
+    marginLeft: '30vw',
   },
   center: {
     textAlign: 'center',
+  },
+  underlineStyle: {
+    borderColor: "linear-gradient(to top, #9C27B0 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
+  },
+  underlineFocusStyle: {
+    borderColor: "linear-gradient(to left right, #9C27B0 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
   }
 };
 
@@ -43,13 +49,13 @@ export default class Welcome extends Component {
           <div><div className={'sun'}></div>
               <TextField
                 style={styles.welText}
-                floatingLabelText="They call me..."
+                hintText="They call me..."
                 onKeyUp={this.props.handleNewName.bind()}
                 textareaStyle={styles.text}
                 hintStyle={styles.text}
-                floatingLabelStyle={styles.text}
                 inputStyle={styles.center}
-                floatingLabelFocusStyle={styles.text}
+                underlineStyle={styles.underlineStyle}
+                underlineFocusStyle={styles.underlineStyleFocus}
               />
               <div style={styles.welcomeButton}>
                 <FloatingActionButton  style={styles.button} zDepth={2} onTouchTap={this.props.handleSubmitName.bind()}>
