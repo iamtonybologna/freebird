@@ -3,6 +3,7 @@ import Player from './Player.js';
 import Paper from 'material-ui/Paper';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Skip from 'material-ui/svg-icons/av/skip-next';
+import Drink from 'material-ui/svg-icons/maps/local-bar';
 
 const styles = {
   paper: {
@@ -17,6 +18,10 @@ const styles = {
   },
   button: {
     float: 'right',
+    top: '0'
+  },
+  partyButton: {
+    float: 'left',
     top: '0'
   }
 };
@@ -57,7 +62,7 @@ class VideoEmbed extends Component {
         // create player one
         this.setState({
           playing: new window.YT.Player('player1', {
-            videoId: 'X_DVS_303kQ',
+            videoId: 'cYMCLz5PQVw',
             // this starts the first player
             events: {
               'onReady': this.onPlayerReady
@@ -220,6 +225,9 @@ class VideoEmbed extends Component {
       <div>
         <FloatingActionButton onTouchTap={this.gotoNextVideo} style={styles.button}>
           <Skip />
+        </FloatingActionButton>
+        <FloatingActionButton onTouchTap={this.props.startParty.bind()} style={styles.partyButton}>
+          <Drink/>
         </FloatingActionButton>
         <Paper zDepth={5} rounded={true} style={styles.paper}>
           <div style={styles.videoWrapper}>

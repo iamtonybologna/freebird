@@ -42,7 +42,6 @@ let upNext = [];
 let playlist = [];
 let lastUpNextList = [];
 
-
 newUpNext = () => {
   // store songs that were just voted on and clear votes
   for (let songId in votes) {
@@ -98,13 +97,13 @@ io.on('connection', (client) => {
       if (votes[song].indexOf(vote.userId) > -1) {
         let index = votes[song].indexOf(vote.userId);
         votes[song].splice(index, 1);
-      };
-    };
+      }
+    }
     if (votes[vote.songId]) {
       votes[vote.songId].push(vote.userId);
     } else {
       votes[vote.songId] = [vote.userId];
-    };
+    }
     io.emit('votes', { votes: votes });
     console.log('Updated votes', votes);
   });
@@ -128,8 +127,8 @@ io.on('connection', (client) => {
         songInPlaylist = true;
         songInPlaylistUploader = playlist[i].uploader;
         songInPlaylistArrayPosition = i;
-      };
-    };
+      }
+    }
     // if song is not in playlist, add to playlist
     if (!songInPlaylist) {
       playlist.push(newSong);
@@ -141,8 +140,8 @@ io.on('connection', (client) => {
         console.log('Uploader id matches song in playlist uploader id');
         playlist.splice(songInPlaylistArrayPosition, 1);
         io.emit('updatePlaylist', { data: playlist });
-      };
-    };
+      }
+    }
   });
 
   // grab 3 new, random songs from playlist, add to voting list, send to host and users
@@ -151,14 +150,22 @@ io.on('connection', (client) => {
     newUpNext();
   });
 
+  client.on('startParty', ()=> {
+    io.emit('readyToParty');
+  });
+
   // partyButton listener and conditional partyOn switch
   client.on('partyButton', () => {
+    console.log('PARTYPARTYPARTY', partyButtonCount);
     partyButtonCount++;
   });
 
   client.on('getUsername', (userId, fn) => {
+    console.log('getUsername message received from client');
     for (let id in usernames) {
-      if (id === userId) {
+      console.log('id', id, 'usernames[id]', usernames[id]);
+      console.log('userId', userId.userId);
+      if (id == userId.userId) {
         console.log(usernames[id]);
         let name = usernames[id];
         fn(name);

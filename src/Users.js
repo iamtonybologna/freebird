@@ -14,7 +14,7 @@ import {
   fullWhite
 } from 'material-ui/styles/colors';
 
-// list of objects/ views being imported
+// list of objects/views being imported
 import Welcome from './Welcome.js';
 import UserVoteList from './UserVoteList.js';
 import Search from './Search.js';
@@ -22,6 +22,7 @@ import SearchResults from './SearchResults.js';
 import NavBar from './NavBar.js';
 import LoadingUser from './LoadingUser.js';
 import DefaultSearch from './DefaultSearch.js';
+import PartyButton from './PartyButton.js';
 
 const muiTheme = getMuiTheme({
   fontFamily: 'Roboto, sans-serif',
@@ -45,17 +46,18 @@ const muiTheme = getMuiTheme({
 
 class Users extends Component {
 
-  getUsername = () => {
-    console.log('GET USERNAME');
-    this.props.ws.emit('getUsername', { userId: this.state.user.id }, (username) => {
-      console.log('username', username);
+  getUsername = function() {
+    let userId = cookie.load('userId');
+    console.log('userId loaded from cookie', cookie.load('userId'));
+    this.props.ws.emit('getUsername', { userId: userId }, (username) => {
+      console.log('Username received from server', username);
       if (username) {
-        this.setState({ user: { id: cookie.load('userId'), name: username } });
+        this.setState({ user: { id: userId, name: username } });
       } else {
         this.setState({ view: 3 });
       }
     });
-  }
+  };
 
   componentDidMount() {
     console.log('componentDidMount <App />');
@@ -69,13 +71,18 @@ class Users extends Component {
 
     this.props.ws.on('updateUpNext', (upNext) => {
       console.log('upNext', upNext);
-      this.setState({ voteListLoaded: true, 'upNext': upNext.data });
+      this.setState({ voteListLoaded: true, upNext: upNext.data });
       console.log('Current state: ', this.state);
     });
 
     this.props.ws.on('updatePlaylist', (playlist) => {
       console.log('playlist', playlist);
-      this.setState({ playlist: playlist.data });
+      let playlistById = [];
+      playlist.data.forEach(function(item) {
+        playlistById.push(item.songId);
+      })
+      console.log(playlistById)
+      this.setState({ playlist: playlistById });
       console.log('Current state: ', this.state);
     });
 
@@ -84,6 +91,10 @@ class Users extends Component {
       if (data.upNext.length > 0) {
         this.setState({ upNext: data.upNext, voteListLoaded: true });
       };
+    });
+
+    this.props.ws.on('readyToParty', () => {
+      this.setState({ readyToParty: true });
     });
   };
 
@@ -105,6 +116,7 @@ class Users extends Component {
       playlist: [],
       selectedSongs: [],
       newVoteId: '',
+      readyToParty: false,
     };
 
     this.renderView = () => {
@@ -121,7 +133,15 @@ class Users extends Component {
               <NavBar switcher={this.switcher} view={this.state.view}/>
             </div>
           )
-            } else {
+        } else if (this.state.readyToParty === true) {
+          return (
+            <div>
+              <PartyButton handlePartyPress={this.handlePartyPress}/>
+              <UserVoteList voteFor={this.handleSongClick} upNext={this.state.upNext} newVoteId={this.state.newVoteId}/>
+              <NavBar switcher={this.switcher} view={this.state.view}/>
+            </div>
+          )
+        } else {
               return (
                 <div>
                   <UserVoteList voteFor={this.handleSongClick} upNext={this.state.upNext} newVoteId={this.state.newVoteId}/>
@@ -159,6 +179,10 @@ class Users extends Component {
 
   updateSearchResultsList = (results) => {
     this.setState({ searchResults: results });
+  };
+
+  handlePartyPress = () => {
+    this.props.ws.emit('partyButton');
   };
 
   handleSubmitName = () => {
@@ -204,14 +228,14 @@ class Users extends Component {
 
   handleSongClick = (e) => {
     this.setState({ newVoteId: e });
-    this.props.ws.emit('setUserVote', { userId: this.state.user.id, 'songId': e });
-    console.log('Vote sent to server', { userId: this.state.user.id, 'songId': e });
+    this.props.ws.emit('setUserVote', { userId: this.state.user.id, songId: e });
+    console.log('Vote sent to server', { userId: this.state.user.id, songId: e });
   };
 
   handleSongAddition = (e) => {
     let newList = this.state.selectedSongs
     if (this.state.selectedSongs.indexOf(e.id.videoId) === -1 ) {
-      newList.push(e.id.videoId)
+      newList.push(e.id.videoId);
       this.setState({ selectedSongs: newList });
     } else {
       let index = newList.indexOf(e.id.videoId);

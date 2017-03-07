@@ -38,19 +38,24 @@ class SearchResults extends Component {
   }
 
   handleTouchTap = (tile) => {
-    if (this.state.selectedSongs.indexOf(tile.id.videoId) === -1 ) {
+    if (this.state.selectedSongs.indexOf(tile.id.videoId) === -1 && this.props.playlist.indexOf(tile.id.videoId) === -1) {
       this.setState({
         open: true,
         songName: 'Added ' + tile.snippet.title + ' to playlist',
       });
-    } else {
-      this.setState({
-        open: true,
-        songName: 'Removed ' + tile.snippet.title + ' from playlist',
-      });
+    } else if (this.state.selectedSongs.indexOf(tile.id.videoId) != -1) {
+        this.setState({
+          open: true,
+          songName: 'Removed ' + tile.snippet.title + ' from playlist',
+        });
+      } else {
+        this.setState({
+          open: true,
+          songName: 'Song already in playlist, it was selected by another user',
+        });
     }
-    console.log(this.props)
     this.props.submitNewSong(tile)
+
   };
 
   handleRequestClose = () => {
@@ -61,7 +66,7 @@ class SearchResults extends Component {
   };
 
   renderIcon = (id) => {
-      if (this.state.selectedSongs.indexOf(id) === -1 ) {
+      if (this.state.selectedSongs.indexOf(id) === -1 && this.props.playlist.indexOf(id) === -1 ) {
         return <IconButton><PlaylistAdd color='white' /></IconButton>
       } else {
         return <IconButton><PlaylistAddCheck color='white' /></IconButton>
@@ -69,10 +74,12 @@ class SearchResults extends Component {
   }
 
   renderShadow = (id) => {
-    if (this.state.selectedSongs.indexOf(id) === -1 ) {
+    if (this.state.selectedSongs.indexOf(id) === -1 && this.props.playlist.indexOf(id) === -1 ) {
       return "linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
+    } else if (this.state.selectedSongs.indexOf(id) != -1) {
+      return "linear-gradient(to top, #D500F9  0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)"
     } else {
-      return "linear-gradient(to top, #D500F9 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)"
+      return "linear-gradient(to top, #0ff 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)"
     }
   }
 
