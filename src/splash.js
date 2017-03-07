@@ -4,15 +4,11 @@ import Paper from 'material-ui/Paper';
 
 const styles = {
   button: {
-
   },
   noSearchDiv: {
-    marginTop: '20vh',
-    width: '30vw',
-    height: '50vh',
     zIndex: '5',
     textAlign: 'center',
-    paddingTop: ''
+    paddingBottom: '20px',
   },
 };
 
@@ -22,8 +18,8 @@ export default class Splash extends Component {
 
   render() {
     return (
-      <div className="container">
-        <Paper zDepth={5} style={styles.noSearchDiv}>
+      <div style={styles.noSearchDiv}>
+        <Paper zDepth={5}>
           <p><a>Not Freebird</a></p>
           <div style={styles.button}>
               <RaisedButton
