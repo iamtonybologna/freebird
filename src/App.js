@@ -53,7 +53,7 @@ class App extends Component {
     this.state = {
       votes: null,
       view: 'splash',
-      upNext: [{songId: 'cYMCLz5PQVw'}],
+      upNext: [{songId: 'JFDj3shXvco'}],
       winner: '',
     };
 
