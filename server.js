@@ -48,8 +48,8 @@ let lastUpNextList = [];
 
 newUpNext = () => {
   // store songs that were just voted on and clear votes
+  lastUpNextList = [];
   for (let songId in votes) {
-    lastUpNextList = [];
     lastUpNextList.push(songId);
   };
   votes = {};
@@ -58,7 +58,6 @@ newUpNext = () => {
     let i = 0;
     while (i < 3) {
       let randomSong = playlist[Math.floor(Math.random() * playlist.length)];
-      debugger;
       if (newSongs.hasOwnProperty(randomSong.songId) === false && lastUpNextList.indexOf(randomSong.songId) === -1) {
         newSongs[randomSong.songId] = randomSong;
         i++;
