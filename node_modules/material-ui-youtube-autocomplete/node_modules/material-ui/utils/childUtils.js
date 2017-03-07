@@ -38,15 +38,11 @@ function createChildFragment(fragments) {
 }
 
 function extendChildren(children, extendedProps, extendedChildren) {
-  return _react2.default.Children.map(children, function (child) {
-    if (!_react2.default.isValidElement(child)) {
-      return child;
-    }
-
+  return _react2.default.isValidElement(children) ? _react2.default.Children.map(children, function (child) {
     var newProps = typeof extendedProps === 'function' ? extendedProps(child) : extendedProps;
 
     var newChildren = typeof extendedChildren === 'function' ? extendedChildren(child) : extendedChildren ? extendedChildren : child.props.children;
 
     return _react2.default.cloneElement(child, newProps, newChildren);
-  });
+  }) : children;
 }

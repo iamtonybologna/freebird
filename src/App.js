@@ -77,7 +77,7 @@ class App extends Component {
 
   switcher = (newView) => {
     this.setState({ view: newView });
-  }
+  };
 
   componentDidMount() {
     console.log('componentDidMount <App />');

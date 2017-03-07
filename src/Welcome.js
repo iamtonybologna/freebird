@@ -52,7 +52,7 @@ export default class Welcome extends Component {
                 floatingLabelFocusStyle={styles.text}
               />
               <div style={styles.welcomeButton}>
-                <FloatingActionButton  style={styles.button} zDepth={2} onTouchTap={this.props.handleSubmitName.bind()}>
+                <FloatingActionButton style={styles.button} zDepth={2} onTouchTap={this.props.handleSubmitName.bind()}>
                     <Send />
                 </FloatingActionButton>
               </div>

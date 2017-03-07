@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import cookie from 'react-cookie';
 
 // theme information, imports colors and material-ui information from node modules
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -44,9 +45,27 @@ const muiTheme = getMuiTheme({
 
 class Users extends Component {
 
+  getUsername = () => {
+    console.log('GET USERNAME');
+    this.props.ws.emit('getUsername', { userId: this.state.user.id }, (username) => {
+      console.log('username', username);
+      if (username) {
+        this.setState({ user: { id: cookie.load('userId'), name: username } });
+      } else {
+        this.setState({ view: 3 });
+      }
+    });
+  }
+
   componentDidMount() {
     console.log('componentDidMount <App />');
-    console.log('Opening socket connection');
+
+    if (cookie.load('userId')) {
+      console.log('cookie exists');
+      this.setState({ view: 1 });
+    };
+
+    this.getUsername();
 
     this.props.ws.on('updateUpNext', (upNext) => {
       console.log('upNext', upNext);
@@ -111,20 +130,20 @@ class Users extends Component {
               )
             }
         case 1:
-          if (this.state.searchResults < 1 ){
+          if (this.state.searchResults < 1) {
             return (
             <div>
               <Search updateSearchResultsList={this.updateSearchResultsList} />
               <DefaultSearch />
-              <NavBar switcher={this.switcher} view={this.state.view}/>
+              <NavBar switcher={this.switcher} view={this.state.view} />
             </div>
           )
             } else {
               return (
                 <div>
                   <Search updateSearchResultsList={this.updateSearchResultsList} switcher={this.switcher} />
-                  <SearchResults results={this.state.searchResults} submitNewSong={this.handleSongAddition} selectedSongs={this.state.selectedSongs} playlist={this.state.playlist}/>
-                  <NavBar switcher={this.switcher} view={this.state.view}/>
+                  <SearchResults results={this.state.searchResults} submitNewSong={this.handleSongAddition} selectedSongs={this.state.selectedSongs} playlist={this.state.playlist} />
+                  <NavBar switcher={this.switcher} view={this.state.view} />
                 </div>
               )
             }
@@ -139,17 +158,20 @@ class Users extends Component {
   };
 
   updateSearchResultsList = (results) => {
-    this.setState({ searchResults: results});
+    this.setState({ searchResults: results });
   };
 
   handleSubmitName = () => {
-    if (this.state.user.name.length >= 1){
+    if (this.state.user.name) {
       let name = this.state.user.name;
       console.log('Sending username to server', name);
       this.props.ws.emit('setUsername', { 'name': name }, (userId) => {
         console.log('Received UUID from server', userId);
         this.setState({ user: { id: userId , name: name } });
         console.log('Current state: ', this.state);
+        // set cookie
+        cookie.save('userId', this.state.user.id);
+        console.log('cookie', cookie.load('userId'));
       });
         if (this.state.voteListLoaded === true) {
         this.setState({ view: 0 });
@@ -161,40 +183,41 @@ class Users extends Component {
 
   handleNewName = (e) => {
     this.setState({ user: { name: e.target.value } });
-    if (e.key === 'Enter' && this.state.user.name.length >= 1) {
+    if (e.key === 'Enter' && this.state.user.name) {
       let name = this.state.user.name;
       console.log('Sending username to server', name);
       this.props.ws.emit('setUsername', { 'name': name }, (userId) => {
         console.log('Received UUID from server', userId);
         this.setState({ user: { id: userId , name: name } });
         console.log('Current state: ', this.state);
+        // set cookie
+        cookie.save('userId', this.state.user.id);
+        console.log('cookie:', cookie.load('userId'));
       });
         if (this.state.voteListLoaded === true) {
         this.setState({ view: 0 });
       } else {
         this.setState({ view: 1 });
-      }
+      };
     };
   };
 
   handleSongClick = (e) => {
-    this.setState({newVoteId: e});
+    this.setState({ newVoteId: e });
     this.props.ws.emit('setUserVote', { userId: this.state.user.id, 'songId': e });
     console.log('Vote sent to server', { userId: this.state.user.id, 'songId': e });
   };
 
   handleSongAddition = (e) => {
-
     let newList = this.state.selectedSongs
     if (this.state.selectedSongs.indexOf(e.id.videoId) === -1 ) {
       newList.push(e.id.videoId)
-      this.setState({selectedSongs: newList})
+      this.setState({ selectedSongs: newList });
     } else {
       let index = newList.indexOf(e.id.videoId);
       newList.splice(index, 1);
-      this.setState({selectedSongs: newList})
+      this.setState({ selectedSongs: newList });
     }
-
     this.props.ws.emit('addNewSong', {
         'userId': this.state.user.id,
         'songId': e.id.videoId,
