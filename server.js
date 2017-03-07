@@ -80,6 +80,7 @@ io.on('connection', (client) => {
   console.log(userCount + ' clients connected!');
   io.emit('updateUserCount', { userCount: userCount });
   io.emit('updatePlaylist', { data: playlist });
+  io.emit('updateUpNext', { data: upNext });
 
   // set username
   client.on('setUsername', (user, fn) => {
@@ -111,6 +112,7 @@ io.on('connection', (client) => {
     io.emit('votes', { votes: votes });
     console.log('Updated votes', votes);
   });
+
   // add new song
   client.on('addNewSong', (songData) => {
     console.log('Received new song from client');
@@ -120,7 +122,8 @@ io.on('connection', (client) => {
       songTitle: songData.songTitle,
       songImageMedium: songData.songImageMedium,
       songImageHigh: songData.songImageHigh,
-      upNext: false
+      upNext: false,
+      played: false
     };
     // check if song is in playlist
     let songInPlaylist = false;
@@ -156,6 +159,7 @@ io.on('connection', (client) => {
     newUpNext();
   });
 
+  // start party button
   client.on('startParty', ()=> {
     io.emit('readyToParty');
   });
@@ -166,15 +170,28 @@ io.on('connection', (client) => {
     partyButtonCount++;
   });
 
+  // send username back to users with cookies
   client.on('getUsername', (userId, fn) => {
     console.log('getUsername message received from client, checking IDs');
     for (let id in usernames) {
       if (id == userId.userId) {
-        console.log('Cookie id matches local id, sending name', usernames[id])
+        console.log('Cookie id matches local id, sending name', usernames[id]);
         let name = usernames[id];
-        fn(name);
+        fn(name, upNext);
       };
     };
+  });
+
+  // flip played boolean if song won
+  client.on('newWinner', (newWinner) => {
+    console.log('new winner song id', newWinner.songId);
+    playlist.forEach((song) => {
+      if (song.songId === newWinner.songId) {
+        played = true;
+        console.log('playlist', playlist);
+        console.log('played?', song.played);
+      };
+    });
   });
 
   client.on('disconnect', () => {

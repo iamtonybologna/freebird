@@ -49,12 +49,16 @@ class Users extends Component {
   getUsername = function() {
     let userId = cookie.load('userId');
     console.log('userId loaded from cookie', cookie.load('userId'));
-    this.props.ws.emit('getUsername', { userId: userId }, (username) => {
+    this.props.ws.emit('getUsername', { userId: userId }, (username, upNext) => {
       console.log('Username received from server', username);
       if (username) {
         this.setState({ user: { id: userId, name: username } });
       } else {
         this.setState({ view: 3 });
+      }
+      if (upNext) {
+        this.setState({ upNext: upNext });
+        console.log('upNext state', this.state.upNext);
       }
     });
   };
