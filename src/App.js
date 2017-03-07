@@ -56,6 +56,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    this.getUpNext();
     console.log('componentDidMount <App />');
     console.log('Opening socket connection');
 
@@ -83,6 +84,7 @@ class App extends Component {
   };
 
   getUpNext = () => {
+    console.log("called")
     this.props.ws.emit('getUpNext');
   };
 
