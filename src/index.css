@@ -2,7 +2,11 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
 body {
-  background-image: url("../public/deep-space.jpg");
+  background: url("../public/catnap-stars.svg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
   background-color: #303030;
   font-family: 'Roboto';
 }
