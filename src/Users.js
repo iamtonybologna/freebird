@@ -56,7 +56,12 @@ class Users extends Component {
 
     this.props.ws.on('updatePlaylist', (playlist) => {
       console.log('playlist', playlist);
-      this.setState({ playlist: playlist.data });
+      let playlistById = [];
+      playlist.data.forEach(function(item) {
+        playlistById.push(item.songId)
+      })
+      console.log(playlistById)
+      this.setState({ playlist: playlistById });
       console.log('Current state: ', this.state);
     });
 
@@ -184,7 +189,6 @@ class Users extends Component {
   };
 
   handleSongAddition = (e) => {
-
     let newList = this.state.selectedSongs
     if (this.state.selectedSongs.indexOf(e.id.videoId) === -1 ) {
       newList.push(e.id.videoId)
