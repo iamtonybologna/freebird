@@ -8,15 +8,20 @@ const styles = {
   gridList: {
     display: 'flex',
     flexWrap: 'nowrap',
-    overflowX: 'auto',
-    height: '100%',
-    width: '100%'
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    width: '100%',
+  },
+  image: {
+    height: '20vh'
+  },
+  div: {
+    marginTop: '10px'
   },
   paper: {
-    display: 'flex',
-    height: '28vh',
-    width: '100%'
-  },
+    width: '100%',
+    height: '56.25%'
+  }
 };
 
 class HostVoteList extends Component {
@@ -26,20 +31,21 @@ class HostVoteList extends Component {
   render() {
 
     return (
-      <Paper style={styles.paper} zDepth={5} rounded={false}>
-        <GridList style={styles.gridList} cols={1.2} cellHeight={'auto'} padding={0}>
+      <div style={styles.div}>
+        <GridList cols={3} cellHeight={'auto'} padding={5} style={styles.gridList}>
           {this.props.upNext.map((tile) => (
-            <GridTile
-              key={tile.songId}
-              title={tile.songTitle}
-              style={styles.tile}
-              titleBackground="linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
-            >
-              <img role="presentation" src={tile.songImageHigh}/>
-            </GridTile>
+            <Paper zDepth={5} rounded={false} style={styles.paper}>
+              <GridTile
+                key={tile.songId}
+                title={tile.songTitle}
+                titleBackground="linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
+              >
+                <img role="presentation" src={tile.songImageHigh} style={styles.image}/>
+              </GridTile>
+            </Paper>
           ))}
         </GridList>
-      </Paper>
+      </div>
     )
   };
 };

@@ -39,12 +39,6 @@ const muiTheme = getMuiTheme({
   },
 });
 
-const styles = {
-    container: {
-      height: '100vh',
-      width: '100vw'
-    }
-  };
 class App extends Component {
 
   constructor(props) {
@@ -124,7 +118,7 @@ class App extends Component {
   render() {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
-        <div style={styles.container}>
+        <div>
           { this.renderView() }
         </div>
       </MuiThemeProvider>

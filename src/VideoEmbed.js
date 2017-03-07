@@ -62,7 +62,7 @@ class VideoEmbed extends Component {
         // create player one
         this.setState({
           playing: new window.YT.Player('player1', {
-            videoId: 'X_DVS_303kQ',
+            videoId: 'CGKN6qiDqnk',
             // this starts the first player
             events: {
               'onReady': this.onPlayerReady
@@ -133,7 +133,7 @@ class VideoEmbed extends Component {
     }
 
 
-    if (timePlayed >= 19) {
+    if (timePlayed >= 90) {
       let newWinner = this.voteCalculate();
       this.props.winner(newWinner);
       this.state.notPlaying.cueVideoById(this.voteCalculate());

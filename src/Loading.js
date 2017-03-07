@@ -15,7 +15,6 @@ export default class Loading extends Component {
   render() {
       return (
         <div style={styles.div}>
-          <br/><br/>
           <RaisedButton
           label="you seem kind of cool, come party"
           primary={true}
