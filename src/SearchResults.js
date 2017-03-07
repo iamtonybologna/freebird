@@ -51,12 +51,11 @@ class SearchResults extends Component {
       } else {
         this.setState({
           open: true,
-          songName: 'Song already selected by another user',
+          songName: 'Song already in playlist, it was selected by another user',
         });
     }
-    if (this.props.playlist.indexOf(tile.id.videoId) === -1) {
     this.props.submitNewSong(tile)
-    }
+
   };
 
   handleRequestClose = () => {
