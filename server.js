@@ -139,6 +139,7 @@ io.on('connection', (client) => {
       if (newSong.uploader === songInPlaylistUploader) {
         console.log('uploader id matches song in playlist uploader id');
         array.splice(songInPlaylistArrayPosition, 1);
+        io.emit('updatePlaylist', { data: playlist });
       }
     };
   });
