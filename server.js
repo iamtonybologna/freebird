@@ -80,6 +80,7 @@ io.on('connection', (client) => {
   console.log(userCount + ' clients connected!');
   io.emit('updateUserCount', { userCount: userCount });
   io.emit('updatePlaylist', { data: playlist });
+  io.emit('checkForUpNext', { upNext: upNext });
 
   // set username
   client.on('setUsername', (user, fn) => {
@@ -173,7 +174,7 @@ io.on('connection', (client) => {
       if (id == userId.userId) {
         console.log('Cookie id matches local id, sending name', usernames[id]);
         let name = usernames[id];
-        fn(name);
+        fn(name, upNext);
       };
     };
   });
