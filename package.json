@@ -18,6 +18,7 @@
     "freebird"
   ],
   "dependencies": {
+    "cookie-parser": "^1.4.3",
     "cors": "^2.8.1",
     "express": "4.14.1",
     "http": "0.0.0",
