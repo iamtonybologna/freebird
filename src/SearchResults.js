@@ -79,7 +79,7 @@ class SearchResults extends Component {
     } else if (this.state.selectedSongs.indexOf(id) != -1) {
       return "linear-gradient(to top, #D500F9  0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)"
     } else {
-      return "linear-gradient(to top, #0ff 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)"
+      return "linear-gradient(to top, #D500F9 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)"
     }
   }
 
