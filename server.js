@@ -161,12 +161,10 @@ io.on('connection', (client) => {
   });
 
   client.on('getUsername', (userId, fn) => {
-    console.log('getUsername message received from client');
+    console.log('getUsername message received from client, checking IDs');
     for (let id in usernames) {
-      console.log('id', id, 'usernames[id]', usernames[id]);
-      console.log('userId', userId.userId);
       if (id == userId.userId) {
-        console.log(usernames[id]);
+        console.log('Cookie id matches local id, sending name', usernames[id])
         let name = usernames[id];
         fn(name);
       };
