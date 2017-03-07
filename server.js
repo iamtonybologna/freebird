@@ -19,6 +19,10 @@ app.use(express.static(`build`));
 
 let partyButtonCount = 51;
 
+app.get('/assets/:id', (req,res) => {
+  res.sendFile(__dirname + `/assets/` + req.params.id);
+});
+
 app.get('/party', (req, res) => {
   if (partyButtonCount > 50) {
     res.status(200).send();

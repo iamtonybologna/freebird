@@ -302,3 +302,14 @@ p a:hover {
     font-size: 3.5em;
   }
 }
+/* make the canvases, children of the this container */
+#container {
+  position: relative;
+}
+
+
+#threeContainer {
+  pointer-events: none;
+  position: absolute;
+  z-index: 10;      /* position this canvas on top of the other one */
+}
