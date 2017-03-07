@@ -120,7 +120,8 @@ io.on('connection', (client) => {
       songTitle: songData.songTitle,
       songImageMedium: songData.songImageMedium,
       songImageHigh: songData.songImageHigh,
-      upNext: false
+      upNext: false,
+      played: false
     };
     // check if song is in playlist
     let songInPlaylist = false;
@@ -170,11 +171,22 @@ io.on('connection', (client) => {
     console.log('getUsername message received from client, checking IDs');
     for (let id in usernames) {
       if (id == userId.userId) {
-        console.log('Cookie id matches local id, sending name', usernames[id])
+        console.log('Cookie id matches local id, sending name', usernames[id]);
         let name = usernames[id];
         fn(name);
       };
     };
+  });
+
+  client.on('newWinner', (newWinner) => {
+    console.log('new winner song id', newWinner.songId);
+    playlist.forEach((song) => {
+      if (song.songId === newWinner.songId) {
+        played = true;
+        console.log('playlist', playlist);
+        console.log('played?', song.played);
+      };
+    });
   });
 
   client.on('disconnect', () => {

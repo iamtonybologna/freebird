@@ -53,7 +53,7 @@ class App extends Component {
     this.state = {
       votes: null,
       view: 'splash',
-      upNext: [{songId: 'JFDj3shXvco'}],
+      upNext: [{ songId: 'JFDj3shXvco' }],
       winner: '',
     };
 
@@ -67,7 +67,7 @@ class App extends Component {
           return (
             <div>
               <VideoEmbed winner={this.setWinner} playList={this.state.playList} upNext={this.state.upNext} getUpNext={this.getUpNext} votes={this.state.votes} startParty={this.startParty} />
-              <HostVoteList votes={this.state.votes} upNext={this.state.upNext} winner={this.state.winner}/>
+              <HostVoteList votes={this.state.votes} upNext={this.state.upNext} winner={this.state.winner} />
               {this.state.userCount} user(s) in room
             </div>
           )
@@ -96,7 +96,7 @@ class App extends Component {
     this.props.ws.on('updateUpNext', (upNext) => {
       console.log('updateUpNext', upNext);
       this.setState({ upNext: upNext.data });
-      this.setState({ votes: null});
+      this.setState({ votes: null });
       console.log('upNext', this.state.upNext);
     });
     this.props.ws.on('updatePlaylist', (playlist) => {
@@ -115,6 +115,7 @@ class App extends Component {
 
   setWinner = (newWinner) => {
     this.setState({ winner: newWinner });
+    this.props.ws.emit('newWinner', { songId: newWinner });
   };
 
   startParty = () => {
