@@ -56,7 +56,8 @@ newUpNext = () => {
   let newSongs = {};
   if (playlist.length > 2) {
     let i = 0;
-    while (i < 3) {
+    let x = 0;
+    while (i < 3 && x < 100) {
       let randomSong = playlist[Math.floor(Math.random() * playlist.length)];
       if (
         newSongs.hasOwnProperty(randomSong.songId) === false &&
@@ -67,6 +68,7 @@ newUpNext = () => {
         newSongs[randomSong.songId] = randomSong;
         i++;
       };
+      x++;
     };
     upNext = [];
     for (let song in newSongs) {
