@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Send from 'material-ui/svg-icons/content/send';
 import Paper from 'material-ui/Paper';
+import IconButton from 'material-ui/IconButton';
 
 const styles = {
   button: {
-    marginTop: '3vh'
+    marginTop: '1vh'
   },
   welcomeButton: {
     textAlign: 'center',
@@ -58,9 +58,9 @@ export default class Welcome extends Component {
                 underlineFocusStyle={styles.underlineStyleFocus}
               />
               <div style={styles.welcomeButton}>
-                <FloatingActionButton style={styles.button} zDepth={2} onTouchTap={this.props.handleSubmitName.bind()}>
+                <IconButton style={styles.button} secondary={true} onTouchTap={this.props.handleSubmitName.bind()}>
                     <Send />
-                </FloatingActionButton>
+                </IconButton>
               </div>
           </div>
         </Paper>

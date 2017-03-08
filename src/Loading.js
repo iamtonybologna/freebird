@@ -1,10 +1,15 @@
 import React, {Component} from 'react';
-import RaisedButton from 'material-ui/RaisedButton';
+import IconButton from 'material-ui/IconButton';
+import Send from 'material-ui/svg-icons/content/send';
 
 const styles = {
   div: {
     marginTop: '35vh',
     textAlign: 'center',
+  },
+  button: {
+    height: '10vh',
+    width: '10vh'
   }
 };
 
@@ -15,11 +20,11 @@ export default class Loading extends Component {
   render() {
       return (
         <div style={styles.div}>
-          <RaisedButton
-          label="you seem kind of cool, come party"
-          primary={true}
-          style={styles.button}
-          onTouchTap={() => this.select('main')} />
+          <IconButton
+          iconStyle={styles.button}
+          onTouchTap={() => this.select('main')} >
+          <Send />
+          </IconButton>
         </div>
       )
   };

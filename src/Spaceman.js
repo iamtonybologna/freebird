@@ -4,7 +4,8 @@ export default class LoadingUser extends Component {
 
   render() {
     return (
-      <div class="container">
+
+<div class="container">
 <svg version="1.1" class="rocketManSVG" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/" x="0px" y="0px" viewBox="0 0 600 600" xml:space="preserve">
 
   <defs>

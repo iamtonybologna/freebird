@@ -26,7 +26,7 @@ const muiTheme = getMuiTheme({
     primary1Color: deepPurple500,
     primary2Color: pinkA200,
     primary3Color: lightGreenA400,
-    accent1Color: deepPurple900,
+    accent1Color: '#0ff',
     accent2Color: deepPurple500,
     accent3Color: deepPurple500,
     textColor: fullWhite,
@@ -43,6 +43,9 @@ const muiTheme = getMuiTheme({
 const styles = {
   newWinner: {
     position: 'absolute'
+  },
+  count: {
+    textAlign: 'center'
   }
 }
 
@@ -65,18 +68,21 @@ class App extends Component {
     this.renderView = () => {
       switch(this.state.view) {
         case 'splash':
-          return <Splash switcher={this.switcher} />
+          return (
+            <div>
+              <Splash switcher={this.switcher} />
+            </div>
+            )
         case 'loading':
               return (
-                <div>
+                <div style={styles.count}>
                 <Loading switcher={this.switcher} upNext={this.state.upNext} />
-                <p><a>{this.state.userCount} users up in hurr</a></p>
+                <p><a >{this.state.userCount} party people</a></p>
                 </div>
                 )
         case 'main':
           return (
             <div>
-              <p><a style={styles.newWinner}>{this.state.winnerName}</a></p>
                 <Snackbar
                   open={this.state.open}
                   message={this.state.userCount + " users connected"}
@@ -84,7 +90,7 @@ class App extends Component {
                   onRequestClose={this.handleRequestClose}
                 />
               <VideoEmbed winner={this.setWinner} playList={this.state.playList} upNext={this.state.upNext} getUpNext={this.getUpNext} votes={this.state.votes} startParty={this.startParty} />
-              <HostVoteList votes={this.state.votes} upNext={this.state.upNext} winner={this.state.winner}/>
+              <HostVoteList votes={this.state.votes} upNext={this.state.upNext} winnerName={this.state.winnerName}/>
             </div>
           )
         default:

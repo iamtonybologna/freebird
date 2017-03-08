@@ -3,7 +3,7 @@ import CircularProgress from 'material-ui/CircularProgress';
 
 const styles = {
   loadingUser: {
-    marginTop: '50%',
+    marginTop: '10vh',
     textAlign: 'center',
   }
 };
@@ -14,6 +14,7 @@ export default class LoadingUser extends Component {
     return (
       <div style={styles.loadingUser}>
         <CircularProgress size={200} secondary={true} thickness={10} />
+        <p><a>Waiting on our first playlist</a></p>
       </div>
     )
   };

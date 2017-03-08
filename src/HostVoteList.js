@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {GridList, GridTile} from 'material-ui/GridList';
 import IconButton from 'material-ui/IconButton';
-import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import Paper from 'material-ui/Paper';
+import Play from 'material-ui/svg-icons/av/play-arrow';
 
 const styles = {
   gridList: {
@@ -29,10 +29,30 @@ const styles = {
     position: 'absolute',
     marginLeft: '3px',
     marginTop: '3px',
-  }
+  },
 };
 
 class HostVoteList extends Component {
+
+  renderShadow = (title) => {
+    if ( this.props.winnerName === title ) {
+      return "linear-gradient(to top, #0ff 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)"
+    } else {
+      return "linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
+    }
+  }
+
+  renderIcon = (title) => {
+    if ( this.props.winnerName === title ) {
+      return <IconButton><Play color='white' /></IconButton>
+    }
+  }
+
+  renderSub = (title) => {
+    if ( this.props.winnerName === title ) {
+      return <span>Winner!</span>
+    }
+  }
 
   render() {
 
@@ -44,7 +64,9 @@ class HostVoteList extends Component {
               <GridTile
                 key={tile.songId}
                 title={tile.songTitle}
-                titleBackground="linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
+                titleBackground={this.renderShadow(tile.songTitle)}
+                subtitle={this.renderSub(tile.songTitle)}
+                actionIcon={this.renderIcon(tile.songTitle)}
               >
               <p><a style={styles.votes}>{tile.votes}</a></p>
                 <img role="presentation" src={tile.songImageHigh} style={styles.image}/>

@@ -4,15 +4,15 @@ import Paper from 'material-ui/Paper';
 
 const styles = {
   paper: {
-    width: '50vw',
+    width: '40vw',
     margin: 'auto',
     marginTop: '30vh',
     paddingBottom: '5vh',
+    paddingTop: '5vh',
   },
   noSearchDiv: {
     zIndex: '5',
     textAlign: 'center',
-
   },
 };
 

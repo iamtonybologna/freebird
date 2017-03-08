@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Player from './Player.js';
 import Paper from 'material-ui/Paper';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
+import IconButton from 'material-ui/IconButton';
 import Skip from 'material-ui/svg-icons/av/skip-next';
 import Drink from 'material-ui/svg-icons/maps/local-bar';
 
@@ -19,14 +19,18 @@ const styles = {
   button: {
     float: 'right',
     top: '0',
-    marginTop: '5px',
-    marginRight: '2.5vw'
+    marginTop: '2vw',
+    marginRight: '4vw',
   },
   partyButton: {
     float: 'left',
     top: '0',
-    marginTop: '5px',
-    marginLeft: '2.5vw'
+    marginTop: '2vw',
+    marginLeft: '2vw',
+  },
+  icons: {
+    height: '4vw',
+    width: '4vw'
   }
 };
 
@@ -234,12 +238,12 @@ class VideoEmbed extends Component {
   render() {
     return (
       <div>
-        <FloatingActionButton onTouchTap={this.gotoNextVideo} style={styles.button}>
+        <IconButton onTouchTap={this.gotoNextVideo} style={styles.button} iconStyle={styles.icons}>
           <Skip />
-        </FloatingActionButton>
-        <FloatingActionButton onTouchTap={this.props.startParty.bind()} style={styles.partyButton}>
+        </IconButton>
+        <IconButton onTouchTap={this.props.startParty.bind()} style={styles.partyButton} iconStyle={styles.icons}>
           <Drink/>
-        </FloatingActionButton>
+        </IconButton>
         <Paper zDepth={5} rounded={true} style={styles.paper}>
           <div style={styles.videoWrapper}>
             <div style={{display: this.state.player1Hidden}}>
