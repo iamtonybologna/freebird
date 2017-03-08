@@ -18,11 +18,15 @@ const styles = {
   },
   button: {
     float: 'right',
-    top: '0'
+    top: '0',
+    marginTop: '5px',
+    marginRight: '2.5vw'
   },
   partyButton: {
     float: 'left',
-    top: '0'
+    top: '0',
+    marginTop: '5px',
+    marginLeft: '2.5vw'
   }
 };
 
