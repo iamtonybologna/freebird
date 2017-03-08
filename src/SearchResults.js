@@ -38,7 +38,7 @@ class SearchResults extends Component {
   }
 
   handleTouchTap = (tile) => {
-    if (this.state.selectedSongs.indexOf(tile.id.videoId) === -1 && this.props.playlist.indexOf(tile.id.videoId) === -1) {
+    if (this.props.playlist.indexOf(tile.id.videoId) === -1) {
       this.setState({
         open: true,
         songName: 'Added ' + tile.snippet.title + ' to playlist',
@@ -51,11 +51,10 @@ class SearchResults extends Component {
       } else {
         this.setState({
           open: true,
-          songName: 'Song already in playlist, it was selected by another user',
+          songName: 'Song in playlist, already selected by another user',
         });
-    }
-    this.props.submitNewSong(tile)
-
+      }
+      this.props.submitNewSong(tile)
   };
 
   handleRequestClose = () => {
@@ -76,8 +75,6 @@ class SearchResults extends Component {
   renderShadow = (id) => {
     if (this.state.selectedSongs.indexOf(id) === -1 && this.props.playlist.indexOf(id) === -1 ) {
       return "linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
-    } else if (this.state.selectedSongs.indexOf(id) != -1) {
-      return "linear-gradient(to top, #D500F9  0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)"
     } else {
       return "linear-gradient(to top, #D500F9 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)"
     }
@@ -89,7 +86,7 @@ class SearchResults extends Component {
         <GridList
           style={styles.gridList}
           cols={0.1}
-          padding={3}
+          padding={5}
         >
           {this.props.results.map((tile) => (
 

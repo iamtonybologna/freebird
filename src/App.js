@@ -17,6 +17,7 @@ import Splash from './splash.js';
 import Loading from './Loading.js';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Skip from 'material-ui/svg-icons/av/skip-next';
+import Snackbar from 'material-ui/Snackbar';
 
 
 const muiTheme = getMuiTheme({
@@ -40,11 +41,11 @@ const muiTheme = getMuiTheme({
 });
 
 const styles = {
-    container: {
-      height: '100vh',
-      width: '100vw'
-    }
-  };
+  newWinner: {
+    position: 'absolute'
+  }
+}
+
 class App extends Component {
 
   constructor(props) {
@@ -55,22 +56,35 @@ class App extends Component {
       view: 'splash',
       upNext: [{ songId: 'JFDj3shXvco' }],
       winner: '',
-      winnerName : 'temp',
+      winnerName: '',
+      displayVotes: [],
+      open: false,
     };
+
 
     this.renderView = () => {
       switch(this.state.view) {
         case 'splash':
           return <Splash switcher={this.switcher} />
         case 'loading':
-              return <Loading switcher={this.switcher} upNext={this.state.upNext} />
+              return (
+                <div>
+                <Loading switcher={this.switcher} upNext={this.state.upNext} />
+                <p><a>{this.state.userCount} users up in hurr</a></p>
+                </div>
+                )
         case 'main':
           return (
             <div>
-              <p>{this.state.winnerName}</p>
+              <p><a style={styles.newWinner}>{this.state.winnerName}</a></p>
+                <Snackbar
+                  open={this.state.open}
+                  message={this.state.userCount + " users connected"}
+                  autoHideDuration={3000}
+                  onRequestClose={this.handleRequestClose}
+                />
               <VideoEmbed winner={this.setWinner} playList={this.state.playList} upNext={this.state.upNext} getUpNext={this.getUpNext} votes={this.state.votes} startParty={this.startParty} />
-              <HostVoteList votes={this.state.votes} upNext={this.state.upNext} winner={this.state.winner} />
-              {this.state.userCount} user(s) in room
+              <HostVoteList votes={this.state.votes} upNext={this.state.upNext} winner={this.state.winner}/>
             </div>
           )
         default:
@@ -83,24 +97,41 @@ class App extends Component {
     this.setState({ view: newView });
   };
 
+
+  handleRequestClose = () => {
+    this.setState({
+      open: false,
+      message: ''
+    });
+  };
+
   componentDidMount() {
     console.log('componentDidMount <App />');
     console.log('Opening socket connection');
 
     this.props.ws.on('updateUserCount', (data) => {
       console.log('Received a message from the server!', data);
-      this.setState({ userCount: data.userCount });
-      console.log(data, 'user');
-    });
-    this.props.ws.on('votes', (data) => {
-      console.log('votes', data);
-      this.setState({ votes: data.votes });
+      this.setState({ userCount: data.userCount, open: true });
     });
     this.props.ws.on('updateUpNext', (upNext) => {
       console.log('updateUpNext', upNext);
       this.setState({ upNext: upNext.data });
       this.setState({ votes: null });
       console.log('upNext', this.state.upNext);
+    });
+    this.props.ws.on('votes', (data) => {
+      console.log('votes', data);
+      let displayVotes = data.votes;
+      let oldUpNext = this.state.upNext;
+      let p = [];
+      for (let item in displayVotes) {
+        p.push(displayVotes[item])
+      }
+      for (let i = 0; i <= 2; i++) {
+        oldUpNext[i].votes = p[i].length
+      }
+      this.setState({votes: data.votes, upNext: oldUpNext});
+      console.log(this.state.upNext)
     });
     this.props.ws.on('updatePlaylist', (playlist) => {
       console.log('updateplaylist', playlist.data);
@@ -141,7 +172,7 @@ class App extends Component {
   render() {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
-        <div style={styles.container}>
+        <div >
           { this.renderView() }
         </div>
       </MuiThemeProvider>

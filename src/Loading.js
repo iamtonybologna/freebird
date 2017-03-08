@@ -3,7 +3,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 const styles = {
   div: {
-    marginTop: '20vh',
+    marginTop: '35vh',
     textAlign: 'center',
   }
 };
@@ -15,7 +15,6 @@ export default class Loading extends Component {
   render() {
       return (
         <div style={styles.div}>
-          <br/><br/>
           <RaisedButton
           label="you seem kind of cool, come party"
           primary={true}

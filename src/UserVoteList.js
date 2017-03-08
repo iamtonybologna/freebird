@@ -24,6 +24,11 @@ const styles = {
   snackBar: {
     marginBottom: '56px',
     zIndex: '5',
+  },
+  votes: {
+    position: 'absolute',
+    marginLeft: '3px',
+    marginTop: '3px',
   }
 };
 
@@ -77,6 +82,7 @@ class UserVoteList extends Component {
         <GridList
           style={styles.gridList}
           cols={0.1}
+          padding={5}
         >
           {this.props.upNext.map((tile) => (
             <GridTile
@@ -86,6 +92,7 @@ class UserVoteList extends Component {
               actionIcon={this.renderIcon(tile.songId)}
               titleBackground={this.renderShadow(tile.songId)}
             >
+              <p><a style={styles.votes}>{tile.votes}</a></p>
               <img src={tile.songImageMedium} role='presentation'/>
             </GridTile>
           ))}
