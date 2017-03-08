@@ -39,6 +39,12 @@ const muiTheme = getMuiTheme({
   },
 });
 
+const styles = {
+  newWinner: {
+    position: 'absolute'
+  }
+}
+
 class App extends Component {
 
   constructor(props) {
@@ -67,7 +73,7 @@ class App extends Component {
         case 'main':
           return (
             <div>
-              <p><a>{this.state.winnerName}</a></p>
+              <p><a style={styles.newWinner}>{this.state.winnerName}</a></p>
               <VideoEmbed winner={this.setWinner} playList={this.state.playList} upNext={this.state.upNext} getUpNext={this.getUpNext} votes={this.state.votes} startParty={this.startParty} />
               <HostVoteList votes={this.state.votes} upNext={this.state.upNext} winner={this.state.winner} />
               {this.state.userCount} user(s) in room
@@ -90,6 +96,7 @@ class App extends Component {
     this.props.ws.on('updateUserCount', (data) => {
       console.log('Received a message from the server!', data);
       this.setState({ userCount: data.userCount });
+      console.log(data, 'user');
     });
     this.props.ws.on('updateUpNext', (upNext) => {
       console.log('updateUpNext', upNext);
@@ -126,17 +133,18 @@ class App extends Component {
   };
 
   setWinner = (newWinner) => {
-   this.setState({ winner: newWinner });
-   let upNext =  this.state.upNext;
-   upNext.forEach((song)=>{
-     console.log("song");
-     if (song.songId = this.state.winner){
-       console.log(song.songId, this.state.winner, "winnerName");
-       this.setState({ winnerName : song.songTitle });
-     };
-   });
- };
-
+    if (!newWinner){
+      this.setState({ winnerName : "" });
+      return
+    }
+    this.setState({ winner: newWinner });
+    let upNext =  this.state.upNext;
+    upNext.forEach((song)=>{
+      if (song.songId === newWinner){
+        this.setState({ winnerName : song.songTitle });
+      };
+    });
+  };
 
   startParty = () => {
     console.log('party\'s just getting started');

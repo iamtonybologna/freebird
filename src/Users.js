@@ -53,6 +53,7 @@ class Users extends Component {
       console.log('Username received from server', username);
       if (username) {
         this.setState({ user: { id: userId, name: username } });
+        this.setState({ view: 1 });
       } else {
         this.setState({ view: 3 });
       }
@@ -67,11 +68,9 @@ class Users extends Component {
     console.log('componentDidMount <App />');
 
     if (cookie.load('userId')) {
-      console.log('cookie exists');
-      this.setState({ view: 1 });
+      console.log('cookie exists, getting username');
+      this.getUsername();
     };
-
-    this.getUsername();
 
     this.props.ws.on('updateUpNext', (upNext) => {
       console.log('upNext', upNext);
@@ -85,7 +84,7 @@ class Users extends Component {
       playlist.data.forEach(function(item) {
         playlistById.push(item.songId);
       })
-      console.log(playlistById)
+      console.log(playlistById);
       this.setState({ playlist: playlistById });
       console.log('Current state: ', this.state);
     });
@@ -94,6 +93,7 @@ class Users extends Component {
       console.log('Received a message from the server!', data);
       if (data.upNext.length > 0) {
         this.setState({ upNext: data.upNext, voteListLoaded: true });
+        console.log('Current state: ', this.state);
       };
     });
 

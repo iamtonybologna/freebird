@@ -174,6 +174,7 @@ class VideoEmbed extends Component {
     this.props.getUpNext();
     this.backgroundVideoLoading = false;
     this.playerTimer();
+    this.props.winner();
     console.log("should be playing", this.state.playing.getVideoUrl(), "was playing", this.state.notPlaying.getVideoUrl())
   };
 

@@ -56,12 +56,19 @@ newUpNext = () => {
   let newSongs = {};
   if (playlist.length > 2) {
     let i = 0;
-    while (i < 3) {
+    let x = 0;
+    while (i < 3 && x < 100) {
       let randomSong = playlist[Math.floor(Math.random() * playlist.length)];
-      if (newSongs.hasOwnProperty(randomSong.songId) === false && lastUpNextList.indexOf(randomSong.songId) === -1) {
+      if (
+        newSongs.hasOwnProperty(randomSong.songId) === false &&
+        lastUpNextList.indexOf(randomSong.songId) === -1 &&
+        randomSong.played === false
+        )
+      {
         newSongs[randomSong.songId] = randomSong;
         i++;
       };
+      x++;
     };
     upNext = [];
     for (let song in newSongs) {
@@ -89,7 +96,7 @@ io.on('connection', (client) => {
     usernames[id] = user.name;
     console.log('New user added to usernames', usernames);
     fn(id);
-    io.emit('checkForUpNext', { upNext: upNext });
+    io.emit('updateUpNext', { data: upNext });
   });
 
   // voting
@@ -187,8 +194,7 @@ io.on('connection', (client) => {
     console.log('new winner song id', newWinner.songId);
     playlist.forEach((song) => {
       if (song.songId === newWinner.songId) {
-        played = true;
-        console.log('playlist', playlist);
+        song.played = true;
         console.log('played?', song.played);
       };
     });
