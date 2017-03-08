@@ -64,9 +64,9 @@ export default class Three extends Component {
       //particleSpriteTex: window.PARTICLE_SPRITE_TEXTURE,
     };
     var spawnerOptions = {
-      spawnRate: 15,
-      horizontalSpeed: 0,
-      verticalSpeed: 0,
+      spawnRate: 15000,
+      horizontalSpeed: 0.75,
+      verticalSpeed: 0.75,
       timeScale: 1
     };
 
@@ -106,9 +106,9 @@ export default class Three extends Component {
         var radius = 1 + (Math.random() * 5);
         let newStar = new THREE.Mesh(star.geometry, material);//var newStar = new THREE.Mesh(star);
 
-        newStar.scale.x = 0.1;
-        newStar.scale.y = 0.1;
-        newStar.scale.z = 0.1;
+        newStar.scale.x = 0.2;
+        newStar.scale.y = 0.2;
+        newStar.scale.z = 0.2;
         newStar.rotation.y = 40;
         newStar.rotation.x = 90;
         asteroidContainer.add(newStar);
@@ -126,8 +126,6 @@ export default class Three extends Component {
     //Websocket responses
     this.ws.on('updateUserCount', (data) => {
       console.log('Received a message from the server!', data);
-      this.setState({userCount: data.userCount});
-
       var bitmap = document.createElement('canvas');
       var g = bitmap.getContext('2d');
       bitmap.width = 128;
@@ -174,6 +172,12 @@ export default class Three extends Component {
 
     }
 
+
+    function createShip () {
+
+    }
+
+
     function onClick(event) {
       mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
       mouse.y = -( event.clientY / window.innerHeight ) * 2 + 1;
@@ -185,33 +189,37 @@ export default class Three extends Component {
 
       var bitmap = document.createElement('canvas');
       console.log(bitmap, "bitmap");
-      bitmap.style.backgroundColor = 'red';
+      bitmap.style.backgroundColor = 'black';
       var g = bitmap.getContext('2d');
-      bitmap.width = 128;
-      bitmap.height = 128;
-      g.font = 'Bold 20px Arial';
+      bitmap.width = 512;
+      bitmap.height = 512;
+      g.font = "80px Georgia";
       g.fillStyle = 'white';
-     // var title = playlist.data[playlist.data.length -1].songTitle;
+     // var title = playlistdata[playlist.data.length -1].songTitle;
       var title = "clickTest";
       console.log(title);
-      g.fillStyle="#FF0000";
-      g.fillRect(0,0,128,128);
-      g.fillText(title, 0, 20);
-      g.strokeStyle = 'white';
-      g.strokeText(title, 0, 20);
+      g.fillStyle='white';
+      g.fillText(title, 126, 126);
 
+
+
+      const modifier = (int) =>{
+        if (Math.random() > 0.5){
+          return int - (int * 2)
+        }
+        else {return int
+        }
+      };
+
+      var randSeedX = 100 * Math.random();
+      var randSeedY = 60 * Math.random();
+      randSeedX = modifier((randSeedX));
+      randSeedY = modifier((randSeedY));
 
       var texture = new THREE.Texture(bitmap)
       texture.needsUpdate = true;
 
-      var material = new THREE.MeshLambertMaterial({map: texture, alpha: true});
-      var plane = new THREE.Mesh(new THREE.PlaneBufferGeometry(10, 10), material);
-      plane.material.side = THREE.DoubleSide;
-      plane.position.x = 100;
-      plane.position.x = camera.position.x;
-      plane.position.y = camera.position.y + 10;
-      plane.position.z = camera.position.z - 300;
-      scene.add(plane);
+
 
       var material = new THREE.MeshPhongMaterial({
         color: 0xF36F5E,
@@ -221,20 +229,28 @@ export default class Three extends Component {
       });
       //Add random asteroids
       let newStar = new THREE.Mesh(star.geometry, material);
-      newStar.position.x = camera.position.x;
-      newStar.position.y = camera.position.y;
+      newStar.position.x = camera.position.x + randSeedX;
+      newStar.position.y = camera.position.y - 20 + randSeedY;
       newStar.position.z = camera.position.z - 200;
-      newStar.scale.x = 0.1;
-      newStar.scale.y = 0.1;
-      newStar.scale.z = 0.1;
-      scene.add(newStar)
+      newStar.scale.x = 0.2;
+      newStar.scale.y = 0.2;
+      newStar.scale.z = 0.2;
+      scene.add(newStar);
 
+
+      var material = new THREE.MeshLambertMaterial({map: texture, alpha: true, alphaTest : 0.05});
+      var plane = new THREE.Mesh(new THREE.PlaneBufferGeometry(40, 40), material);
+      plane.material.side = THREE.DoubleSide;
+      plane.position.x = newStar.position.x;
+      plane.position.y = newStar.position.y + 10;
+      plane.position.z = newStar.position.z;
+      scene.add(plane);
 
       particleSystem = new THREE.GPUParticleSystem({
         maxParticles: 5000
       });
-      particleSystem.position.x = camera.position.x;
-      particleSystem.position.y = camera.position.y + 1;
+      particleSystem.position.x = camera.position.x + randSeedX;
+      particleSystem.position.y = camera.position.y - 19 + randSeedY;
       particleSystem.position.z = camera.position.z -200;
       particleSystem.rotation.x = 90;
       scene.add(particleSystem);
@@ -263,17 +279,23 @@ export default class Three extends Component {
       tick += delta;
       if (tick < 0) tick = 0;
       if (delta > 0) {
-        options.position.x = Math.sin(tick * spawnerOptions.horizontalSpeed) * 20;
-        options.position.y = Math.sin(tick * spawnerOptions.verticalSpeed) * 10;
-        options.position.z = Math.sin(tick * spawnerOptions.horizontalSpeed + spawnerOptions.verticalSpeed) * 5;
+       // options.position.x = Math.sin(tick * spawnerOptions.horizontalSpeed) * 20;
+       // options.position.y = Math.sin(tick * spawnerOptions.verticalSpeed) * 20;
+       // options.position.z = Math.sin(tick * spawnerOptions.horizontalSpeed + spawnerOptions.verticalSpeed) * 5;
         for (var x = 0; x < spawnerOptions.spawnRate * delta; x++) {
           particleSystem.spawnParticle(options);
         }
+        // scene.children.forEach((mesh) => {
+        //   if (mesh.type === "Mesh" ){
+        //     mesh.position.x = mesh.position.x -  (options.position.x / 10);
+        //     mesh.position.y =  mesh.position.y - (options.position.y / 10);
+        //     mesh.position.y =  mesh.position.y - (options.position.y / 10);
+        //   }
+        // });
+
       }
 
-      scene.children.forEach((mesh) => {
 
-       });
 
       particleSystem.update(tick);
       renderer.render(scene, camera);
