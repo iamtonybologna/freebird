@@ -23,6 +23,7 @@ import LoadingUser from './LoadingUser.js';
 import DefaultSearch from './DefaultSearch.js';
 import PartyButton from './PartyButton.js';
 
+
 const muiTheme = getMuiTheme({
   fontFamily: 'Roboto, sans-serif',
   palette: {
@@ -72,6 +73,21 @@ class Users extends Component {
         this.setState({ upNext: data.upNext, voteListLoaded: true });
       };
     });
+    this.props.ws.on('votes', (data) => {
+      console.log('votes', data);
+      let displayVotes = data.votes;
+      let oldUpNext = this.state.upNext;
+      let p = [];
+      for (let item in displayVotes) {
+        p.push(displayVotes[item])
+      }
+      for (let i = 0; i <= 2; i++) {
+        oldUpNext[i].votes = p[i].length
+      }
+      this.setState({votes: data.votes, upNext: oldUpNext});
+      console.log(this.state.upNext)
+    });
+
   };
 
   componentWillUnmount() {

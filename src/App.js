@@ -17,6 +17,7 @@ import Splash from './splash.js';
 import Loading from './Loading.js';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Skip from 'material-ui/svg-icons/av/skip-next';
+import Snackbar from 'material-ui/Snackbar';
 
 
 const muiTheme = getMuiTheme({
@@ -50,8 +51,10 @@ class App extends Component {
       upNext: [{songId: 'X_DVS_303kQ'}],
       winner: '',
       winnerName: '',
-      displayVotes: []
+      displayVotes: [],
+      open: false,
     };
+
 
     this.renderView = () => {
       switch(this.state.view) {
@@ -61,16 +64,21 @@ class App extends Component {
               return (
                 <div>
                 <Loading switcher={this.switcher} upNext={this.state.upNext} />
-                <p><a>{this.state.userCount} user(s) in room</a></p>
+                <p><a>{this.state.userCount} users up in hurr</a></p>
                 </div>
                 )
         case 'main':
           return (
             <div>
               <p><a>{this.state.winnerName}</a></p>
+                <Snackbar
+                  open={this.state.open}
+                  message={this.state.userCount + " users connected"}
+                  autoHideDuration={3000}
+                  onRequestClose={this.handleRequestClose}
+                />
               <VideoEmbed winner={this.setWinner} playList={this.state.playList} upNext={this.state.upNext} getUpNext={this.getUpNext} votes={this.state.votes} startParty={this.startParty} />
               <HostVoteList votes={this.state.votes} upNext={this.state.upNext} winner={this.state.winner}/>
-              {this.state.userCount} user(s) in room
             </div>
           )
         default:
@@ -83,13 +91,21 @@ class App extends Component {
     this.setState({ view: newView });
   }
 
+
+  handleRequestClose = () => {
+    this.setState({
+      open: false,
+      message: ''
+    });
+  };
+
   componentDidMount() {
     console.log('componentDidMount <App />');
     console.log('Opening socket connection');
 
     this.props.ws.on('updateUserCount', (data) => {
       console.log('Received a message from the server!', data);
-      this.setState({ userCount: data.userCount });
+      this.setState({ userCount: data.userCount, open: true });
     });
     this.props.ws.on('updateUpNext', (upNext) => {
       console.log('updateUpNext', upNext);
