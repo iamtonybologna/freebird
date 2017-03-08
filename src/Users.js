@@ -53,6 +53,7 @@ class Users extends Component {
       console.log('Username received from server', username);
       if (username) {
         this.setState({ user: { id: userId, name: username } });
+        this.setState({ view: 1 });
       } else {
         this.setState({ view: 3 });
       }
@@ -69,7 +70,6 @@ class Users extends Component {
     if (cookie.load('userId')) {
       console.log('cookie exists, getting username');
       this.getUsername();
-      this.setState({ view: 1 });
     };
 
     this.props.ws.on('updateUpNext', (upNext) => {
