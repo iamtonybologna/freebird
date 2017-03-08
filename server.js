@@ -192,6 +192,7 @@ io.on('connection', (client) => {
 
   // flip played boolean if song won
   client.on('newWinner', (newWinner) => {
+    io.emit('winner', { songId: newWinner.songId });
     console.log('New winner song id', newWinner.songId);
     playlist.forEach((song) => {
       if (song.songId === newWinner.songId) {

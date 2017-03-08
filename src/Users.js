@@ -109,12 +109,17 @@ class Users extends Component {
       for (let i = 0; i <= 2; i++) {
         oldUpNext[i].votes = p[i].length;
       }
-      this.setState({votes: data.votes, upNext: oldUpNext});
+      this.setState({ votes: data.votes, upNext: oldUpNext });
       console.log(this.state.upNext);
     });
 
     this.props.ws.on('readyToParty', () => {
       this.setState({ readyToParty: true });
+    });
+
+    this.props.ws.on('winner', (winner) => {
+      this.setState({ winner: winner.songId });
+      console.log('Winner song id', this.state.winner);
     });
   };
 
@@ -137,6 +142,7 @@ class Users extends Component {
       selectedSongs: [],
       newVoteId: '',
       readyToParty: false,
+      winner: ''
     };
 
     this.renderView = () => {

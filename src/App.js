@@ -130,7 +130,7 @@ class App extends Component {
       for (let i = 0; i <= 2; i++) {
         oldUpNext[i].votes = p[i].length;
       }
-      this.setState({votes: data.votes, upNext: oldUpNext});
+      this.setState({ votes: data.votes, upNext: oldUpNext });
       console.log(this.state.upNext);
     });
     this.props.ws.on('updatePlaylist', (playlist) => {
