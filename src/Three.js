@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import io from 'socket.io-client';
 import THREELib from "three-js";
-const THREE = THREELib(['GPUParticleSystem']);
+const THREE = THREELib(['GPUParticleSystem', 'MTLLoader' , 'OBJLoader']);
 
 
 export default class Three extends Component {
@@ -29,9 +29,8 @@ export default class Three extends Component {
           '/assets/UFO.json',
           // Function when resource is loaded
           (obj, mat) => {
-            console.log(obj, mat);
-            var material = new THREE.MultiMaterial( mat );
-            const mesh = new THREE.Mesh(obj, material);
+            console.log(obj);
+            const mesh = new THREE.Mesh(obj);
             this.middleLoader(mesh)
           });
   }
@@ -44,22 +43,23 @@ export default class Three extends Component {
       // Function when resource is loaded
       (obj, mat) => {
         console.log(obj, mat);
-        var material = new THREE.MultiMaterial( mat );
-        const mesh = new THREE.Mesh(obj, mat);
-        this.launchSimpleAnimation(ship,mesh);
+        this.launchSimpleAnimation(ship, obj);
       });
   }
+
+
+
+
 
   launchSimpleAnimation(obj, obj2) {
     var camera, scene, renderer;
     var light1 = new THREE.PointLight(0xffffff, 2, 1000);
     var mouse = new THREE.Vector2();
-    var numAsteroids = 50;
     var ship = obj;
     var star = obj2
-    console.log(star, 'Star');
+
     var particleSystem = new THREE.GPUParticleSystem({
-      maxParticles: 25000
+      maxParticles: 250000
     });
     var nodeContainer = new THREE.Object3D();
     var asteroidContainer = new THREE.Object3D();
@@ -84,6 +84,30 @@ export default class Three extends Component {
       timeScale: 1
     };
 
+    function matLoader(scene, obj) {
+
+      var mtlLoader = new THREE.MTLLoader();
+      //mtlLoader.setBaseUrl( "/assets/" );
+      mtlLoader.setPath(  "/obj/"  );
+     let object = mtlLoader.load( obj + ".mtl", function( materials ) {
+        materials.preload();
+        console.log(materials, "materials")
+        var objLoader = new THREE.OBJLoader();
+        objLoader.setMaterials( materials );
+        objLoader.setPath(  "/obj/"  );
+        let object = objLoader.load( obj +".obj", function ( object ) {
+          object.position.z = -200;
+
+          //scene.add(object);
+          createStar(object);
+
+        });
+        return object;
+      });
+      return object
+    }
+
+
     init();
     animate();
 
@@ -100,7 +124,7 @@ export default class Three extends Component {
 
 
       camera.position.z = 500;
-      camera.lookAt(new THREE.Vector3(0, 0, -1000000000000000));
+     // camera.lookAt(new THREE.Vector3(0, 0, -1000000000000000));
 
       scene = new THREE.Scene();
       //scene.background = new THREE.Color(0xff0000);
@@ -112,6 +136,8 @@ export default class Three extends Component {
       window.addEventListener('resize', onWindowResize, false);
       window.addEventListener('click', onClick, false);
       window.addEventListener('mousemove', onMouseMove, false);
+
+
 
     }
 
@@ -183,14 +209,14 @@ export default class Three extends Component {
     };
 
 
-    function createStar(playListItem){
-      mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-      mouse.y = -( event.clientY / window.innerHeight ) * 2 + 1;
+    function createStar(newStar, playListItem){
+     // mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+     // mouse.y = -( event.clientY / window.innerHeight ) * 2 + 1;
 
-      camera.position.x = mouse.x * 100;
-      camera.position.y = mouse.y * 100;
-      camera.lookAt(new THREE.Vector3(0, 0, -1000000000000000));
-      console.log(camera.position.x + ", " + camera.position.y);
+      //camera.position.x = mouse.x * 100;
+      //camera.position.y = mouse.y * 100;
+      //camera.lookAt(new THREE.Vector3(0, 0, -1000000000000000));
+      //console.log(camera.position.x + ", " + camera.position.y);
 
       var bitmap = document.createElement('canvas');
       console.log(bitmap, "bitmap");
@@ -221,8 +247,7 @@ export default class Three extends Component {
         opacity: 1,
         shading: THREE.FlatShading
       });
-      //Add random asteroids
-      let newStar = new THREE.Mesh(star.geometry, material);
+
       newStar.position.x = camera.position.x + randSeedX;
       newStar.position.y = camera.position.y - 20 + randSeedY;
       newStar.position.z = camera.position.z - 800;
@@ -233,6 +258,7 @@ export default class Three extends Component {
 
       newStar.name = 'star';
       scene.add(newStar);
+
 
 
       var material = new THREE.MeshLambertMaterial({map: texture, alpha: true, alphaTest : 0.05});
@@ -288,16 +314,18 @@ export default class Three extends Component {
       texture.needsUpdate = true;
 
       var material = new THREE.MeshPhongMaterial({
-        color: 0xF36F5E,
+        color: 0x4286f4,
         transparent: true,
         opacity: 1,
         shading: THREE.FlatShading
       });
       //Add random asteroids
-      let newShip = new THREE.Mesh(ship.geometry, material);
+       let newShip = new THREE.Mesh(ship.geometry, material);
+      console.log(ship);
+      //let newShip = ship;
       newShip.position.x = camera.position.x + randSeedX;
       newShip.position.y = camera.position.y - 20 + randSeedY;
-      newShip.position.z = camera.position.z - 200;
+      newShip.position.z = camera.position.z - 400;
       newShip.scale.x = 0.2;
       newShip.scale.y = 0.2;
       newShip.scale.z = 0.2;
@@ -319,16 +347,15 @@ export default class Three extends Component {
       particleSystem.position.x = camera.position.x + randSeedX;
       particleSystem.position.y = camera.position.y - 19 + randSeedY;
       particleSystem.position.z = camera.position.z -200;
-      particleSystem.rotation.x = 90;
-      //scene.add(particleSystem);
+      scene.add(particleSystem);
       console.log(scene);
     }
 
 
     function onClick(event) {
 
-     // createShip();
-        createStar();
+        createShip();
+        matLoader(scene, "20facestar")
       }
 
     function onWindowResize() {
