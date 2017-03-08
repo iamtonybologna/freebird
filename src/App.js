@@ -39,12 +39,6 @@ const muiTheme = getMuiTheme({
   },
 });
 
-const styles = {
-    container: {
-      height: '100vh',
-      width: '100vw'
-    }
-  };
 class App extends Component {
 
   constructor(props) {
@@ -55,6 +49,7 @@ class App extends Component {
       view: 'splash',
       upNext: [{ songId: 'JFDj3shXvco' }],
       winner: '',
+      displayVotes: []
     };
 
     this.renderView = () => {
@@ -62,7 +57,12 @@ class App extends Component {
         case 'splash':
           return <Splash switcher={this.switcher} />
         case 'loading':
-              return <Loading switcher={this.switcher} upNext={this.state.upNext} />
+              return (
+                <div>
+                <Loading switcher={this.switcher} upNext={this.state.upNext} />
+                <p><a>{this.state.userCount} user(s) in room</a></p>
+                </div>
+                )
         case 'main':
           return (
             <div>
@@ -89,15 +89,25 @@ class App extends Component {
       console.log('Received a message from the server!', data);
       this.setState({ userCount: data.userCount });
     });
-    this.props.ws.on('votes', (data) => {
-      console.log('votes', data);
-      this.setState({ votes: data.votes });
-    });
     this.props.ws.on('updateUpNext', (upNext) => {
       console.log('updateUpNext', upNext);
       this.setState({ upNext: upNext.data });
       this.setState({ votes: null });
       console.log('upNext', this.state.upNext);
+    });
+    this.props.ws.on('votes', (data) => {
+      console.log('votes', data);
+      let displayVotes = data.votes;
+      let oldUpNext = this.state.upNext;
+      let p = [];
+      for (let item in displayVotes) {
+        p.push(displayVotes[item])
+      }
+      for (let i = 0; i < 2; i++) {
+        oldUpNext[i].votes = p[i].length
+      }
+      this.setState({votes: data.votes, upNext: oldUpNext});
+      console.log(this.state.upNext)
     });
     this.props.ws.on('updatePlaylist', (playlist) => {
       console.log('updateplaylist', playlist.data);
@@ -126,7 +136,7 @@ class App extends Component {
   render() {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
-        <div style={styles.container}>
+        <div >
           { this.renderView() }
         </div>
       </MuiThemeProvider>

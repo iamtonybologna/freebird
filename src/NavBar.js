@@ -24,7 +24,6 @@ class NavBar extends Component {
   select = (newView) => {this.props.switcher(newView); }
 
   render() {
-    console.log(this.props.view)
     return (
       <div style={styles.navBar}>
         <Paper zDepth={1} >

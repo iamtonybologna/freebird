@@ -77,6 +77,7 @@ class UserVoteList extends Component {
         <GridList
           style={styles.gridList}
           cols={0.1}
+          padding={5}
         >
           {this.props.upNext.map((tile) => (
             <GridTile

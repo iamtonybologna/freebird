@@ -7,8 +7,8 @@ import Drink from 'material-ui/svg-icons/maps/local-bar';
 
 const styles = {
   paper: {
-    width: '70vw',
-    marginLeft: '15vw'
+    width: '80vw',
+    marginLeft: '10vw'
   },
   videoWrapper: {
     position: 'relative',
@@ -62,7 +62,7 @@ class VideoEmbed extends Component {
         // create player one
         this.setState({
           playing: new window.YT.Player('player1', {
-            videoId: 'JFDj3shXvco',
+            videoId: 'CGKN6qiDqnk',
             // this starts the first player
             events: {
               'onReady': this.onPlayerReady
@@ -133,7 +133,7 @@ class VideoEmbed extends Component {
     }
 
 
-    if (timePlayed >= 19) {
+    if (timePlayed >= 90) {
       let newWinner = this.voteCalculate();
       this.props.winner(newWinner);
       this.state.notPlaying.cueVideoById(this.voteCalculate());

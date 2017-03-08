@@ -238,10 +238,10 @@ class Users extends Component {
 
   handleSongAddition = (e) => {
     let newList = this.state.selectedSongs
-    if (this.state.selectedSongs.indexOf(e.id.videoId) === -1 ) {
-      newList.push(e.id.videoId);
-      this.setState({ selectedSongs: newList });
-    } else {
+    if (this.state.selectedSongs.indexOf(e.id.videoId) === -1 && this.state.playlist.indexOf(e.id.videoId) === -1) {
+      newList.push(e.id.videoId)
+      this.setState({selectedSongs: newList})
+    } else if (this.state.selectedSongs.indexOf(e.id.videoId) != -1){
       let index = newList.indexOf(e.id.videoId);
       newList.splice(index, 1);
       this.setState({ selectedSongs: newList });
