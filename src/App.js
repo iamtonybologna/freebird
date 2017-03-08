@@ -102,6 +102,9 @@ class App extends Component {
     this.props.ws.on('updatePlaylist', (playlist) => {
       console.log('updateplaylist', playlist.data);
     });
+    this.props.ws.on('sendName', (data) => {
+      console.log('name', data.name);
+    });
   };
 
   componentWillUnmount() {
