@@ -45,6 +45,7 @@ let votes = {};               // votes = { songId: [userId, userId, userId] }
 let upNext = [];
 let playlist = [];
 let lastUpNextList = [];
+let readyToParty = false;
 
 newUpNext = () => {
   // store songs that were just voted on and clear votes
@@ -54,7 +55,13 @@ newUpNext = () => {
   };
   votes = {};
   let newSongs = {};
-  if (playlist.length > 2) {
+  let playableSongsLeft = 0;
+  playlist.forEach((song) => {
+    if (song.played == false) {
+      playableSongsLeft++;
+    }
+  });
+  if (playableSongsLeft > 2) {
     let i = 0;
     let x = 0;
     while (i < 3 && x < 100) {
@@ -63,6 +70,28 @@ newUpNext = () => {
         newSongs.hasOwnProperty(randomSong.songId) === false &&
         lastUpNextList.indexOf(randomSong.songId) === -1 &&
         randomSong.played === false
+        )
+      {
+        newSongs[randomSong.songId] = randomSong;
+        i++;
+      };
+      x++;
+    };
+    upNext = [];
+    for (let song in newSongs) {
+      upNext.push(newSongs[song]);
+      votes[song] = [];
+    };
+    console.log('Broadcasting new upNext list');
+    io.emit('updateUpNext', { data: upNext });
+  } else {
+    let i = 0;
+    let x = 0;
+    while (i < 3 && x < 100) {
+      let randomSong = playlist[Math.floor(Math.random() * playlist.length)];
+      if (
+        newSongs.hasOwnProperty(randomSong.songId) === false &&
+        lastUpNextList.indexOf(randomSong.songId) === -1
         )
       {
         newSongs[randomSong.songId] = randomSong;
@@ -88,6 +117,10 @@ io.on('connection', (client) => {
   io.emit('updateUserCount', { userCount: userCount });
   io.emit('updatePlaylist', { data: playlist });
   io.emit('updateUpNext', { data: upNext });
+  io.emit('votes', { votes: votes });
+  if (readyToParty) {
+    io.emit('readyToParty');
+  };
 
   // set username
   client.on('setUsername', (user, fn) => {
@@ -126,6 +159,7 @@ io.on('connection', (client) => {
     console.log('Received new song from client');
     let newSong = {
       uploader: songData.userId,
+      uploaderName: songData.username,
       songId: songData.songId,
       songTitle: songData.songTitle,
       songImageMedium: songData.songImageMedium,
@@ -148,15 +182,15 @@ io.on('connection', (client) => {
     if (!songInPlaylist) {
       playlist.push(newSong);
       console.log('Broadcasting playlist data');
-      io.emit('updatePlaylist', { data: playlist });
+      io.emit('updatePlaylist', { data: playlist, remove: false });
     } else {
       console.log('Song found in playlist');
       if (newSong.uploader === songInPlaylistUploader) {
         console.log('Uploader id matches song in playlist uploader id');
         playlist.splice(songInPlaylistArrayPosition, 1);
-        io.emit('updatePlaylist', { data: playlist });
+        io.emit('updatePlaylist', { data: playlist, remove: true });
       } else {
-        io.emit('updatePlaylist', { data: playlist });
+        io.emit('updatePlaylist', { data: playlist, remove: false });
       }
     }
   });
@@ -169,6 +203,7 @@ io.on('connection', (client) => {
 
   // start party button
   client.on('startParty', ()=> {
+    readyToParty = true;
     io.emit('readyToParty');
   });
 
@@ -180,14 +215,17 @@ io.on('connection', (client) => {
 
   // send username back to users with cookies
   client.on('getUsername', (userId, fn) => {
+    let name = '';
     console.log('getUsername message received from client, checking IDs');
     for (let id in usernames) {
       if (id == userId.userId) {
         console.log('Cookie id matches local id, sending name', usernames[id]);
-        let name = usernames[id];
+        name = usernames[id];
         fn(name, upNext);
       };
     };
+    io.emit('name', { name: name });
+    console.log('Emitted name', name);
   });
 
   // flip played boolean if song won
