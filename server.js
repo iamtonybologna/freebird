@@ -94,7 +94,7 @@ io.on('connection', (client) => {
     usernames[id] = user.name;
     console.log('New user added to usernames', usernames);
     fn(id);
-    io.emit('checkForUpNext', { upNext: upNext });
+    io.emit('updateUpNext', { data: upNext });
   });
 
   // voting

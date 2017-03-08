@@ -93,6 +93,7 @@ class Users extends Component {
       console.log('Received a message from the server!', data);
       if (data.upNext.length > 0) {
         this.setState({ upNext: data.upNext, voteListLoaded: true });
+        console.log('Current state: ', this.state);
       };
     });
 
