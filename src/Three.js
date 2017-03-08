@@ -28,20 +28,36 @@ export default class Three extends Component {
           // resource URL
           '/assets/UFO.json',
           // Function when resource is loaded
-          (obj) => {
-            console.log(obj);
-            const mesh = new THREE.Mesh(obj);
-            this.launchSimpleAnimation(mesh);
+          (obj, mat) => {
+            console.log(obj, mat);
+            var material = new THREE.MultiMaterial( mat );
+            const mesh = new THREE.Mesh(obj, material);
+            this.middleLoader(mesh)
           });
   }
 
-  launchSimpleAnimation(obj) {
+  middleLoader = (ship) => {
+    const loader = new THREE.JSONLoader();
+    loader.load(
+      // resource URL
+      '/assets/star.json',
+      // Function when resource is loaded
+      (obj, mat) => {
+        console.log(obj, mat);
+        var material = new THREE.MultiMaterial( mat );
+        const mesh = new THREE.Mesh(obj, mat);
+        this.launchSimpleAnimation(ship,mesh);
+      });
+  }
+
+  launchSimpleAnimation(obj, obj2) {
     var camera, scene, renderer;
     var light1 = new THREE.PointLight(0xffffff, 2, 1000);
     var mouse = new THREE.Vector2();
     var numAsteroids = 50;
-    var star = obj;
-
+    var ship = obj;
+    var star = obj2
+    console.log(star, 'Star');
     var particleSystem = new THREE.GPUParticleSystem({
       maxParticles: 25000
     });
@@ -53,18 +69,16 @@ export default class Three extends Component {
       position: new THREE.Vector3(),
       positionRandomness: 1,
       velocity: new THREE.Vector3(),
-      velocityRandomness: .5,
-      color: 0xff0000,
-      colorRandomness: 1,
+      velocityRandomness: 1,
+      color: 0x71a4f7,
+      colorRandomness: 0.5,
       turbulence: .5,
-      lifetime: 3,
+      lifetime: 10,
       size: 5,
-      sizeRandomness: 1,
-      //particleNoiseTex: window.PARTICLE_NOISE_TEXTURE,
-      //particleSpriteTex: window.PARTICLE_SPRITE_TEXTURE,
+      sizeRandomness: 10,
     };
     var spawnerOptions = {
-      spawnRate: 15000,
+      spawnRate: 2000,
       horizontalSpeed: 0.75,
       verticalSpeed: 0.75,
       timeScale: 1
@@ -82,7 +96,9 @@ export default class Three extends Component {
       renderer.setSize(window.innerWidth, window.innerHeight);
       var addNode = document.getElementById('threeContainer');
       addNode.appendChild(renderer.domElement);
-      camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
+      camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
+
+
       camera.position.z = 500;
       camera.lookAt(new THREE.Vector3(0, 0, -1000000000000000));
 
@@ -92,30 +108,6 @@ export default class Three extends Component {
       scene.add(light1);
       scene.add(nodeContainer);
 
-
-
-
-      var material = new THREE.MeshPhongMaterial({
-        color: 0xF36F5E,
-        transparent: true,
-        opacity: 1,
-        shading: THREE.FlatShading
-      });
-      //Add random asteroids
-      for (var i = 0; i < numAsteroids; i++) {
-        var radius = 1 + (Math.random() * 5);
-        let newStar = new THREE.Mesh(star.geometry, material);//var newStar = new THREE.Mesh(star);
-
-        newStar.scale.x = 0.2;
-        newStar.scale.y = 0.2;
-        newStar.scale.z = 0.2;
-        newStar.rotation.y = 40;
-        newStar.rotation.x = 90;
-        asteroidContainer.add(newStar);
-        newStar.position.x = -480 + ( Math.random() * 960 );
-        newStar.position.y = -480 + ( Math.random() * 960 );
-        newStar.position.z = camera.position.z - (Math.random() * 1000);
-      }
       //scene.add(asteroidContainer);
       window.addEventListener('resize', onWindowResize, false);
       window.addEventListener('click', onClick, false);
@@ -151,6 +143,15 @@ export default class Three extends Component {
       plane.position.z = camera.position.z - 300;
       scene.add(plane);
 
+      particleSystem = new THREE.GPUParticleSystem({
+        maxParticles: 5000
+      });
+      particleSystem.position.x = 0
+      particleSystem.position.y = 0
+      particleSystem.position.z = 0
+      scene.add(particleSystem);
+
+
     });
 
     //PLAYLIST UPDATE LOADER
@@ -173,12 +174,16 @@ export default class Three extends Component {
     }
 
 
-    function createShip () {
+    function modifier(int){
+      if (Math.random() > 0.5){
+        return int - (int * 2)
+      }
+      else {return int
+      }
+    };
 
-    }
 
-
-    function onClick(event) {
+    function createStar(playListItem){
       mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
       mouse.y = -( event.clientY / window.innerHeight ) * 2 + 1;
 
@@ -195,21 +200,12 @@ export default class Three extends Component {
       bitmap.height = 512;
       g.font = "80px Georgia";
       g.fillStyle = 'white';
-     // var title = playlistdata[playlist.data.length -1].songTitle;
+      // var title = playlistdata[playlist.data.length -1].songTitle;
       var title = "clickTest";
       console.log(title);
       g.fillStyle='white';
       g.fillText(title, 126, 126);
 
-
-
-      const modifier = (int) =>{
-        if (Math.random() > 0.5){
-          return int - (int * 2)
-        }
-        else {return int
-        }
-      };
 
       var randSeedX = 100 * Math.random();
       var randSeedY = 60 * Math.random();
@@ -218,8 +214,6 @@ export default class Three extends Component {
 
       var texture = new THREE.Texture(bitmap)
       texture.needsUpdate = true;
-
-
 
       var material = new THREE.MeshPhongMaterial({
         color: 0xF36F5E,
@@ -231,10 +225,13 @@ export default class Three extends Component {
       let newStar = new THREE.Mesh(star.geometry, material);
       newStar.position.x = camera.position.x + randSeedX;
       newStar.position.y = camera.position.y - 20 + randSeedY;
-      newStar.position.z = camera.position.z - 200;
-      newStar.scale.x = 0.2;
-      newStar.scale.y = 0.2;
-      newStar.scale.z = 0.2;
+      newStar.position.z = camera.position.z - 800;
+      newStar.scale.x = 2;
+      newStar.scale.y = 2;
+      newStar.scale.z = 2;
+      newStar.rotation.x = 90;
+
+      newStar.name = 'star';
       scene.add(newStar);
 
 
@@ -249,12 +246,89 @@ export default class Three extends Component {
       particleSystem = new THREE.GPUParticleSystem({
         maxParticles: 5000
       });
+      particleSystem.position.x = newStar.position.x;
+      particleSystem.position.y = newStar.position.y;
+      particleSystem.position.z = newStar.position.z;
+      particleSystem.rotation.x = 90;
+      scene.add(particleSystem);
+      console.log(scene);
+    }
+
+
+    function createShip (userName) {
+      mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+      mouse.y = -( event.clientY / window.innerHeight ) * 2 + 1;
+
+      camera.position.x = mouse.x * 100;
+      camera.position.y = mouse.y * 100;
+      camera.lookAt(new THREE.Vector3(0, 0, -1000000000000000));
+      console.log(camera.position.x + ", " + camera.position.y);
+
+      var bitmap = document.createElement('canvas');
+      console.log(bitmap, "bitmap");
+      bitmap.style.backgroundColor = 'black';
+      var g = bitmap.getContext('2d');
+      bitmap.width = 512;
+      bitmap.height = 512;
+      g.font = "80px Georgia";
+      g.fillStyle = 'white';
+      // var title = playlistdata[playlist.data.length -1].songTitle;
+      var title = "clickTest";
+      console.log(title);
+      g.fillStyle='white';
+      g.fillText(title, 126, 126);
+
+
+      var randSeedX = 100 * Math.random();
+      var randSeedY = 60 * Math.random();
+      randSeedX = modifier((randSeedX));
+      randSeedY = modifier((randSeedY));
+
+      var texture = new THREE.Texture(bitmap)
+      texture.needsUpdate = true;
+
+      var material = new THREE.MeshPhongMaterial({
+        color: 0xF36F5E,
+        transparent: true,
+        opacity: 1,
+        shading: THREE.FlatShading
+      });
+      //Add random asteroids
+      let newShip = new THREE.Mesh(ship.geometry, material);
+      newShip.position.x = camera.position.x + randSeedX;
+      newShip.position.y = camera.position.y - 20 + randSeedY;
+      newShip.position.z = camera.position.z - 200;
+      newShip.scale.x = 0.2;
+      newShip.scale.y = 0.2;
+      newShip.scale.z = 0.2;
+      newShip.name = 'ship';
+      scene.add(newShip);
+
+
+      var material = new THREE.MeshLambertMaterial({map: texture, alpha: true, alphaTest : 0.05});
+      var plane = new THREE.Mesh(new THREE.PlaneBufferGeometry(40, 40), material);
+      plane.material.side = THREE.DoubleSide;
+      plane.position.x = newShip.position.x;
+      plane.position.y = newShip.position.y + 10;
+      plane.position.z = newShip.position.z;
+      scene.add(plane);
+
+      particleSystem = new THREE.GPUParticleSystem({
+        maxParticles: 5000
+      });
       particleSystem.position.x = camera.position.x + randSeedX;
       particleSystem.position.y = camera.position.y - 19 + randSeedY;
       particleSystem.position.z = camera.position.z -200;
       particleSystem.rotation.x = 90;
-      scene.add(particleSystem);
+      //scene.add(particleSystem);
       console.log(scene);
+    }
+
+
+    function onClick(event) {
+
+     // createShip();
+        createStar();
       }
 
     function onWindowResize() {
@@ -282,16 +356,31 @@ export default class Three extends Component {
        // options.position.x = Math.sin(tick * spawnerOptions.horizontalSpeed) * 20;
        // options.position.y = Math.sin(tick * spawnerOptions.verticalSpeed) * 20;
        // options.position.z = Math.sin(tick * spawnerOptions.horizontalSpeed + spawnerOptions.verticalSpeed) * 5;
+        var randSeedX = 100 * Math.random();
+        var randSeedY = 60 * Math.random();
+        randSeedX = modifier((randSeedX));
+        randSeedY = modifier((randSeedY));
+        options.position.x = randSeedX * 2;
+        options.position.y = randSeedY * 8;
+        //options.position.z = camera.position.z + 200;
+        particleSystem.position.z = camera.position.z -200;
+
         for (var x = 0; x < spawnerOptions.spawnRate * delta; x++) {
           particleSystem.spawnParticle(options);
         }
-        // scene.children.forEach((mesh) => {
-        //   if (mesh.type === "Mesh" ){
-        //     mesh.position.x = mesh.position.x -  (options.position.x / 10);
-        //     mesh.position.y =  mesh.position.y - (options.position.y / 10);
-        //     mesh.position.y =  mesh.position.y - (options.position.y / 10);
-        //   }
-        // });
+        var offset = Math.sin(tick * spawnerOptions.verticalSpeed) * 0.05;
+        scene.children.forEach((mesh) => {
+          if (mesh.name === "ship" ){
+
+            mesh.rotation.y += 0.3;
+            mesh.rotation.z = offset;
+            mesh.rotation.x = offset;
+            mesh.position.y += modifier(offset) * 2;
+          } else if (mesh.name === "star"){
+            mesh.rotation.y += 0.1;
+          }
+        });
+
 
       }
 
@@ -385,7 +474,7 @@ export default class Three extends Component {
 //
 //
 //         //var circle = new THREE.Mesh(circleGeometry, material);
-//         let circle = new THREE.Mesh(star.geometry, material2);//var newStar = new THREE.Mesh(star);
+//         let circle = new THREE.Mesh(star.geometry, material2);//var newShip = new THREE.Mesh(star);
 //
 //         circle.scale.x = 5;
 //         circle.scale.y = 5;
