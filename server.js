@@ -58,7 +58,12 @@ newUpNext = () => {
     let i = 0;
     while (i < 3) {
       let randomSong = playlist[Math.floor(Math.random() * playlist.length)];
-      if (newSongs.hasOwnProperty(randomSong.songId) === false && lastUpNextList.indexOf(randomSong.songId) === -1) {
+      if (
+        newSongs.hasOwnProperty(randomSong.songId) === false &&
+        lastUpNextList.indexOf(randomSong.songId) === -1 &&
+        randomSong.played === false
+        )
+      {
         newSongs[randomSong.songId] = randomSong;
         i++;
       };
