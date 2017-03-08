@@ -49,6 +49,7 @@ class App extends Component {
       view: 'splash',
       upNext: [{ songId: 'JFDj3shXvco' }],
       winner: '',
+      winnerName: '',
       displayVotes: []
     };
 
@@ -66,6 +67,7 @@ class App extends Component {
         case 'main':
           return (
             <div>
+              <p><a>{this.state.winnerName}</a></p>
               <VideoEmbed winner={this.setWinner} playList={this.state.playList} upNext={this.state.upNext} getUpNext={this.getUpNext} votes={this.state.votes} startParty={this.startParty} />
               <HostVoteList votes={this.state.votes} upNext={this.state.upNext} winner={this.state.winner} />
               {this.state.userCount} user(s) in room
@@ -103,7 +105,7 @@ class App extends Component {
       for (let item in displayVotes) {
         p.push(displayVotes[item])
       }
-      for (let i = 0; i < 2; i++) {
+      for (let i = 0; i <= 2; i++) {
         oldUpNext[i].votes = p[i].length
       }
       this.setState({votes: data.votes, upNext: oldUpNext});
@@ -124,9 +126,17 @@ class App extends Component {
   };
 
   setWinner = (newWinner) => {
-    this.setState({ winner: newWinner });
-    this.props.ws.emit('newWinner', { songId: newWinner });
-  };
+   this.setState({ winner: newWinner });
+   let upNext =  this.state.upNext;
+   upNext.forEach((song)=>{
+     console.log("song");
+     if (song.songId = this.state.winner){
+       console.log(song.songId, this.state.winner, "winnerName");
+       this.setState({ winnerName : song.songTitle });
+     };
+   });
+ };
+
 
   startParty = () => {
     console.log('party\'s just getting started');
