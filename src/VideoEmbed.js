@@ -134,8 +134,6 @@ class VideoEmbed extends Component {
 
 
     if (timePlayed >= 19) {
-      let newWinner = this.voteCalculate();
-      this.props.winner(newWinner);
       this.state.notPlaying.cueVideoById(this.voteCalculate());
       console.log('Winner should be played next:', this.voteCalculate());
       this.backgroundVideoLoading = true;
@@ -189,6 +187,7 @@ class VideoEmbed extends Component {
   voteCalculate = () => {
     let sortArray = [];
     let votes = this.props.votes;
+    let newWinner = null ;
 
     for (let item in votes) {
       if (votes.hasOwnProperty(item)) {
@@ -196,12 +195,16 @@ class VideoEmbed extends Component {
       }
     }
     if (sortArray.length === 0) {
-      return this.props.upNext[0].songId;
+      newWinner = this.props.upNext[0].songId;
+      this.props.winner(newWinner);
+      return newWinner
     }
     sortArray.sort((a, b) => {
       return a[1] < b[1];
     });
-    return sortArray[0][0];
+    newWinner = sortArray[0][0];
+    this.props.winner(newWinner);
+    return newWinner
   };
 
   gotoNextVideo = () => {
