@@ -33,7 +33,6 @@ const styles = {
 };
 
 class HostVoteList extends Component {
-  
 
   render() {
 
@@ -47,7 +46,7 @@ class HostVoteList extends Component {
                 title={tile.songTitle}
                 titleBackground="linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
               >
-              <p><a style={styles.votes}></a></p>
+              <p><a style={styles.votes}>{tile.votes}</a></p>
                 <img role="presentation" src={tile.songImageHigh} style={styles.image}/>
               </GridTile>
             ))}
