@@ -133,6 +133,7 @@ class VideoEmbed extends Component {
     }
 
 
+
     if (timePlayed >= 90) {
       let newWinner = this.voteCalculate();
       this.props.winner(newWinner);
@@ -189,6 +190,7 @@ class VideoEmbed extends Component {
   voteCalculate = () => {
     let sortArray = [];
     let votes = this.props.votes;
+    let newWinner = null ;
 
     for (let item in votes) {
       if (votes.hasOwnProperty(item)) {
@@ -196,12 +198,16 @@ class VideoEmbed extends Component {
       }
     }
     if (sortArray.length === 0) {
-      return this.props.upNext[0].songId;
+      newWinner = this.props.upNext[0].songId;
+      this.props.winner(newWinner);
+      return newWinner
     }
     sortArray.sort((a, b) => {
       return a[1] < b[1];
     });
-    return sortArray[0][0];
+    newWinner = sortArray[0][0];
+    this.props.winner(newWinner);
+    return newWinner
   };
 
   gotoNextVideo = () => {
