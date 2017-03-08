@@ -17,7 +17,7 @@ io.origins('*:*');
 
 app.use(express.static(`build`));
 
-let partyButtonCount = 51;
+let partyButtonCount = 48;
 
 app.get('/assets/:id', (req,res) => {
   res.sendFile(__dirname + `/assets/` + req.params.id);
