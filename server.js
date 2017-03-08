@@ -192,7 +192,7 @@ io.on('connection', (client) => {
     console.log('new winner song id', newWinner.songId);
     playlist.forEach((song) => {
       if (song.songId === newWinner.songId) {
-        played = true;
+        song.played = true;
         console.log('playlist', playlist);
         console.log('played?', song.played);
       };

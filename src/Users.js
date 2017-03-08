@@ -67,11 +67,10 @@ class Users extends Component {
     console.log('componentDidMount <App />');
 
     if (cookie.load('userId')) {
-      console.log('cookie exists');
+      console.log('cookie exists, getting username');
+      this.getUsername();
       this.setState({ view: 1 });
     };
-
-    this.getUsername();
 
     this.props.ws.on('updateUpNext', (upNext) => {
       console.log('upNext', upNext);
@@ -85,7 +84,7 @@ class Users extends Component {
       playlist.data.forEach(function(item) {
         playlistById.push(item.songId);
       })
-      console.log(playlistById)
+      console.log(playlistById);
       this.setState({ playlist: playlistById });
       console.log('Current state: ', this.state);
     });
