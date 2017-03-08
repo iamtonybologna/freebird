@@ -55,6 +55,7 @@ class App extends Component {
       view: 'splash',
       upNext: [{ songId: 'JFDj3shXvco' }],
       winner: '',
+      winnerName : 'temp',
     };
 
     this.renderView = () => {
@@ -66,6 +67,7 @@ class App extends Component {
         case 'main':
           return (
             <div>
+              <p>{this.state.winnerName}</p>
               <VideoEmbed winner={this.setWinner} playList={this.state.playList} upNext={this.state.upNext} getUpNext={this.getUpNext} votes={this.state.votes} startParty={this.startParty} />
               <HostVoteList votes={this.state.votes} upNext={this.state.upNext} winner={this.state.winner} />
               {this.state.userCount} user(s) in room
@@ -88,6 +90,7 @@ class App extends Component {
     this.props.ws.on('updateUserCount', (data) => {
       console.log('Received a message from the server!', data);
       this.setState({ userCount: data.userCount });
+      console.log(data, 'user');
     });
     this.props.ws.on('votes', (data) => {
       console.log('votes', data);
@@ -114,8 +117,17 @@ class App extends Component {
   };
 
   setWinner = (newWinner) => {
+    if (!newWinner){
+      this.setState({ winnerName : "" });
+      return
+    }
     this.setState({ winner: newWinner });
-    this.props.ws.emit('newWinner', { songId: newWinner });
+    let upNext =  this.state.upNext;
+    upNext.forEach((song)=>{
+      if (song.songId === newWinner){
+        this.setState({ winnerName : song.songTitle });
+      };
+    });
   };
 
   startParty = () => {
