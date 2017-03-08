@@ -7,8 +7,8 @@ import Drink from 'material-ui/svg-icons/maps/local-bar';
 
 const styles = {
   paper: {
-    width: '70vw',
-    marginLeft: '15vw'
+    width: '80vw',
+    marginLeft: '10vw'
   },
   videoWrapper: {
     position: 'relative',

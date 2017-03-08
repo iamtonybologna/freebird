@@ -40,8 +40,7 @@ body {
 
 /*Neon*/
 p {
-  text-align: center;
-  font-size: 7em;
+  font-size: 3em;
   margin: 20px 0 20px 0;
 }
 
@@ -69,11 +68,11 @@ p:nth-child(6) a:hover {
 
 p:nth-child(2) a {
   font-size: 1.5em;
-  color: #228DFF;
-  font-family: Iceland;
+  color: #ffffff;
+  font-family: 'VT323', monospace;;
 }
 
-p:nth-child(2) a:hover {
+p:nth-child(2) a {
   -webkit-animation: neon2 1.5s ease-in-out infinite alternate;
   -moz-animation: neon2 1.5s ease-in-out infinite alternate;
   animation: neon2 1.5s ease-in-out infinite alternate;
@@ -114,7 +113,7 @@ p:nth-child(5) a:hover {
 }
 
 p:nth-child(1) a {
-
+  color: #ffffff;
   font-family: 'VT323', monospace;;;
 }
 
@@ -124,7 +123,7 @@ p:nth-child(1) a {
   animation: neon6 1.5s ease-in-out infinite alternate;
 }
 
-p a:hover {
+p a {
   color: #ffffff;
 }
 /*glow for webkit*/
