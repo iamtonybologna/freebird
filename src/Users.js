@@ -104,13 +104,17 @@ class Users extends Component {
       let oldUpNext = this.state.upNext;
       let p = [];
       for (let item in displayVotes) {
-        p.push(displayVotes[item])
+        p.push(displayVotes[item]);
       }
       for (let i = 0; i <= 2; i++) {
-        oldUpNext[i].votes = p[i].length
+        oldUpNext[i].votes = p[i].length;
       }
       this.setState({votes: data.votes, upNext: oldUpNext});
-      console.log(this.state.upNext)
+      console.log(this.state.upNext);
+    });
+
+    this.props.ws.on('readyToParty', () => {
+      this.setState({ readyToParty: true });
     });
   };
 
@@ -201,6 +205,7 @@ class Users extends Component {
     this.props.ws.emit('partyButton');
   };
 
+  // send username on button tap
   handleSubmitName = () => {
     if (this.state.user.name) {
       let name = this.state.user.name;
@@ -221,6 +226,8 @@ class Users extends Component {
     }
   };
 
+  // update state with name on every key stroke
+  // send username if not empty and key = enter
   handleNewName = (e) => {
     this.setState({ user: { name: e.target.value } });
     if (e.key === 'Enter' && this.state.user.name) {
@@ -249,10 +256,10 @@ class Users extends Component {
   };
 
   handleSongAddition = (e) => {
-    let newList = this.state.selectedSongs
+    let newList = this.state.selectedSongs;
     if (this.state.selectedSongs.indexOf(e.id.videoId) === -1 && this.state.playlist.indexOf(e.id.videoId) === -1) {
-      newList.push(e.id.videoId)
-      this.setState({selectedSongs: newList})
+      newList.push(e.id.videoId);
+      this.setState({selectedSongs: newList});
     } else if (this.state.selectedSongs.indexOf(e.id.videoId) != -1){
       let index = newList.indexOf(e.id.videoId);
       newList.splice(index, 1);

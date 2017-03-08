@@ -84,7 +84,7 @@ class App extends Component {
                   onRequestClose={this.handleRequestClose}
                 />
               <VideoEmbed winner={this.setWinner} playList={this.state.playList} upNext={this.state.upNext} getUpNext={this.getUpNext} votes={this.state.votes} startParty={this.startParty} />
-              <HostVoteList votes={this.state.votes} upNext={this.state.upNext} winner={this.state.winner}/>
+              <HostVoteList votes={this.state.votes} upNext={this.state.upNext} winner={this.state.winner} />
             </div>
           )
         default:
@@ -125,13 +125,13 @@ class App extends Component {
       let oldUpNext = this.state.upNext;
       let p = [];
       for (let item in displayVotes) {
-        p.push(displayVotes[item])
+        p.push(displayVotes[item]);
       }
       for (let i = 0; i <= 2; i++) {
-        oldUpNext[i].votes = p[i].length
+        oldUpNext[i].votes = p[i].length;
       }
       this.setState({votes: data.votes, upNext: oldUpNext});
-      console.log(this.state.upNext)
+      console.log(this.state.upNext);
     });
     this.props.ws.on('updatePlaylist', (playlist) => {
       console.log('updateplaylist', playlist.data);
@@ -151,17 +151,18 @@ class App extends Component {
   };
 
   setWinner = (newWinner) => {
-    if (!newWinner){
+    if (!newWinner) {
       this.setState({ winnerName : "" });
       return
     }
     this.setState({ winner: newWinner });
     let upNext =  this.state.upNext;
-    upNext.forEach((song)=>{
-      if (song.songId === newWinner){
+    upNext.forEach((song) => {
+      if (song.songId === newWinner) {
         this.setState({ winnerName : song.songTitle });
       };
     });
+    this.props.ws.emit('newWinner', { songId: this.state.winner });
   };
 
   startParty = () => {
