@@ -125,6 +125,10 @@ class Users extends Component {
       this.setState({ winner: winner.songId });
       console.log('Winner song id', this.state.winner);
     });
+
+    this.props.ws.on('upNextResetWinner', () => {
+      this.setState({ winner: '' });
+    });
   };
 
   componentWillUnmount() {
@@ -145,7 +149,8 @@ class Users extends Component {
       selectedSongs: [],
       newVoteId: '',
       readyToParty: false,
-      winner: ''
+      winner: '',
+      reset: false
     };
 
     this.renderView = () => {

@@ -17,14 +17,12 @@ io.origins('*:*');
 
 app.use(express.static(`build`));
 
-let partyButtonCount = 48;
-
 app.get('/assets/:id', (req,res) => {
   res.sendFile(__dirname + `/assets/` + req.params.id);
 });
 
 app.get('/party', (req, res) => {
-  if (partyButtonCount > 50) {
+  if (partyButtonCount > partyButtonCountLimit) {
     res.status(200).send();
   } else {
     res.status(404).send();
@@ -46,6 +44,8 @@ let upNext = [];
 let playlist = [];
 let lastUpNextList = [];
 let readyToParty = false;
+let partyButtonCount = 48;
+let partyButtonCountLimit = 50;
 
 newUpNext = () => {
   // store songs that were just voted on and clear votes
@@ -111,7 +111,7 @@ io.on('connection', (client) => {
   userCount++;
   console.log(userCount + ' clients connected!');
   io.emit('updateUserCount', { userCount: userCount });
-  io.emit('updatePlaylist', { data: playlist });
+  io.emit('updatePlaylist', { data: playlist, remove: true });
   io.emit('updateUpNext', { data: upNext });
   io.emit('votes', { votes: votes });
   if (readyToParty) {
@@ -178,6 +178,7 @@ io.on('connection', (client) => {
     if (!songInPlaylist) {
       playlist.push(newSong);
       console.log('Broadcasting playlist data');
+      io.emit('sendNewSong', { song: newSong });
       io.emit('updatePlaylist', { data: playlist, remove: false });
     } else {
       console.log('Song found in playlist');
@@ -195,6 +196,7 @@ io.on('connection', (client) => {
   client.on('getUpNext', () => {
     // get 3 new, random songs, clear upNext, and add those songs to upNext
     newUpNext();
+    io.emit('upNextResetWinner');
   });
 
   // start party button
@@ -207,6 +209,7 @@ io.on('connection', (client) => {
   client.on('partyButton', () => {
     console.log('PARTYPARTYPARTY', partyButtonCount);
     partyButtonCount++;
+    io.emit('partyButton', { partyButtonCount: partyButtonCount, partyButtonCountLimit: partyButtonCountLimit });
   });
 
   // send username back to users with cookies
