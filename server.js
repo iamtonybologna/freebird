@@ -61,7 +61,7 @@ newUpNext = () => {
       playableSongsLeft++;
     }
   });
-  if (playableSongsLeft > 2) {
+  if (playableSongsLeft > 3) {
     let i = 0;
     let x = 0;
     while (i < 3 && x < 100) {
@@ -89,11 +89,7 @@ newUpNext = () => {
     let x = 0;
     while (i < 3 && x < 100) {
       let randomSong = playlist[Math.floor(Math.random() * playlist.length)];
-      if (
-        newSongs.hasOwnProperty(randomSong.songId) === false &&
-        lastUpNextList.indexOf(randomSong.songId) === -1
-        )
-      {
+      if (newSongs.hasOwnProperty(randomSong.songId) === false) {
         newSongs[randomSong.songId] = randomSong;
         i++;
       };
