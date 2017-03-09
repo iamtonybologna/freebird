@@ -21,9 +21,8 @@ npm install
 ```
 
 Run the app
-```
-npm start
-```
+terminal 1: ```npm start```
+terminal 2: ```node server```
 
 ## Dependencies
 
