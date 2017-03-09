@@ -44,7 +44,7 @@ let upNext = [];
 let playlist = [];
 let lastUpNextList = [];
 let readyToParty = false;
-let partyButtonCount = 48;
+let partyButtonCount = 0;
 let partyButtonCountLimit = 50;
 
 newUpNext = () => {

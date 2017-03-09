@@ -4,15 +4,16 @@ import React, {Component} from 'react';
 export default class Spaceman extends Component {
 
   componentDidMount() {
-    this.props.ws.on('updatePlaylist', () => {
-     console.log("sent");
-      this.testLog();
+    this.props.ws.on('partyButton', (data) => {
+     console.log(data);
+      this.testLog(data);
     });
   }
 
-  testLog = () => {
+  testLog = (data) => {
+
     setTimeout(()=> {window.spacemanFrame = document.getElementById("spacemanFrame").contentWindow;
-    window.spacemanFrame.testLog()}, 2000);
+    window.spacemanFrame.testLog(data)}, 1000);
   };
 
   render() {

@@ -9,10 +9,17 @@ var starContainer = document.querySelector('.starContainer');
 var badgeLink = document.querySelector('#badgeLink');
 
 
-function testLog(){
+function testLog(data){
+  let count = data.partyButtonCount;
+  let limit = data.partyButtonCountLimit;
+  let top = Math.floor(count / limit) * 50;
+  console.log(top);
+  top -= 50;
+  top = top.toString() + '%';
+    console.log(top, 'top');
   TweenMax.set(container, {
     position:'absolute',
-    top:'0%',
+    top: '0%',
     left:'50%',
     xPercent:-50,
     yPercent:-50
