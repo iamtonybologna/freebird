@@ -15,6 +15,7 @@ import VideoEmbed from './VideoEmbed.js';
 import HostVoteList from './HostVoteList.js';
 import Splash from './splash.js';
 import Loading from './Loading.js';
+
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Skip from 'material-ui/svg-icons/av/skip-next';
 import Snackbar from 'material-ui/Snackbar';
@@ -26,7 +27,7 @@ const muiTheme = getMuiTheme({
     primary1Color: deepPurple500,
     primary2Color: pinkA200,
     primary3Color: lightGreenA400,
-    accent1Color: deepPurple900,
+    accent1Color: '#0ff',
     accent2Color: deepPurple500,
     accent3Color: deepPurple500,
     textColor: fullWhite,
@@ -43,7 +44,7 @@ const muiTheme = getMuiTheme({
 const styles = {
   newWinner: {
     position: 'absolute'
-  }
+  },
 }
 
 class App extends Component {
@@ -59,24 +60,27 @@ class App extends Component {
       winnerName: '',
       displayVotes: [],
       open: false,
+      playList: []
     };
 
 
     this.renderView = () => {
       switch(this.state.view) {
         case 'splash':
-          return <Splash switcher={this.switcher} />
+          return (
+            <div>
+              <Splash switcher={this.switcher} />
+            </div>
+            )
         case 'loading':
               return (
                 <div>
-                <Loading switcher={this.switcher} upNext={this.state.upNext} />
-                <p><a>{this.state.userCount} users up in hurr</a></p>
+                  <Loading switcher={this.switcher} playList={this.state.playList} />
                 </div>
                 )
         case 'main':
           return (
             <div>
-              <p><a style={styles.newWinner}>{this.state.winnerName}</a></p>
                 <Snackbar
                   open={this.state.open}
                   message={this.state.userCount + " users connected"}
@@ -84,7 +88,9 @@ class App extends Component {
                   onRequestClose={this.handleRequestClose}
                 />
               <VideoEmbed winner={this.setWinner} playList={this.state.playList} upNext={this.state.upNext} getUpNext={this.getUpNext} votes={this.state.votes} startParty={this.startParty} />
-              <HostVoteList votes={this.state.votes} upNext={this.state.upNext} winner={this.state.winner} />
+
+              <HostVoteList votes={this.state.votes} upNext={this.state.upNext} winnerName={this.state.winnerName} />
+
             </div>
           )
         default:
@@ -96,7 +102,6 @@ class App extends Component {
   switcher = (newView) => {
     this.setState({ view: newView });
   };
-
 
   handleRequestClose = () => {
     this.setState({
@@ -139,6 +144,7 @@ class App extends Component {
     });
     this.props.ws.on('updatePlaylist', (playlist) => {
       console.log('updateplaylist', playlist.data);
+      this.setState({playList: playlist.data})
     });
     this.props.ws.on('sendName', (data) => {
       console.log('name', data.name);

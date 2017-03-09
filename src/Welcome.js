@@ -1,16 +1,15 @@
 import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import Send from 'material-ui/svg-icons/content/send';
 import Paper from 'material-ui/Paper';
+import IconButton from 'material-ui/IconButton';
+import SpaceShip from './customIcon.js';
 
 const styles = {
   button: {
-    marginTop: '3vh'
+    marginTop: '1vh'
   },
   welcomeButton: {
-    textAlign: 'center',
-    margin: 'auto',
+    marginLeft: '33vw',
   },
   welText: {
     width: '90vw',
@@ -58,9 +57,9 @@ export default class Welcome extends Component {
                 underlineFocusStyle={styles.underlineStyleFocus}
               />
               <div style={styles.welcomeButton}>
-                <FloatingActionButton style={styles.button} zDepth={2} onTouchTap={this.props.handleSubmitName.bind()}>
-                    <Send />
-                </FloatingActionButton>
+                <IconButton iconStyle={styles.button} onTouchTap={this.props.handleSubmitName.bind()}>
+                    <SpaceShip style={styles.button}/>
+                </IconButton>
               </div>
           </div>
         </Paper>

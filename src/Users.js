@@ -31,7 +31,7 @@ const muiTheme = getMuiTheme({
     primary1Color: deepPurple500,
     primary2Color: pinkA200,
     primary3Color: lightGreenA400,
-    accent1Color: deepPurple900,
+    accent1Color: '#0ff',
     accent2Color: deepPurple500,
     accent3Color: deepPurple500,
     textColor: fullWhite,
@@ -140,7 +140,6 @@ class Users extends Component {
       userCount: 0,
       searchResults: [],
       user: { id: 0, name: '' },
-      voteListLoaded: false,
       upNext: [],
       playlist: [],
       selectedSongs: [],
@@ -156,7 +155,7 @@ class Users extends Component {
             <Welcome handleNewName={this.handleNewName} handleSubmitName={this.handleSubmitName}/>
         )
         case 0:
-          if (this.state.voteListLoaded === false) {
+          if (this.state.upNext.length === 0) {
             return (
             <div>
               <LoadingUser />
