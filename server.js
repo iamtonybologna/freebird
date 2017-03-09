@@ -196,6 +196,7 @@ io.on('connection', (client) => {
   client.on('getUpNext', () => {
     // get 3 new, random songs, clear upNext, and add those songs to upNext
     newUpNext();
+    io.emit('upNextResetWinner');
   });
 
   // start party button
