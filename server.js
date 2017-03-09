@@ -61,7 +61,7 @@ newUpNext = () => {
       playableSongsLeft++;
     }
   });
-  if (playableSongsLeft > 3) {
+  if (playableSongsLeft > 4) {
     let i = 0;
     let x = 0;
     while (i < 3 && x < 100) {
