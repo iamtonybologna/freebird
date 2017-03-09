@@ -12,14 +12,15 @@ var badgeLink = document.querySelector('#badgeLink');
 function testLog(data){
   let count = data.partyButtonCount;
   let limit = data.partyButtonCountLimit;
-  let top = Math.floor(count / limit) * 50;
+  let top = count / limit;
+  top = 50 - (top * 50);
+  top = Math.floor(top);
   console.log(top);
-  top -= 50;
   top = top.toString() + '%';
     console.log(top, 'top');
   TweenMax.set(container, {
     position:'absolute',
-    top: '0%',
+    top: top,
     left:'50%',
     xPercent:-50,
     yPercent:-50
