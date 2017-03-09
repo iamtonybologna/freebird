@@ -12,12 +12,6 @@ export default class Three extends Component {
 
   componentDidMount = () => {
     this.ws = io.connect('ws://localhost:4000');
-
-    this.ws.on('updateUserCount', (data) => {
-      console.log('Received a message from the server!', data);
-      this.setState({userCount: data.userCount});
-      window.wsUserCount = 0;
-    });
     this.threeLoaders();
   };
 
@@ -28,8 +22,8 @@ export default class Three extends Component {
           // resource URL
           '/assets/UFO.json',
           // Function when resource is loaded
-          (obj, mat) => {
-            console.log(obj);
+          (obj) => {
+
             const mesh = new THREE.Mesh(obj);
             this.middleLoader(mesh)
           });
@@ -42,7 +36,7 @@ export default class Three extends Component {
       '/assets/star.json',
       // Function when resource is loaded
       (obj, mat) => {
-        console.log(obj, mat);
+
         this.launchSimpleAnimation(ship, obj);
       });
   }
@@ -91,7 +85,7 @@ export default class Three extends Component {
       mtlLoader.setPath(  "/obj/"  );
      let object = mtlLoader.load( obj + ".mtl", function( materials ) {
         materials.preload();
-        console.log(materials, "materials")
+
         var objLoader = new THREE.OBJLoader();
         objLoader.setMaterials( materials );
         objLoader.setPath(  "/obj/"  );
@@ -132,17 +126,15 @@ export default class Three extends Component {
     }
 
     //Websocket responses
-    this.ws.on('sendUsername', (data) => {
-      data.username;
-
+    this.ws.on('sendName', (data) => {
+      console.log('newUser' , data.name);
+      createShip(data.name);
     });
 
     //PLAYLIST UPDATE LOADER
-    this.ws.on('updatePlaylist', (playlist) => {
-      console.log('updateplaylist', playlist.data);
-      var song = playlist.data[playlist.data.length -1];
+    this.ws.on('addNewSong', (song) => {
+      console.log("newSong" , song);
       matLoader("20facestar" , song);
-
     });
 
     function onMouseMove(event) {
@@ -167,16 +159,15 @@ export default class Three extends Component {
 
 
     function createStar(newStar, song){
-      console.log(song);
+      console.log(song, "in star");
       var bitmap = document.createElement('canvas');
-      console.log(bitmap, "bitmap");
       bitmap.style.backgroundColor = 'black';
       var g = bitmap.getContext('2d');
       bitmap.width = 2048;
       bitmap.height = 2048;
       g.font = "80px Georgia";
       g.fillStyle = 'white';
-      var title = song.songTitle
+      var title = song.songTitle;
       if (title.length > 40){
         title = title.substring(0, 40) + '...'
       }
@@ -203,9 +194,9 @@ export default class Three extends Component {
       newStar.position.x = camera.position.x + randSeedX;
       newStar.position.y = camera.position.y - 20 + randSeedY;
       newStar.position.z = camera.position.z - 800;
-      newStar.scale.x = 2;
-      newStar.scale.y = 2;
-      newStar.scale.z = 2;
+      newStar.scale.x = 3;
+      newStar.scale.y = 3;
+      newStar.scale.z = 3;
       newStar.rotation.x = 90;
 
       newStar.name = 'star';
@@ -229,33 +220,24 @@ export default class Three extends Component {
       particleSystem.position.z = newStar.position.z;
       particleSystem.rotation.x = 90;
       scene.add(particleSystem);
-      console.log(scene);
     }
 
 
     function createShip (userName) {
-      mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-      mouse.y = -( event.clientY / window.innerHeight ) * 2 + 1;
 
-      camera.position.x = mouse.x * 100;
-      camera.position.y = mouse.y * 100;
-      camera.lookAt(new THREE.Vector3(0, 0, -1000000000000000));
-      console.log(camera.position.x + ", " + camera.position.y);
 
       var bitmap = document.createElement('canvas');
-      console.log(bitmap, "bitmap");
+
       bitmap.style.backgroundColor = 'black';
       var g = bitmap.getContext('2d');
       bitmap.width = 512;
       bitmap.height = 512;
       g.font = "80px Georgia";
       g.fillStyle = 'white';
-      // var title = playlistdata[playlist.data.length -1].songTitle;
-      var title = "clickTest";
-      console.log(title);
+      var title = userName;
+
       g.fillStyle='white';
       g.fillText(title, 126, 126);
-
 
       var randSeedX = 100 * Math.random();
       var randSeedY = 60 * Math.random();
@@ -273,7 +255,7 @@ export default class Three extends Component {
       });
       //Add random asteroids
        let newShip = new THREE.Mesh(ship.geometry, material);
-      console.log(ship);
+
       //let newShip = ship;
       newShip.position.x = camera.position.x + randSeedX;
       newShip.position.y = camera.position.y - 20 + randSeedY;
@@ -289,7 +271,7 @@ export default class Three extends Component {
       var plane = new THREE.Mesh(new THREE.PlaneBufferGeometry(40, 40), material);
       plane.material.side = THREE.DoubleSide;
       plane.position.x = newShip.position.x;
-      plane.position.y = newShip.position.y + 10;
+      plane.position.y = newShip.position.y + 5;
       plane.position.z = newShip.position.z;
       scene.add(plane);
 
@@ -300,7 +282,7 @@ export default class Three extends Component {
       particleSystem.position.y = camera.position.y - 19 + randSeedY;
       particleSystem.position.z = camera.position.z -200;
       scene.add(particleSystem);
-      console.log(scene);
+
     }
 
 
