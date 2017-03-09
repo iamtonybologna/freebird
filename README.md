@@ -1,6 +1,6 @@
 # Freebird/Space Jam
 =====================
-Playlist Voting App Using Node.js, React, and Websockets
+A playlist voting App Using Node.js, React, and Websockets that allows users have a say in what music they want to listen to next.
 
 Host page: https://desolate-temple-13043.herokuapp.com/host
 
