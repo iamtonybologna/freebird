@@ -16,6 +16,9 @@ export default class Three extends Component {
     this.threeLoaders();
   };
 
+  componentWillUnmount = () => {
+    document.getElementById('threeContainer').remove();
+  }
 
   threeLoaders = () => {
     const loader = new THREE.JSONLoader();
