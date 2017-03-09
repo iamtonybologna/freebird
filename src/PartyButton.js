@@ -7,8 +7,8 @@ const styles = {
     marginTop: '5vh',
     marginBottom: '5vh',
     textAlign: 'center',
-    height: '50vw',
-    width: '50vw',
+    height: '60vw',
+    width: '60vw',
     position: 'relative',
     marginLeft: '20vw'
   }

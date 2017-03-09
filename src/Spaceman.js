@@ -1,5 +1,11 @@
 import React, {Component} from 'react';
 
+const styles = {
+  spaceUno: {
+    positon: 'fixed',
+
+  },
+}
 
 export default class Spaceman extends Component {
 
@@ -19,9 +25,7 @@ export default class Spaceman extends Component {
   render() {
     return (
       <div>
-
-        <iframe id="spacemanFrame" frameBorder="0"  height="500" width="500"  src="./space.html"></iframe>
-
+        <iframe id="spacemanFrame" frameBorder="0"  style={styles.spaceUno} height="900" width="500"  src="./space.html"></iframe>
       </div>
     )
   };

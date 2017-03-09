@@ -89,11 +89,10 @@ class App extends Component {
                   autoHideDuration={3000}
                   onRequestClose={this.handleRequestClose}
                 />
-              <Spaceman />
+
               <VideoEmbed winner={this.setWinner} playList={this.state.playList} upNext={this.state.upNext} getUpNext={this.getUpNext} votes={this.state.votes} startParty={this.startParty} />
 
               <HostVoteList votes={this.state.votes} upNext={this.state.upNext} winnerName={this.state.winnerName} />
-
             </div>
           )
         default:
