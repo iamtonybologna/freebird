@@ -4,6 +4,7 @@ import THREELib from "three-js";
 const THREE = THREELib(['GPUParticleSystem', 'MTLLoader' , 'OBJLoader']);
 
 
+
 export default class Three extends Component {
   constructor(props) {
     super(props);
@@ -123,6 +124,7 @@ export default class Three extends Component {
       window.addEventListener('resize', onWindowResize, false);
       window.addEventListener('click', onClick, false);
       window.addEventListener('mousemove', onMouseMove, false);
+      window.addEventListener('mousewheel', onWheel, false);
     }
 
     //Websocket responses
@@ -132,7 +134,7 @@ export default class Three extends Component {
     });
 
     //PLAYLIST UPDATE LOADER
-    this.ws.on('addNewSong', (song) => {
+    this.ws.on('sendNewSong', (song) => {
       console.log("newSong" , song);
       matLoader("20facestar" , song);
     });
@@ -159,7 +161,7 @@ export default class Three extends Component {
 
 
     function createStar(newStar, song){
-      console.log(song, "in star");
+      console.log(song.song.songTitle, "in star");
       var bitmap = document.createElement('canvas');
       bitmap.style.backgroundColor = 'black';
       var g = bitmap.getContext('2d');
@@ -167,13 +169,27 @@ export default class Three extends Component {
       bitmap.height = 2048;
       g.font = "80px Georgia";
       g.fillStyle = 'white';
-      var title = song.songTitle;
+      var title = song.song.songTitle;
       if (title.length > 40){
         title = title.substring(0, 40) + '...'
       }
 
       g.fillStyle='white';
       g.fillText(title, 126, 126);
+
+      var bitmapName = document.createElement('canvas');
+      bitmapName.style.backgroundColor = 'black';
+      var g = bitmapName.getContext('2d');
+      bitmapName.width = 2048;
+      bitmapName.height = 2048;
+      g.font = "80px Georgia";
+      g.fillStyle = 'white';
+      name = song.song.uploaderName + " Added"
+
+      g.fillStyle='white';
+      g.fillText(name, 126, 126);
+
+
 
 
       var randSeedX = 100 * Math.random();
@@ -183,6 +199,9 @@ export default class Three extends Component {
 
       var texture = new THREE.Texture(bitmap)
       texture.needsUpdate = true;
+
+      var textureName = new THREE.Texture(bitmapName)
+      textureName.needsUpdate = true;
 
       var material = new THREE.MeshPhongMaterial({
         color: 0xF36F5E,
@@ -207,8 +226,16 @@ export default class Three extends Component {
       var material = new THREE.MeshLambertMaterial({map: texture, alpha: true, alphaTest : 0.05});
       var plane = new THREE.Mesh(new THREE.PlaneBufferGeometry(80, 80), material);
       plane.material.side = THREE.DoubleSide;
-      plane.position.x = newStar.position.x;
-      plane.position.y = newStar.position.y + 10;
+      plane.position.x = newStar.position.x + 45;
+      plane.position.y = newStar.position.y - 40;
+      plane.position.z = newStar.position.z;
+      scene.add(plane);
+
+      material = new THREE.MeshLambertMaterial({map: textureName, alpha: true, alphaTest : 0.05});
+      plane = new THREE.Mesh(new THREE.PlaneBufferGeometry(80, 80), material);
+      plane.material.side = THREE.DoubleSide;
+      plane.position.x = newStar.position.x + 45;
+      plane.position.y = newStar.position.y - 30;
       plane.position.z = newStar.position.z;
       scene.add(plane);
 
@@ -285,11 +312,14 @@ export default class Three extends Component {
 
     }
 
+    function onWheel(event){
+      camera.position.z -= event.deltaY
+    }
 
     function onClick(event) {
 
-        createShip();
-        matLoader(scene, "20facestar");
+       // createShip();
+      //  matLoader(scene, "20facestar");
       }
 
     function onWindowResize() {
