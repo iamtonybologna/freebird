@@ -19,9 +19,9 @@ body {
     display: inline;
     z-index: 0;
     position: absolute;
-    -webkit-animation: neon7 1.5s ease-in-out infinite alternate;
-    -moz-animation: neon7 1.5s ease-in-out infinite alternate;
-    animation: neon7 1.5s ease-in-out infinite alternate;
+    -webkit-animation: neon7 3s ease-in-out infinite alternate;
+    -moz-animation: neon7 3s ease-in-out infinite alternate;
+    animation: neon7 3s ease-in-out infinite alternate;
 }
 
 .title {

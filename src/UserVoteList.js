@@ -119,7 +119,7 @@ class UserVoteList extends Component {
               titleBackground={this.renderShadow(tile.songId)}
             >
             <p style={styles.p}><a style={styles.votes}>{tile.votes}</a></p>
-            <img src={tile.songImageMedium} style={styles.img} role='presentation'/>              
+            <img src={tile.songImageMedium} style={styles.img} role='presentation'/>
             </GridTile>
           ))}
         </GridList>

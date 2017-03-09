@@ -15,6 +15,7 @@ import VideoEmbed from './VideoEmbed.js';
 import HostVoteList from './HostVoteList.js';
 import Splash from './splash.js';
 import Loading from './Loading.js';
+import Spaceman from './Spaceman.js';
 
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Skip from 'material-ui/svg-icons/av/skip-next';
@@ -88,6 +89,7 @@ class App extends Component {
                   autoHideDuration={3000}
                   onRequestClose={this.handleRequestClose}
                 />
+              <Spaceman />
               <VideoEmbed winner={this.setWinner} playList={this.state.playList} upNext={this.state.upNext} getUpNext={this.getUpNext} votes={this.state.votes} startParty={this.startParty} />
 
               <HostVoteList votes={this.state.votes} upNext={this.state.upNext} winnerName={this.state.winnerName} />

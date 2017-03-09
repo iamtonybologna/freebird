@@ -3,8 +3,8 @@ import {blue500, red500, greenA200} from 'material-ui/styles/colors';
 import SvgIcon from 'material-ui/SvgIcon';
 
 const iconStyles = {
-  height: '10vw',
-  width: '10vw',
+  height: '200%',
+  width: '200%',
   margin: 'auto',
   position: 'absolute'
 };

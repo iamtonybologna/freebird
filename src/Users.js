@@ -132,7 +132,7 @@ class Users extends Component {
         oldUpNext[i].votes = ''
       }
       this.setState({winner: '', upNext: oldUpNext})
-      console.log(this.state)
+      console.log('eraser')
     });
   };
 
@@ -176,7 +176,7 @@ class Users extends Component {
           return (
             <div>
               <PartyButton handlePartyPress={this.handlePartyPress}/>
-              <UserVoteList voteFor={this.handleSongClick} upNext={this.state.upNext} newVoteId={this.state.newVoteId}/>
+              <UserVoteList voteFor={this.handleSongClick} upNext={this.state.upNext} newVoteId={this.state.newVoteId} winner={this.state.winner}/>
               <NavBar switcher={this.switcher} view={this.state.view}/>
             </div>
           )
