@@ -6,15 +6,20 @@ import SpaceShip from './customIcon.js';
 
 const styles = {
   button: {
-    marginTop: '1vh'
+    marginTop: '1vw',
+    height: '20vw',
+    width: '20vw'
   },
   welcomeButton: {
-    marginLeft: '33vw',
+    marginLeft: '25vw',
+    height: '20vw',
+    width: '20vw'
   },
   welText: {
     width: '90vw',
-    marginTop: '20vh',
-    textAlign: 'center',
+    marginTop: '35vw',
+    textAlign: '',
+    fontSize: '1.5em'
   },
   paper: {
     height: '90vw',
@@ -25,7 +30,7 @@ const styles = {
   },
   text: {
     textAlign: 'center',
-    marginLeft: '30vw',
+    marginLeft: '26vw',
   },
   center: {
     textAlign: 'center',
@@ -48,7 +53,7 @@ export default class Welcome extends Component {
           <div><div className={'sun'}></div>
               <TextField
                 style={styles.welText}
-                hintText="They call me..."
+                hintText="they call me..."
                 onKeyUp={this.props.handleNewName.bind()}
                 textareaStyle={styles.text}
                 hintStyle={styles.text}
@@ -58,7 +63,7 @@ export default class Welcome extends Component {
               />
               <div style={styles.welcomeButton}>
                 <IconButton iconStyle={styles.button} onTouchTap={this.props.handleSubmitName.bind()}>
-                    <SpaceShip style={styles.button}/>
+                    <SpaceShip />
                 </IconButton>
               </div>
           </div>
