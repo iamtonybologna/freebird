@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import io from 'socket.io-client';
 import THREELib from "three-js";
 const THREE = THREELib(['GPUParticleSystem', 'MTLLoader' , 'OBJLoader']);
+const config = require('../config');
 
 
 
@@ -12,50 +13,23 @@ export default class Three extends Component {
 
 
   componentDidMount = () => {
-    this.ws = io.connect('ws://localhost:4000');
-    this.threeLoaders();
+    this.ws = io.connect(config.IO);
+    this.launchSimpleAnimation();
   };
 
   componentWillUnmount = () => {
     document.getElementById('threeContainer').remove();
   }
 
-  threeLoaders = () => {
-    const loader = new THREE.JSONLoader();
-        loader.load(
-          // resource URL
-          '/assets/UFO.json',
-          // Function when resource is loaded
-          (obj, materials) => {
-            console.log(materials);
-
-            const mesh = new THREE.Mesh(obj);
-            this.middleLoader(mesh)
-          });
-  }
-
-  middleLoader = (ship) => {
-    const loader = new THREE.JSONLoader();
-    loader.load(
-      // resource URL
-      '/assets/star.json',
-      // Function when resource is loaded
-      (obj) => {
-
-        this.launchSimpleAnimation(ship, obj);
-      });
-  }
 
 
 
 
-
-  launchSimpleAnimation(obj, obj2) {
+  launchSimpleAnimation() {
     var camera, scene, renderer;
     var light1 = new THREE.PointLight(0xffffff, 2, 1000);
     var mouse = new THREE.Vector2();
-    var ship = obj;
-    var star = obj2
+
 
     var particleSystem = new THREE.GPUParticleSystem({
       maxParticles: 250000
@@ -88,7 +62,7 @@ export default class Three extends Component {
       var mtlLoader = new THREE.MTLLoader();
       //mtlLoader.setBaseUrl( "/assets/" );
       mtlLoader.setPath(  "/obj/"  );
-     let object = mtlLoader.load( obj + ".mtl", function( materials ) {
+      mtlLoader.load( obj + ".mtl", function( materials ) {
         materials.preload();
 
         var objLoader = new THREE.OBJLoader();
@@ -98,12 +72,34 @@ export default class Three extends Component {
           object.position.z = -200;
 
           createStar(object, song);
-
         });
-        return object;
+
       });
-      return object
+
     }
+
+
+    function matLoader2(obj, name) {
+
+      var mtlLoader = new THREE.MTLLoader();
+      //mtlLoader.setBaseUrl( "/assets/" );
+      mtlLoader.setPath(  "/obj/"  );
+      mtlLoader.load( obj + ".mtl", function( materials ) {
+        materials.preload();
+
+        var objLoader = new THREE.OBJLoader();
+        objLoader.setMaterials( materials );
+        objLoader.setPath(  "/obj/"  );
+        let object = objLoader.load( obj +".obj", function ( object ) {
+          object.position.z = -200;
+
+          createShip(object, name);
+        });
+
+      });
+
+    }
+
 
 
     init();
@@ -134,7 +130,7 @@ export default class Three extends Component {
     //Websocket responses
     this.ws.on('sendName', (data) => {
       console.log('newUser' , data.name);
-      createShip(data.name);
+      matLoader2( "Low_poly_UFO2", data.name);
     });
 
     //PLAYLIST UPDATE LOADER
@@ -254,7 +250,7 @@ export default class Three extends Component {
     }
 
 
-    function createShip (userName) {
+    function createShip (newShip, userName) {
 
 
       var bitmap = document.createElement('canvas');
@@ -285,7 +281,7 @@ export default class Three extends Component {
         shading: THREE.FlatShading
       });
       //Add random asteroids
-       let newShip = new THREE.Mesh(ship.geometry, material);
+      // let newShip = new THREE.Mesh(ship.geometry, material);
 
       //let newShip = ship;
       newShip.position.x = camera.position.x + randSeedX;
@@ -322,8 +318,7 @@ export default class Three extends Component {
 
     function onClick(event) {
 
-       // createShip();
-      //  matLoader(scene, "20facestar");
+
       }
 
     function onWindowResize() {
