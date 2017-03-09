@@ -149,6 +149,7 @@ class App extends Component {
     this.props.ws.on('sendName', (data) => {
       console.log('name', data.name);
     });
+    
   };
 
   componentWillUnmount() {

@@ -4,8 +4,6 @@ import SpaceShip from './customIcon.js';
 
 const styles = {
   div: {
-    marginTop: '40vh',
-    marginLeft: '40vw'
   },
   button: {
     height: '10vh',
@@ -21,7 +19,7 @@ export default class Loading extends Component {
   select = (newView) => this.props.switcher(newView);
 
   gatekeeper = () => {
-    if (this.props.playList.length >= 5) {
+    if (this.props.playList.length > 10) {
       return (
         <div style={styles.div}>
         <IconButton

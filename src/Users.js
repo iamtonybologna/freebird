@@ -75,7 +75,7 @@ class Users extends Component {
 
     this.props.ws.on('updateUpNext', (upNext) => {
       console.log('upNext', upNext);
-      this.setState({ voteListLoaded: true, upNext: upNext.data });
+      this.setState({ voteListLoaded: true, upNext: upNext.data});
       console.log('Current state: ', this.state);
     });
 
@@ -125,6 +125,15 @@ class Users extends Component {
       this.setState({ winner: winner.songId });
       console.log('Winner song id', this.state.winner);
     });
+
+    this.props.ws.on('upNextResetWinner', () => {
+      let oldUpNext = this.state.upNext;
+      for (let i = 0; i <= 2; i++) {
+        oldUpNext[i].votes = ''
+      }
+      this.setState({winner: '', upNext: oldUpNext})
+      console.log(this.state)
+    });
   };
 
   componentWillUnmount() {
@@ -173,7 +182,7 @@ class Users extends Component {
         } else {
               return (
                 <div>
-                  <UserVoteList voteFor={this.handleSongClick} upNext={this.state.upNext} newVoteId={this.state.newVoteId}/>
+                  <UserVoteList voteFor={this.handleSongClick} upNext={this.state.upNext} newVoteId={this.state.newVoteId} winner={this.state.winner} />
                   <NavBar switcher={this.switcher} view={this.state.view}/>
                 </div>
               )
@@ -260,8 +269,10 @@ class Users extends Component {
 
   handleSongClick = (e) => {
     this.setState({ newVoteId: e });
-    this.props.ws.emit('setUserVote', { userId: this.state.user.id, songId: e });
-    console.log('Vote sent to server', { userId: this.state.user.id, songId: e });
+    if (this.state.winner == false){
+      this.props.ws.emit('setUserVote', { userId: this.state.user.id, songId: e });
+      console.log('Vote sent to server', { userId: this.state.user.id, songId: e });
+    }
   };
 
   handleSongAddition = (e) => {

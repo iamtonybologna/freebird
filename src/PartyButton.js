@@ -1,21 +1,25 @@
 import React, {Component} from 'react';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import Party from 'material-ui/svg-icons/social/whatshot';
+import IconButton from 'material-ui/IconButton';
+import PartyIcon from './partyIcon.js';
 
 const styles = {
-  button: {
-    marginTop: '10vh',
-    marginBottom: '10vh',
-    textAlign: 'center'
+  pButton: {
+    marginTop: '5vh',
+    marginBottom: '5vh',
+    textAlign: 'center',
+    height: '50vw',
+    width: '50vw',
+    position: 'relative',
+    marginLeft: '20vw'
   }
 };
 
 class PartyButton extends Component {
   render() {
     return (
-      <FloatingActionButton label="Party Button" secondary={true} style={styles.button} onTouchTap={this.props.handlePartyPress.bind()}>
-        <Party />
-      </FloatingActionButton>
+      <IconButton style={styles.pButton} onTouchTap={this.props.handlePartyPress.bind()}>
+        <PartyIcon />
+      </IconButton>
     )
   };
 };
