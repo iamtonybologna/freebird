@@ -1,4 +1,4 @@
-# Freebird
+# Freebird/Space Jam
 =====================
 Playlist Voting App Using Node.js, React, and Websockets
 
