@@ -124,10 +124,12 @@ class App extends Component {
       let displayVotes = data.votes;
       let oldUpNext = this.state.upNext;
       let p = [];
-      if (p.length > 2) {
-        for (let item in displayVotes) {
+      for (let item in displayVotes) {
+        if (item) {
           p.push(displayVotes[item]);
         }
+      }
+      if (p.length > 2) {
         for (let i = 0; i <= 2; i++) {
           oldUpNext[i].votes = p[i].length;
         }
