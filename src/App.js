@@ -143,6 +143,12 @@ class App extends Component {
     this.props.ws.on('sendName', (data) => {
       console.log('name', data.name);
     });
+    this.props.ws.on('partyButton', (data) => {
+      console.log('partyButtonCount', data.partyButtonCount, 'partyButtonCountLimit', data.partyButtonCountLimit);
+    });
+    this.props.ws.on('sendNewSong', (data) => {
+      console.log('song', data.song, 'name', data.song.uploaderName);
+    });
   };
 
   componentWillUnmount() {
