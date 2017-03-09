@@ -1,16 +1,15 @@
 import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
-import Send from 'material-ui/svg-icons/content/send';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
+import SpaceShip from './customIcon.js';
 
 const styles = {
   button: {
     marginTop: '1vh'
   },
   welcomeButton: {
-    textAlign: 'center',
-    margin: 'auto',
+    marginLeft: '33vw',
   },
   welText: {
     width: '90vw',
@@ -58,8 +57,8 @@ export default class Welcome extends Component {
                 underlineFocusStyle={styles.underlineStyleFocus}
               />
               <div style={styles.welcomeButton}>
-                <IconButton style={styles.button} secondary={true} onTouchTap={this.props.handleSubmitName.bind()}>
-                    <Send />
+                <IconButton iconStyle={styles.button} onTouchTap={this.props.handleSubmitName.bind()}>
+                    <SpaceShip style={styles.button}/>
                 </IconButton>
               </div>
           </div>

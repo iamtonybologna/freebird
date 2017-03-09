@@ -15,6 +15,7 @@ import VideoEmbed from './VideoEmbed.js';
 import HostVoteList from './HostVoteList.js';
 import Splash from './splash.js';
 import Loading from './Loading.js';
+
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Skip from 'material-ui/svg-icons/av/skip-next';
 import Snackbar from 'material-ui/Snackbar';
@@ -44,9 +45,6 @@ const styles = {
   newWinner: {
     position: 'absolute'
   },
-  count: {
-    textAlign: 'center'
-  }
 }
 
 class App extends Component {
@@ -62,6 +60,7 @@ class App extends Component {
       winnerName: '',
       displayVotes: [],
       open: false,
+      playList: []
     };
 
 
@@ -75,9 +74,8 @@ class App extends Component {
             )
         case 'loading':
               return (
-                <div style={styles.count}>
-                <Loading switcher={this.switcher} upNext={this.state.upNext} />
-                <p><a >{this.state.userCount} party people</a></p>
+                <div>
+                  <Loading switcher={this.switcher} playList={this.state.playList} />
                 </div>
                 )
         case 'main':
@@ -102,7 +100,6 @@ class App extends Component {
   switcher = (newView) => {
     this.setState({ view: newView });
   };
-
 
   handleRequestClose = () => {
     this.setState({
@@ -141,6 +138,7 @@ class App extends Component {
     });
     this.props.ws.on('updatePlaylist', (playlist) => {
       console.log('updateplaylist', playlist.data);
+      this.setState({playList: playlist.data})
     });
     this.props.ws.on('sendName', (data) => {
       console.log('name', data.name);

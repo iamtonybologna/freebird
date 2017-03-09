@@ -1,18 +1,35 @@
 import React, {Component} from 'react';
-import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
+import IconButton from 'material-ui/IconButton';
+import SpaceShip from './customIcon.js';
+
 
 const styles = {
-  paper: {
-    width: '40vw',
-    margin: 'auto',
-    marginTop: '30vh',
-    paddingBottom: '5vh',
-    paddingTop: '5vh',
+  button: {
+    marginTop: '0vw',
+    marginRight: '10vw',
+    height: '5vw',
+    width: '5vw',
+    display: 'inline',
   },
-  noSearchDiv: {
-    zIndex: '5',
-    textAlign: 'center',
+  welcomeButton: {
+    textAlign: 'center'
+  },
+  paper: {
+    height: '40vw',
+    width: '40vw',
+    display: 'inline-block',
+    marginTop: '10vw',
+    marginLeft: '30vw',
+  },
+  center: {
+
+  },
+  text: {
+    margin: '0'
+  },
+  titleBox: {
+    marginTop: '13vw'
   },
 };
 
@@ -22,14 +39,16 @@ export default class Splash extends Component {
 
   render() {
     return (
-      <div style={styles.noSearchDiv}>
-        <Paper zDepth={5} style={styles.paper}>
-          <p><a>Not Freebird</a></p>
-          <div style={styles.button}>
-              <RaisedButton
-              label="Are you ready for ze party ???"
-              primary={true}
-              onTouchTap={() => this.select('loading')}/>
+      <div style={styles.welcomeDiv} >
+        <Paper style={styles.paper} zDepth={3} circle={true}>
+          <div className={'sun-host'}></div>
+          <div style={styles.titleBox}>
+              <div style={styles.welcomeButton}>
+                <p style={styles.text} className={'title'}><a>SPACE JAM</a></p>
+                <IconButton style={styles.button} onTouchTap={() => this.select('loading')}>
+                  <SpaceShip />
+                </IconButton>
+              </div>
           </div>
         </Paper>
       </div>

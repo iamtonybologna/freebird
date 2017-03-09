@@ -30,6 +30,9 @@ const styles = {
     marginLeft: '3px',
     marginTop: '3px',
   },
+  p: {
+    margin: '0'
+  }
 };
 
 class HostVoteList extends Component {
@@ -68,7 +71,7 @@ class HostVoteList extends Component {
                 subtitle={this.renderSub(tile.songTitle)}
                 actionIcon={this.renderIcon(tile.songTitle)}
               >
-              <p><a style={styles.votes}>{tile.votes}</a></p>
+              <p style={styles.p}><a style={styles.votes}>{tile.votes}</a></p>
                 <img role="presentation" src={tile.songImageHigh} style={styles.image}/>
               </GridTile>
             ))}
