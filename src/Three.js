@@ -26,7 +26,8 @@ export default class Three extends Component {
           // resource URL
           '/assets/UFO.json',
           // Function when resource is loaded
-          (obj) => {
+          (obj, materials) => {
+            console.log(materials);
 
             const mesh = new THREE.Mesh(obj);
             this.middleLoader(mesh)
@@ -39,7 +40,7 @@ export default class Three extends Component {
       // resource URL
       '/assets/star.json',
       // Function when resource is loaded
-      (obj, mat) => {
+      (obj) => {
 
         this.launchSimpleAnimation(ship, obj);
       });
