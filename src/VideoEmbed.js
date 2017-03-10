@@ -142,7 +142,7 @@ class VideoEmbed extends Component {
 
 
 
-    if (timePlayed >= 90) {
+    if (timePlayed >= 600) {
       let newWinner = this.voteCalculate();
       this.props.winner(newWinner);
       this.state.notPlaying.cueVideoById(this.voteCalculate());
