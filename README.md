@@ -6,9 +6,9 @@ Host page: https://desolate-temple-13043.herokuapp.com/host
 
 Mobile user page: https://desolate-temple-13043.herokuapp.com/users
 
-Open the host page on the main computer, TV, or projector. Open the user page on your phone, or in chrome devtools mobile view (⌘ + ⇧ + M). Add 12 songs to enter the host page and start the party.
+Open the host page on the main computer, TV, or projector. Open the user page on your phone, or in chrome devtools mobile view (⌘ + ⇧ + M). Add enough songs to enter the host page and start the party.
 
-Hidden feature: raspberry pi configured to send GET requests to "/party" switches the relay connected to smoke machine(s), disco ball(s), and light(s). Martini glass button on host page activates the "party button" on users' pages, which trips the raspberry pi and relay after the party button is hit a certain amount of times.
+Hidden feature: raspberry pi configured to send GET requests to "/party" switches the relay connected to smoke machine(s), disco ball(s), and light(s). Martini glass button on host page activates the "party button" on users' pages, which trips the raspberry pi and relay after it is hit a certain amount of times.
 
 ## Dependencies
 * cookie-parser
