@@ -19,7 +19,7 @@ export default class Loading extends Component {
   select = (newView) => this.props.switcher(newView);
 
   gatekeeper = () => {
-    if (this.props.playList.length > 10) {
+    if (this.props.playList.length > 6) {
       return (
         <div style={styles.div}>
         <IconButton
