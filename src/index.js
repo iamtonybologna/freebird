@@ -22,7 +22,7 @@ ReactDOM.render(
   <Router>
     <div>
       <Route path='/three' component={() => <Three ws={ws} />} />
-      <Route path='/spaceman' component={()=> <Spaceman ws={ws}/>} />
+      <Route path='/spaceman' component={()=> <Spaceman ws={ws} />} />
       <Route
         exact path='/'
         render={() => <Redirect to={{ pathname: '/users' }} />}

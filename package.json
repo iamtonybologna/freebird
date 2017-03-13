@@ -25,6 +25,8 @@
     "material-ui": "^0.17.0",
     "material-ui-youtube-autocomplete": "^1.2.1",
     "node-uuid": "1.4.7",
+    "passport": "^0.3.2",
+    "passport-facebook": "^2.1.1",
     "react": "^15.4.2",
     "react-cookie": "^1.0.4",
     "react-dom": "^15.4.2",

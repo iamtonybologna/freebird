@@ -66,6 +66,10 @@ export default class Welcome extends Component {
                     <SpaceShip />
                 </IconButton>
               </div>
+              <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+              <div>
+                <a href="/login/facebook">Log In with Facebook</a>
+              </div>
           </div>
         </Paper>
       </div>
