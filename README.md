@@ -1,10 +1,10 @@
-# Freebird/Space Jam
+# Space Jam
 =====================
 A playlist voting App Using Node.js, React, and Websockets that allows users have a say in what music they want to listen to next.
 
-Host page: https://desolate-temple-13043.herokuapp.com/host
+Host page: https://node-dj.herokuapp.com/host
 
-Mobile user page: https://desolate-temple-13043.herokuapp.com/users
+Mobile user page: https://node-dj.herokuapp.com/
 
 Open the host page on the main computer, TV, or projector. Open the user page on your phone, or in chrome devtools mobile view (⌘ + ⇧ + M). Add enough songs to enter the host page and start the party.
 
