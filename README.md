@@ -1,5 +1,6 @@
 # Space Jam
 =====================
+
 A a massively cooperative, interactive jukebox web application that uses Node.js, React, and Websockets to allow users to collectively create their own playlist and vote on the songs they want to listen to next.
 
 Host page: https://node-dj.herokuapp.com/host
