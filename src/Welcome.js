@@ -70,6 +70,11 @@ export default class Welcome extends Component {
               <div>
                 <a href="/login/facebook">Log In with Facebook</a>
               </div>
+              <br/>
+              <div>
+                Username: {}
+                Facebook ID:
+              </div>
           </div>
         </Paper>
       </div>

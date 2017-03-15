@@ -148,9 +148,6 @@ class App extends Component {
       console.log('updateplaylist', playlist.data);
       this.setState({playList: playlist.data})
     });
-    this.props.ws.on('sendName', (data) => {
-      console.log('name', data.name);
-    });
     this.props.ws.on('partyButton', (data) => {
       console.log('partyButtonCount', data.partyButtonCount, 'partyButtonCountLimit', data.partyButtonCountLimit);
     });

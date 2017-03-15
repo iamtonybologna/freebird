@@ -75,7 +75,7 @@ class Users extends Component {
 
     this.props.ws.on('updateUpNext', (upNext) => {
       console.log('upNext', upNext);
-      this.setState({ voteListLoaded: true, upNext: upNext.data});
+      this.setState({ voteListLoaded: true, upNext: upNext.data });
       console.log('Current state: ', this.state);
     });
 
@@ -131,8 +131,13 @@ class Users extends Component {
       for (let i = 0; i <= 2; i++) {
         oldUpNext[i].votes = ''
       }
-      this.setState({winner: '', upNext: oldUpNext})
+      this.setState({ winner: '', upNext: oldUpNext })
       console.log('eraser')
+    });
+
+    this.props.ws.on('sendFacebookUser', (user) => {
+      let facebookUser = { id: user.id, name: user.name };
+      this.setState({ user: facebookUser });
     });
   };
 

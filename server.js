@@ -24,7 +24,7 @@ const Strategy      = require('passport-facebook').Strategy;
 passport.use(new Strategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: 'http://localhost:3000/login/facebook/return'
+    callbackURL: 'http://localhost:4000/login/facebook/return'
   },
   function(accessToken, refreshToken, profile, cb) {
     // In this example, the user's Facebook profile is supplied as the user
@@ -71,6 +71,12 @@ app.get('/login/facebook',
 app.get('/login/facebook/return',
   passport.authenticate('facebook', { failureRedirect: '/' }),
   function(req, res) {
+    console.log('user', req.user);
+    let id = uuid.v1();
+    usernames[id] = req.user.displayName;
+    console.log('New user added to usernames', usernames);
+    io.emit('sendFacebookUser', { id: id, name: req.user.displayName });
+    io.emit('sendName', { name: req.user.displayName });
     res.redirect('/');
   });
 
