@@ -122,6 +122,7 @@ class App extends Component {
       let roomId = cookie.load('room');
       this.joinRoom(roomId);
     } else {
+      console.log('no cookie found, creating room');
       this.createRoom();
     };
 
@@ -180,26 +181,28 @@ class App extends Component {
   createRoom = () => {
     this.props.ws.emit('create', (roomId) => {
       this.setState({ room: roomId });
-      cookie.save('room', this.state.roomId);
+      cookie.save('room', this.state.room);
+      console.log('joined room', roomId);
     });
   };
 
   joinRoom = (roomId) => {
-    this.props.ws.emit('joinRoom', (roomId) => {
+    this.props.ws.emit('join', { id: roomId }, (roomId) => {
       this.setState({ room: roomId });
+      console.log('joined room', roomId)
     });
   };
 
   setWinner = (newWinner) => {
     if (!newWinner) {
-      this.setState({ winnerName : "" });
+      this.setState({ winnerName: "" });
       return
     }
     this.setState({ winner: newWinner });
     let upNext =  this.state.upNext;
     upNext.forEach((song) => {
       if (song.songId === newWinner) {
-        this.setState({ winnerName : song.songTitle });
+        this.setState({ winnerName: song.songTitle });
       };
     });
     this.props.ws.emit('newWinner', { songId: this.state.winner });

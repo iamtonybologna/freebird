@@ -119,15 +119,17 @@ io.on('connection', (client) => {
     io.emit('readyToParty');
   };
 
-  client.on('create', () => {
+  client.on('create', (fn) => {
     let roomId = uuid.v1();
     console.log('New host connected, joining room', roomId);
     client.join(roomId);
+    fn(roomId);
   });
 
-  client.on('join', (roomId) => {
-    console.log('Host reconnected, joining room', roomId);
-    client.join(roomId);
+  client.on('join', (room, fn) => {
+    console.log('Host reconnected, joining room', room.id);
+    client.join(room.id);
+    fn(room.id);
   });
 
   // set username
