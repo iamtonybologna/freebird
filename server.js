@@ -21,13 +21,14 @@ app.get('/assets/:id', (req,res) => {
   res.sendFile(__dirname + `/assets/` + req.params.id);
 });
 
-app.get('/party', (req, res) => {
-  if (partyButtonCount > partyButtonCountLimit) {
-    res.status(200).send();
-  } else {
-    res.status(404).send();
-  }
-});
+// Raspberry Pi route
+// app.get('/party', (req, res) => {
+//   if (partyButtonCount > partyButtonCountLimit) {
+//     res.status(200).send();
+//   } else {
+//     res.status(404).send();
+//   }
+// });
 
 app.get('*', (req, res) => {
   res.sendFile(__dirname + `/build/index.html`);
@@ -46,6 +47,7 @@ let lastUpNextList = [];
 let readyToParty = false;
 let partyButtonCount = 0;
 let partyButtonCountLimit = 50;
+let room = [];
 
 newUpNext = () => {
   // store songs that were just voted on and clear votes
@@ -76,7 +78,6 @@ newUpNext = () => {
         console.log('newSongs length', Object.keys(newSongs).length);
         i++;
       };
-      x++;
     };
     upNext = [];
     for (let song in newSongs) {
@@ -94,7 +95,6 @@ newUpNext = () => {
         console.log('newSongs length', Object.keys(newSongs).length);
         i++;
       };
-      x++;
     };
     upNext = [];
     for (let song in newSongs) {
@@ -118,6 +118,17 @@ io.on('connection', (client) => {
   if (readyToParty) {
     io.emit('readyToParty');
   };
+
+  client.on('create', () => {
+    let roomId = uuid.v1();
+    console.log('New host connected, joining room', roomId);
+    client.join(roomId);
+  });
+
+  client.on('join', (roomId) => {
+    console.log('Host reconnected, joining room', roomId);
+    client.join(roomId);
+  });
 
   // set username
   client.on('setUsername', (user, fn) => {

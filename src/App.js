@@ -61,7 +61,8 @@ class App extends Component {
       winnerName: '',
       displayVotes: [],
       open: false,
-      playList: []
+      playList: [],
+      room: null
     };
 
 
@@ -114,7 +115,14 @@ class App extends Component {
 
   componentDidMount() {
     console.log('componentDidMount <App />');
-    console.log('Opening socket connection');
+
+    if (cookie.load('room')) {
+      console.log('cookie exists, joining room', cookie.load('room'));
+      let roomId = cookie.load('room');
+      this.joinRoom(roomId);
+    } else {
+      this.createRoom();
+    };
 
     this.props.ws.on('updateUserCount', (data) => {
       console.log('Received a message from the server!', data);
@@ -166,6 +174,19 @@ class App extends Component {
 
   getUpNext = () => {
     this.props.ws.emit('getUpNext');
+  };
+
+  createRoom = () => {
+    this.props.ws.emit('create', (roomId) => {
+      this.setState({ room: roomId });
+      cookie.save('room', this.state.roomId);
+    });
+  };
+
+  joinRoom = (roomId) => {
+    this.props.ws.emit('joinRoom', (roomId) => {
+      this.setState({ room: roomId });
+    });
   };
 
   setWinner = (newWinner) => {
