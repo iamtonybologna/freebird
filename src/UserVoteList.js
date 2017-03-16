@@ -4,6 +4,7 @@ import IconButton from 'material-ui/IconButton';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import Star from 'material-ui/svg-icons/toggle/star';
 import Snackbar from 'material-ui/Snackbar';
+import Play from 'material-ui/svg-icons/av/play-arrow';
 
 const styles = {
   root: {
@@ -29,6 +30,12 @@ const styles = {
     position: 'absolute',
     marginLeft: '3px',
     marginTop: '3px',
+  },
+  p: {
+    margin: '0'
+  },
+  img: {
+    width: '100%'
   }
 };
 
@@ -44,10 +51,18 @@ class UserVoteList extends Component {
   }
 
   handleTouchTap = (newVote, newVoteId) => {
-    if (this.state.newVoteId !== newVoteId) {
+    if (this.state.newVoteId === newVoteId && this.props.winner == false) {
+      return;
+    } else if (this.state.newVoteId !== newVoteId && this.props.winner == false) {
       this.setState({
         open: true,
         votedFor: 'Voting for ' + newVote,
+        newVoteId: newVoteId
+      });
+    } else {
+      this.setState({
+        open: true,
+        votedFor: 'Vote complete! Wait for next round',
         newVoteId: newVoteId
       });
     }
@@ -62,17 +77,27 @@ class UserVoteList extends Component {
   };
 
   renderIcon = (votedForId) => {
-    if ( this.state.newVoteId === votedForId ) {
+    if (this.props.winner === votedForId) {
+      return <IconButton><Play color='white' /></IconButton>
+    } else if (this.state.newVoteId === votedForId && this.props.winner == false) {
       return <IconButton><Star color='white' /></IconButton>
     } else {
       return <IconButton><StarBorder color='white' /></IconButton>
     }
   }
   renderShadow = (votedForId) => {
-    if ( this.state.newVoteId === votedForId ) {
+    if (this.props.winner === votedForId) {
+      return "linear-gradient(to top, #0ff 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)"
+    } else if (this.state.newVoteId === votedForId && this.props.winner == false) {
       return "linear-gradient(to top, #D500F9 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)"
     } else {
       return "linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
+    }
+  }
+
+  renderSub = (votedForId) => {
+    if (this.props.winner === votedForId) {
+      return <span>Winner!</span>
     }
   }
 
@@ -89,11 +114,12 @@ class UserVoteList extends Component {
               key={tile.songId}
               onTouchTap={() => this.handleTouchTap(tile.songTitle, tile.songId)}
               title={tile.songTitle}
+              subtitle={this.renderSub(tile.songId)}
               actionIcon={this.renderIcon(tile.songId)}
               titleBackground={this.renderShadow(tile.songId)}
             >
-              <p><a style={styles.votes}>{tile.votes}</a></p>
-              <img src={tile.songImageMedium} role='presentation'/>
+            <p style={styles.p}><a style={styles.votes}>{tile.votes}</a></p>
+            <img src={tile.songImageMedium} style={styles.img} role='presentation'/>
             </GridTile>
           ))}
         </GridList>

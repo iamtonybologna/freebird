@@ -21,7 +21,7 @@ let ws = io.connect(config.IO);
 ReactDOM.render(
   <Router>
     <div>
-      <Route path='/three' component={Three} />
+      <Route path='/three' component={() => <Three ws={ws} />} />
       <Route path='/spaceman' component={()=> <Spaceman ws={ws}/>} />
       <Route
         exact path='/'

@@ -15,11 +15,12 @@ import VideoEmbed from './VideoEmbed.js';
 import HostVoteList from './HostVoteList.js';
 import Splash from './splash.js';
 import Loading from './Loading.js';
+import Spaceman from './Spaceman.js';
 
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Skip from 'material-ui/svg-icons/av/skip-next';
 import Snackbar from 'material-ui/Snackbar';
-
+import Three from './Three';
 
 const muiTheme = getMuiTheme({
   fontFamily: 'Roboto, sans-serif',
@@ -75,6 +76,7 @@ class App extends Component {
         case 'loading':
               return (
                 <div>
+                  <Three />
                   <Loading switcher={this.switcher} playList={this.state.playList} />
                 </div>
                 )
@@ -87,10 +89,10 @@ class App extends Component {
                   autoHideDuration={3000}
                   onRequestClose={this.handleRequestClose}
                 />
+
               <VideoEmbed winner={this.setWinner} playList={this.state.playList} upNext={this.state.upNext} getUpNext={this.getUpNext} votes={this.state.votes} startParty={this.startParty} />
 
               <HostVoteList votes={this.state.votes} upNext={this.state.upNext} winnerName={this.state.winnerName} />
-
             </div>
           )
         default:

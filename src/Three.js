@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import io from 'socket.io-client';
 import THREELib from "three-js";
 const THREE = THREELib(['GPUParticleSystem', 'MTLLoader' , 'OBJLoader']);
+const config = require('../config');
+
 
 
 export default class Three extends Component {
@@ -11,46 +13,23 @@ export default class Three extends Component {
 
 
   componentDidMount = () => {
-    this.ws = io.connect('ws://localhost:4000');
-    this.threeLoaders();
+    this.ws = io.connect(config.IO);
+    this.launchSimpleAnimation();
   };
 
-
-  threeLoaders = () => {
-    const loader = new THREE.JSONLoader();
-        loader.load(
-          // resource URL
-          '/assets/UFO.json',
-          // Function when resource is loaded
-          (obj) => {
-
-            const mesh = new THREE.Mesh(obj);
-            this.middleLoader(mesh)
-          });
-  }
-
-  middleLoader = (ship) => {
-    const loader = new THREE.JSONLoader();
-    loader.load(
-      // resource URL
-      '/assets/star.json',
-      // Function when resource is loaded
-      (obj, mat) => {
-
-        this.launchSimpleAnimation(ship, obj);
-      });
+  componentWillUnmount = () => {
+    document.getElementById('threeContainer').remove();
   }
 
 
 
 
 
-  launchSimpleAnimation(obj, obj2) {
+  launchSimpleAnimation() {
     var camera, scene, renderer;
     var light1 = new THREE.PointLight(0xffffff, 2, 1000);
     var mouse = new THREE.Vector2();
-    var ship = obj;
-    var star = obj2
+
 
     var particleSystem = new THREE.GPUParticleSystem({
       maxParticles: 250000
@@ -83,7 +62,7 @@ export default class Three extends Component {
       var mtlLoader = new THREE.MTLLoader();
       //mtlLoader.setBaseUrl( "/assets/" );
       mtlLoader.setPath(  "/obj/"  );
-     let object = mtlLoader.load( obj + ".mtl", function( materials ) {
+      mtlLoader.load( obj + ".mtl", function( materials ) {
         materials.preload();
 
         var objLoader = new THREE.OBJLoader();
@@ -93,12 +72,34 @@ export default class Three extends Component {
           object.position.z = -200;
 
           createStar(object, song);
-
         });
-        return object;
+
       });
-      return object
+
     }
+
+
+    function matLoader2(obj, name) {
+
+      var mtlLoader = new THREE.MTLLoader();
+      //mtlLoader.setBaseUrl( "/assets/" );
+      mtlLoader.setPath(  "/obj/"  );
+      mtlLoader.load( obj + ".mtl", function( materials ) {
+        materials.preload();
+
+        var objLoader = new THREE.OBJLoader();
+        objLoader.setMaterials( materials );
+        objLoader.setPath(  "/obj/"  );
+        let object = objLoader.load( obj +".obj", function ( object ) {
+          object.position.z = -200;
+
+          createShip(object, name);
+        });
+
+      });
+
+    }
+
 
 
     init();
@@ -123,16 +124,17 @@ export default class Three extends Component {
       window.addEventListener('resize', onWindowResize, false);
       window.addEventListener('click', onClick, false);
       window.addEventListener('mousemove', onMouseMove, false);
+      window.addEventListener('mousewheel', onWheel, false);
     }
 
     //Websocket responses
     this.ws.on('sendName', (data) => {
       console.log('newUser' , data.name);
-      createShip(data.name);
+      matLoader2( "Low_poly_UFO2", data.name);
     });
 
     //PLAYLIST UPDATE LOADER
-    this.ws.on('addNewSong', (song) => {
+    this.ws.on('sendNewSong', (song) => {
       console.log("newSong" , song);
       matLoader("20facestar" , song);
     });
@@ -159,7 +161,7 @@ export default class Three extends Component {
 
 
     function createStar(newStar, song){
-      console.log(song, "in star");
+      console.log(song.song.songTitle, "in star");
       var bitmap = document.createElement('canvas');
       bitmap.style.backgroundColor = 'black';
       var g = bitmap.getContext('2d');
@@ -167,13 +169,27 @@ export default class Three extends Component {
       bitmap.height = 2048;
       g.font = "80px Georgia";
       g.fillStyle = 'white';
-      var title = song.songTitle;
+      var title = song.song.songTitle;
       if (title.length > 40){
         title = title.substring(0, 40) + '...'
       }
 
       g.fillStyle='white';
       g.fillText(title, 126, 126);
+
+      var bitmapName = document.createElement('canvas');
+      bitmapName.style.backgroundColor = 'black';
+      var g = bitmapName.getContext('2d');
+      bitmapName.width = 2048;
+      bitmapName.height = 2048;
+      g.font = "80px Georgia";
+      g.fillStyle = 'white';
+      name = song.song.uploaderName + " Added"
+
+      g.fillStyle='white';
+      g.fillText(name, 126, 126);
+
+
 
 
       var randSeedX = 100 * Math.random();
@@ -183,6 +199,9 @@ export default class Three extends Component {
 
       var texture = new THREE.Texture(bitmap)
       texture.needsUpdate = true;
+
+      var textureName = new THREE.Texture(bitmapName)
+      textureName.needsUpdate = true;
 
       var material = new THREE.MeshPhongMaterial({
         color: 0xF36F5E,
@@ -207,8 +226,16 @@ export default class Three extends Component {
       var material = new THREE.MeshLambertMaterial({map: texture, alpha: true, alphaTest : 0.05});
       var plane = new THREE.Mesh(new THREE.PlaneBufferGeometry(80, 80), material);
       plane.material.side = THREE.DoubleSide;
-      plane.position.x = newStar.position.x;
-      plane.position.y = newStar.position.y + 10;
+      plane.position.x = newStar.position.x + 45;
+      plane.position.y = newStar.position.y - 40;
+      plane.position.z = newStar.position.z;
+      scene.add(plane);
+
+      material = new THREE.MeshLambertMaterial({map: textureName, alpha: true, alphaTest : 0.05});
+      plane = new THREE.Mesh(new THREE.PlaneBufferGeometry(80, 80), material);
+      plane.material.side = THREE.DoubleSide;
+      plane.position.x = newStar.position.x + 45;
+      plane.position.y = newStar.position.y - 30;
       plane.position.z = newStar.position.z;
       scene.add(plane);
 
@@ -223,7 +250,7 @@ export default class Three extends Component {
     }
 
 
-    function createShip (userName) {
+    function createShip (newShip, userName) {
 
 
       var bitmap = document.createElement('canvas');
@@ -254,7 +281,7 @@ export default class Three extends Component {
         shading: THREE.FlatShading
       });
       //Add random asteroids
-       let newShip = new THREE.Mesh(ship.geometry, material);
+      // let newShip = new THREE.Mesh(ship.geometry, material);
 
       //let newShip = ship;
       newShip.position.x = camera.position.x + randSeedX;
@@ -285,11 +312,13 @@ export default class Three extends Component {
 
     }
 
+    function onWheel(event){
+      camera.position.z -= event.deltaY
+    }
 
     function onClick(event) {
 
-        createShip();
-        matLoader(scene, "20facestar");
+
       }
 
     function onWindowResize() {

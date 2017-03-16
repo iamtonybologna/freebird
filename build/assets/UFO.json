@@ -22,9 +22,6 @@
 	"colorDiffuse" : [0.588235, 0.588235, 0.588235],
 	"colorSpecular" : [0.0, 0.0, 0.0],
 	"illumination" : 2,
-	"mapAlpha" : "ufo_diffuse.png",
-	"mapBump" : "-bm 0.250000 Map__7_Normal_Bump.tga",
-	"mapDiffuse" : "ufo_diffuse.png",
 	"opacity" : 1.0,
 	"opticalDensity" : 1.5,
 	"specularCoef" : 9.999999,
@@ -38,7 +35,6 @@
 	"colorDiffuse" : [0.588235, 0.588235, 0.588235],
 	"colorSpecular" : [0.0, 0.0, 0.0],
 	"illumination" : 2,
-	"mapDiffuse" : "ufo_diffuse2.png",
 	"opacity" : 1.0,
 	"opticalDensity" : 1.5,
 	"specularCoef" : 9.999999

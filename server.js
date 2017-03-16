@@ -44,7 +44,7 @@ let upNext = [];
 let playlist = [];
 let lastUpNextList = [];
 let readyToParty = false;
-let partyButtonCount = 48;
+let partyButtonCount = 0;
 let partyButtonCountLimit = 50;
 
 newUpNext = () => {
@@ -61,7 +61,8 @@ newUpNext = () => {
       playableSongsLeft++;
     }
   });
-  if (playableSongsLeft > 8) {
+
+  if (playableSongsLeft > 6) {
     let i = 0;
     let x = 0;
     while (i < 3 && x < 100) {
