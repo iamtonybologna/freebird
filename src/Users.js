@@ -131,13 +131,16 @@ class Users extends Component {
       for (let i = 0; i <= 2; i++) {
         oldUpNext[i].votes = ''
       }
-      this.setState({ winner: '', upNext: oldUpNext })
-      console.log('eraser')
+      this.setState({ winner: '', upNext: oldUpNext });
+      console.log('eraser');
     });
 
     this.props.ws.on('sendFacebookUser', (user) => {
       let facebookUser = { id: user.id, name: user.name };
       this.setState({ user: facebookUser });
+      if (this.state.user.name.length > 0) {
+        this.setState({ view: 1 });
+      }
     });
   };
 

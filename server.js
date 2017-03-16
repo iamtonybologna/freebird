@@ -71,12 +71,9 @@ app.get('/login/facebook',
 app.get('/login/facebook/return',
   passport.authenticate('facebook', { failureRedirect: '/' }),
   function(req, res) {
-    console.log('user', req.user);
     let id = uuid.v1();
     usernames[id] = req.user.displayName;
-    console.log('New user added to usernames', usernames);
-    io.emit('sendFacebookUser', { id: id, name: req.user.displayName });
-    io.emit('sendName', { name: req.user.displayName });
+    console.log('New Facebook user added to usernames', usernames);
     res.redirect('/');
   });
 
@@ -115,6 +112,8 @@ let lastUpNextList = [];
 let readyToParty = false;
 let partyButtonCount = 0;
 let partyButtonCountLimit = 50;
+let newFacebookUser = false;
+let facebookUser = {};
 
 newUpNext = () => {
   // store songs that were just voted on and clear votes
@@ -132,8 +131,7 @@ newUpNext = () => {
   });
   if (playableSongsLeft > 6) {
     let i = 0;
-    let x = 0;
-    while (i < 3 && x < 100) {
+    while (i < 3 && Object.keys(newSongs).length < 3) {
       let randomSong = playlist[Math.floor(Math.random() * playlist.length)];
       if (
         newSongs.hasOwnProperty(randomSong.songId) === false &&
@@ -185,6 +183,10 @@ io.on('connection', (client) => {
   io.emit('votes', { votes: votes });
   if (readyToParty) {
     io.emit('readyToParty');
+  };
+  if (newFacebookUser == true) {
+    io.emit('sendFacebookUser', { id: id, name: req.user.displayName });
+    io.emit('sendName', { name: req.user.displayName });
   };
 
   // set username
