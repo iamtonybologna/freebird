@@ -1,14 +1,15 @@
-# Freebird/Space Jam
+# Space Jam
 =====================
-A playlist voting App Using Node.js, React, and Websockets that allows users have a say in what music they want to listen to next.
 
-Host page: https://desolate-temple-13043.herokuapp.com/host
+A massively cooperative, interactive jukebox web application that uses Node.js, React, and Websockets to allow users to collectively create their own playlist and vote on the songs they want to listen to next.
 
-Mobile user page: https://desolate-temple-13043.herokuapp.com/users
+Host page: https://node-dj.herokuapp.com/host
 
-Open the host page on the main computer, TV, or projector. Open the user page on your phone, or in chrome devtools mobile view (⌘ + ⇧ + M). Add 12 songs to enter the host page and start the party.
+Mobile user page: https://node-dj.herokuapp.com/
 
-Hidden feature: raspberry pi configured to send GET requests to "/party" switches the relay connected to smoke machine(s), disco ball(s), and light(s). Martini glass button on host page activates the "party button" on users' pages, which trips the raspberry pi and relay after the party button is hit a certain amount of times.
+Open the host page on the main computer, TV, or projector. Open the user page on your phone, or in chrome devtools mobile view (⌘ + ⇧ + M). Add enough songs to enter the host page and start the party.
+
+Hidden feature: raspberry pi configured to send GET requests to "/party" switches the relay connected to smoke machine(s), disco ball(s), and light(s). Martini glass button on host page activates the "party button" on users' pages, which trips the raspberry pi and relay after it is hit a certain amount of times.
 
 ## Dependencies
 * cookie-parser
