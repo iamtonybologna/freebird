@@ -64,8 +64,7 @@ newUpNext = () => {
 
   if (playableSongsLeft > 6) {
     let i = 0;
-    let x = 0;
-    while (i < 3 && x < 100) {
+    while (i < 3 && Object.keys(newSongs).length < 3) {
       let randomSong = playlist[Math.floor(Math.random() * playlist.length)];
       if (
         newSongs.hasOwnProperty(randomSong.songId) === false &&
@@ -74,6 +73,7 @@ newUpNext = () => {
         )
       {
         newSongs[randomSong.songId] = randomSong;
+        console.log('newSongs length', Object.keys(newSongs).length);
         i++;
       };
       x++;
@@ -87,11 +87,11 @@ newUpNext = () => {
     io.emit('updateUpNext', { data: upNext });
   } else {
     let i = 0;
-    let x = 0;
-    while (i < 3 && x < 100) {
+    while (i < 3 && Object.keys(newSongs).length < 3) {
       let randomSong = playlist[Math.floor(Math.random() * playlist.length)];
       if (newSongs.hasOwnProperty(randomSong.songId) === false) {
         newSongs[randomSong.songId] = randomSong;
+        console.log('newSongs length', Object.keys(newSongs).length);
         i++;
       };
       x++;
