@@ -189,7 +189,7 @@ class App extends Component {
   joinRoom = (roomId) => {
     this.props.ws.emit('join', { id: roomId }, (roomId) => {
       this.setState({ room: roomId });
-      console.log('joined room', roomId)
+      console.log('joined room', roomId);
     });
   };
 

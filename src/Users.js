@@ -129,10 +129,10 @@ class Users extends Component {
     this.props.ws.on('upNextResetWinner', () => {
       let oldUpNext = this.state.upNext;
       for (let i = 0; i <= 2; i++) {
-        oldUpNext[i].votes = ''
+        oldUpNext[i].votes = '';
       }
-      this.setState({winner: '', upNext: oldUpNext})
-      console.log('eraser')
+      this.setState({ winner: '', upNext: oldUpNext });
+      console.log('eraser');
     });
   };
 
@@ -162,29 +162,29 @@ class Users extends Component {
       switch (this.state.view) {
         case 3:
           return (
-            <Welcome handleNewName={this.handleNewName} handleSubmitName={this.handleSubmitName}/>
+            <Welcome handleNewName={this.handleNewName} handleSubmitName={this.handleSubmitName} />
         )
         case 0:
           if (this.state.upNext.length === 0) {
             return (
             <div>
               <LoadingUser />
-              <NavBar switcher={this.switcher} view={this.state.view}/>
+              <NavBar switcher={this.switcher} view={this.state.view} />
             </div>
           )
         } else if (this.state.readyToParty === true) {
           return (
             <div>
-              <PartyButton handlePartyPress={this.handlePartyPress}/>
-              <UserVoteList voteFor={this.handleSongClick} upNext={this.state.upNext} newVoteId={this.state.newVoteId} winner={this.state.winner}/>
-              <NavBar switcher={this.switcher} view={this.state.view}/>
+              <PartyButton handlePartyPress={this.handlePartyPress} />
+              <UserVoteList voteFor={this.handleSongClick} upNext={this.state.upNext} newVoteId={this.state.newVoteId} winner={this.state.winner} />
+              <NavBar switcher={this.switcher} view={this.state.view} />
             </div>
           )
         } else {
               return (
                 <div>
                   <UserVoteList voteFor={this.handleSongClick} upNext={this.state.upNext} newVoteId={this.state.newVoteId} winner={this.state.winner} />
-                  <NavBar switcher={this.switcher} view={this.state.view}/>
+                  <NavBar switcher={this.switcher} view={this.state.view} />
                 </div>
               )
             }
@@ -280,8 +280,8 @@ class Users extends Component {
     let newList = this.state.selectedSongs;
     if (this.state.selectedSongs.indexOf(e.id.videoId) === -1 && this.state.playlist.indexOf(e.id.videoId) === -1) {
       newList.push(e.id.videoId);
-      this.setState({selectedSongs: newList});
-    } else if (this.state.selectedSongs.indexOf(e.id.videoId) != -1){
+      this.setState({ selectedSongs: newList });
+    } else if (this.state.selectedSongs.indexOf(e.id.videoId) != -1) {
       let index = newList.indexOf(e.id.videoId);
       newList.splice(index, 1);
       this.setState({ selectedSongs: newList });
