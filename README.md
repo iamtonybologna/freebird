@@ -1,8 +1,8 @@
 # Space Jam
 
-No-DJ is a multi-platform application that is used on both TV's/laptops and iOS/android mobile devices that can allow for easy control of a media system. It is also a social media platform that allows users to interact by adding and voting on songs they want to hear.  It was also connected into the internet of things by allowing the users to trigger a smoke machine and disco ball by using a raspberry pi as a relay switch.
+Space Jam is a multi-platform application that is used on both TV's/laptops and iOS/android mobile devices that can allow for easy control of a media system. It is also a social media platform that allows users to interact by adding and voting on songs they want to hear.  It was also connected into the internet of things by allowing the users to trigger a smoke machine and disco ball by using a raspberry pi as a relay switch.
 
-No-DJ was built in a Node.js environment on Javascript, Websockets, React.js, Three.js, and several API's including: YouTube and Facebook.
+Space Jam was built in a Node.js environment on Javascript, Websockets, React.js, Three.js, and several API's including: YouTube and Facebook.
 
 Host page: https://node-dj.herokuapp.com/host
 
