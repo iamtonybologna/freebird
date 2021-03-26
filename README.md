@@ -1,6 +1,6 @@
 # Space Jam
 
-Space Jam is a multi-platform application that is used on both TV's/laptops and iOS/android mobile devices that can allow for easy control of a media system. It is also a social media platform that allows users to interact by adding and voting on songs they want to hear. We allowed users to trigger special party events from their phones by connecting an industrial smoke machine and disco balls to our server by through a Raspberry Pi and relay switch.
+Space Jam is a multi-platform application that is used on both TV's/laptops and iOS/android mobile devices that can allow for easy control of a media system. Users can interact by adding and voting on songs they want to hear from their phones. We enabled users to trigger special party events from their phones by connecting an industrial smoke machine and disco balls to our server by through a Raspberry Pi and relay switch.
 
 Space Jam was built in a Node.js environment on Javascript, Websockets, React.js, Three.js, and several APIs including YouTube and Facebook.
 
