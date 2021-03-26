@@ -10,8 +10,6 @@ Add songs and vote from your phone: https://node-dj.herokuapp.com/
 
 Open the host page on your computer, TV, or projector and full-screen the page. Open the user page on your phone or in chrome devtools mobile view. Add around 7 songs, admire the state of the art animations, and click the spaceship in the top left corner to start listening to music and voting.
 
-![](https://media.giphy.com/media/Bn10ZqdRGiYXm/giphy.gif)
-
 ## Dependencies
 * cookie-parser
 * cors
